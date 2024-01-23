@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using DSUGrupp1.Models.API;
 using System.Text;
-using System.Net.Http;
+using DSUGrupp1.Models.DTO;
 
 
 namespace DSUGrupp1.Controllers
@@ -60,9 +60,9 @@ namespace DSUGrupp1.Controllers
 
                     return Ok(values);
                 }
+				return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
 
-                return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
-            }
+			}
             catch (Exception ex)
             {
                
@@ -70,6 +70,31 @@ namespace DSUGrupp1.Controllers
             }
         }
 
+        public async Task<IActionResult> GetVaccinationsCount()
+        {
+            string requestUrl = "https://grupp1.dsvkurs.miun.se/api/vaccinations/count";
+          
+            try
+            {
+				var response = await _httpClient.GetAsync($"{requestUrl}");
+				
+                if (response.IsSuccessStatusCode)
+				{
+					string responseContent = await response.Content.ReadAsStringAsync();
+
+					var responseObject = JsonConvert.DeserializeObject<SwaggerDTO>(responseContent);
+
+					return Ok(responseObject);
+				}
+				return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
+			}
+			catch (Exception ex)
+			{
+
+				return StatusCode(500, ex.Message);
+			}
+
+        }
 
     }
 }
