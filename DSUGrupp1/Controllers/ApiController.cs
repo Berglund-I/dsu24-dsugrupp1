@@ -54,7 +54,11 @@ namespace DSUGrupp1.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    return Ok(responseContent);
+
+                    var responseObject = JsonConvert.DeserializeObject<ResponseObject>(responseContent);
+                    var values = responseObject.Data[0].Values[0];
+
+                    return Ok(values);
                 }
 
                 return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
