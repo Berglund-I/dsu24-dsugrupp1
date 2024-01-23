@@ -18,7 +18,7 @@ namespace DSUGrupp1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> MakeApiCall()
+        public async Task<IActionResult> ScbApiCall(string desoCode,string year)
         {
             var apiQuery = new ApiQuery
             {
@@ -27,7 +27,7 @@ namespace DSUGrupp1.Controllers
                     new QueryItem
                     {
                         Code = "Region",
-                        Selection = new Selection { Filter = "vs:RegionKommun07", Values = new List<string> { "2380" } }
+                        Selection = new Selection { Filter = "vs:RegionKommun07", Values = new List<string> { $"{desoCode}" } }
                     },
                     new QueryItem
                     {
@@ -37,7 +37,7 @@ namespace DSUGrupp1.Controllers
                      new QueryItem
                     {
                         Code = "Tid",
-                        Selection = new Selection { Filter = "item", Values = new List<string> { "2022" } }
+                        Selection = new Selection { Filter = "item", Values = new List<string> { $"{year}" } }
                     },
 
                 },
@@ -45,7 +45,7 @@ namespace DSUGrupp1.Controllers
             };
 
             string jsonRequest = JsonConvert.SerializeObject(apiQuery);
-            var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+            var content = new StringContent(jsonRequest, Encoding.UTF8, "text/json");
 
             try
             {
@@ -65,5 +65,7 @@ namespace DSUGrupp1.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        }
+
+
+    }
 }
