@@ -3,7 +3,6 @@
 	public class DoseData
 	{
 		//public int Dosenumber {  get; set; }
-
 		public int Count { get; set; }
 	}
 }
