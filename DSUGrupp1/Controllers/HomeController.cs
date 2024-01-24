@@ -1,8 +1,7 @@
 using DSUGrupp1.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using DSUGrupp1.Controllers;
-using Newtonsoft.Json;
+
 
 namespace DSUGrupp1.Controllers
 {

@@ -11,8 +11,14 @@ namespace DSUGrupp1.Controllers
     [Route("[controller]")]
     public class ApiController : Controller
     {
+        /// <summary>
+        /// Gets the total population of a specified Deso for a specified year.
+        /// </summary>
+        /// <param name="desoCode"></param>
+        /// <param name="year"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> ScbApiCall(string desoCode, string year)
+        public async Task<IActionResult> GetPopulationCount(string desoCode, string year)
         {
             string requestUrl = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/BE/BE0101/BE0101A/BefolkningNy";
 
@@ -55,7 +61,11 @@ namespace DSUGrupp1.Controllers
 			}
 
 		}
-
+        /// <summary>
+        /// Gets data for vaccinations in all Deso's. These are sorted after Deso thereafter after dose.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
         public async Task<IActionResult> GetVaccinationsCount()
         {
             string requestUrl = "https://grupp1.dsvkurs.miun.se/api/vaccinations/count";
