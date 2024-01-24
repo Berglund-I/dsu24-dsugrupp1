@@ -25,9 +25,10 @@ namespace DSUGrupp1.Controllers
 
         public async Task<ActionResult> Privacy()
         {
-            var apiResult = await _apiController.ScbApiCall("2380","2022");
+			//var apiResult = await _apiController.ScbApiCall("2380","2022");
+			var apiResult = await _apiController.GetVaccinationsCount();
 
-            if (apiResult is OkObjectResult okResult)
+			if (apiResult is OkObjectResult okResult)
             {
 
                 var jsonData = okResult.Value.ToString();
