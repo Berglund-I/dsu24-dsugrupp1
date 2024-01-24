@@ -43,7 +43,7 @@ namespace DSUGrupp1.Controllers
             string jsonRequest = JsonConvert.SerializeObject(apiQuery);
             var content = new StringContent(jsonRequest, Encoding.UTF8, "text/json");
 
-            var apiResponse = await Fetch<PopulationDto>(requestUrl, HttpMethod.Post, content);
+            var apiResponse = await ApiEngine.Fetch<PopulationDto>(requestUrl, HttpMethod.Post, content);
             
             if(apiResponse.IsSuccessful) 
             {
@@ -60,7 +60,7 @@ namespace DSUGrupp1.Controllers
         {
             string requestUrl = "https://grupp1.dsvkurs.miun.se/api/vaccinations/count";
 
-			var apiResponse = await Fetch<VaccineCountDto>(requestUrl, HttpMethod.Get);
+			var apiResponse = await ApiEngine.Fetch<VaccineCountDto>(requestUrl, HttpMethod.Get);
 
 			if (apiResponse.IsSuccessful)
 			{
