@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using DSUGrupp1.Models.API;
 using System.Text;
 using DSUGrupp1.Models.DTO;
+using System.Net;
 
 
 namespace DSUGrupp1.Controllers
@@ -10,17 +11,66 @@ namespace DSUGrupp1.Controllers
     [Route("[controller]")]
     public class ApiController : Controller
     {
-        private readonly HttpClient? _httpClient;
+		private readonly HttpClient? _httpClient;
 
         public ApiController()
         {
             _httpClient = new HttpClient();
         }
+        public async Task<ApiResponse<T>> Fetch<T>(string apiUrl, HttpMethod method,HttpContent content = null)
+        {
+			using HttpClient client = new HttpClient();
+			ApiResponse<T> apiResponse = new ApiResponse<T>();
+
+			try
+			{
+				if (!Uri.TryCreate(apiUrl, UriKind.Absolute, out _))
+				{
+					apiResponse.ErrorMessage = "Invalid URL";
+					HttpResponseMessage invalidUrlResponse = new HttpResponseMessage(HttpStatusCode.BadRequest)
+					{
+						ReasonPhrase = "Invalid URL"
+					};
+
+					apiResponse.Response = invalidUrlResponse;
+					return apiResponse;
+				}
+
+                HttpResponseMessage response;
+
+                if(method == HttpMethod.Post)
+                {
+                    response = await client.PostAsync(apiUrl, content);
+                }
+                else
+                {
+                    response = await client.GetAsync(apiUrl);
+                }
+				
+				if (response.IsSuccessStatusCode)
+				{
+					string responseData = await response.Content.ReadAsStringAsync();
+					apiResponse.Data = JsonConvert.DeserializeObject<T>(responseData);
+				}
+				else
+				{
+					apiResponse.StatusCode = response.StatusCode;
+				}
+			}
+			catch (Exception)
+			{
+
+				apiResponse.ErrorMessage = "Error";
+			}
+			return apiResponse;
+        }
 
         [HttpPost]
-        public async Task<IActionResult> ScbApiCall(string desoCode,string year)
+        public async Task<IActionResult> ScbApiCall(string desoCode, string year)
         {
-            var apiQuery = new ApiQuery
+            string requestUrl = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/BE/BE0101/BE0101A/BefolkningNy";
+
+			var apiQuery = new ApiQuery
             {
                 Query = new List<QueryItem>
                 {
@@ -47,54 +97,34 @@ namespace DSUGrupp1.Controllers
             string jsonRequest = JsonConvert.SerializeObject(apiQuery);
             var content = new StringContent(jsonRequest, Encoding.UTF8, "text/json");
 
-            try
+            var apiResponse = await Fetch<ResponseObject>(requestUrl, HttpMethod.Post, content);
+            
+            if(apiResponse.IsSuccessful) 
             {
-                var response = await _httpClient.PostAsync("https://api.scb.se/OV0104/v1/doris/sv/ssd/START/BE/BE0101/BE0101A/BefolkningNy", content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-
-                    var responseObject = JsonConvert.DeserializeObject<ResponseObject>(responseContent);
-                    var values = responseObject.Data[0].Values[0];
-
-                    return Ok(values);
-                }
-				return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
-
-			}
-            catch (Exception ex)
-            {
-               
-                return StatusCode(500, ex.Message);
+                return Ok(apiResponse.Data);
             }
-        }
+            else
+            {
+				return StatusCode((int)apiResponse.StatusCode);
+			}
+
+		}
 
         public async Task<IActionResult> GetVaccinationsCount()
         {
             string requestUrl = "https://grupp1.dsvkurs.miun.se/api/vaccinations/count";
-          
-            try
-            {
-				var response = await _httpClient.GetAsync($"{requestUrl}");
-				
-                if (response.IsSuccessStatusCode)
-				{
-					string responseContent = await response.Content.ReadAsStringAsync();
 
-					var responseObject = JsonConvert.DeserializeObject<SwaggerDTO>(responseContent);
+			var apiResponse = await Fetch<SwaggerDTO>(requestUrl, HttpMethod.Get);
 
-					return Ok(responseObject);
-				}
-				return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
-			}
-			catch (Exception ex)
+			if (apiResponse.IsSuccessful)
 			{
-
-				return StatusCode(500, ex.Message);
+				return Ok(apiResponse.Data);
 			}
-
-        }
+			else
+			{
+				return StatusCode((int)apiResponse.StatusCode);
+			}
+		}
 
     }
 }

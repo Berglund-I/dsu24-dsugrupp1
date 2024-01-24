@@ -18,29 +18,20 @@ namespace DSUGrupp1.Controllers
             _apiController = new ApiController();
         }
 
-        public IActionResult Index()
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
+
+        public async Task<ActionResult> Index()
         {
+            //var apiResult = await _apiController.ScbApiCall("2380","2022");
+            var apiResult = await _apiController.GetVaccinationsCount();
+            //var apiResult = await _apiController.Fetch<Object>("https://grupp1.dsvkurs.miun.se/api/vaccinations/count");
+
+            
             return View();
-        }
 
-        public async Task<ActionResult> Privacy()
-        {
-			//var apiResult = await _apiController.ScbApiCall("2380","2022");
-			var apiResult = await _apiController.GetVaccinationsCount();
-
-			if (apiResult is OkObjectResult okResult)
-            {
-
-                var jsonData = okResult.Value.ToString();
-
-
-                return View();
-            }
-            else
-            {
-
-                return View("Error");
-            }
 
         }
 
