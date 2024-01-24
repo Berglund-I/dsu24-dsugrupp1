@@ -15,6 +15,8 @@ namespace DSUGrupp1.Controllers
         public ApiController()
         {
             _httpClient = new HttpClient();
+            Call();
+            
         }
 
         [HttpPost]
@@ -93,6 +95,35 @@ namespace DSUGrupp1.Controllers
 
 				return StatusCode(500, ex.Message);
 			}
+
+        }
+        public async Task<string> Call()
+        {
+            var result = await GetVaccinationDataFromDeSo("2380A0010");
+            
+            return "ok";
+        }
+
+        public async Task<VaccinationDataFromSpecifikDeSoDto> GetVaccinationDataFromDeSo(string deSoCode)
+        {
+            string requestUrl = "https://grupp1.dsvkurs.miun.se/api/vaccinations/";
+            VaccinationDataFromSpecifikDeSoDto vaccinationData = new VaccinationDataFromSpecifikDeSoDto();  
+
+            string jsonRequest = requestUrl + deSoCode;
+
+            var response = await _httpClient.GetAsync(jsonRequest);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                vaccinationData = JsonConvert.DeserializeObject<VaccinationDataFromSpecifikDeSoDto>(responseContent);
+
+                
+            }
+            return vaccinationData;
+
+
+
 
         }
 
