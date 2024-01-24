@@ -2,7 +2,7 @@
 
 namespace DSUGrupp1.Models.DTO
 {
-    public class TotalVaccinationsDto
+    public class Meta
     {
         [JsonProperty("total-records-patients")]
         public int TotalRecordsPatients { get; set; }
