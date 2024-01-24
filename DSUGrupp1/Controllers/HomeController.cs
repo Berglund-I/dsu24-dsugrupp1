@@ -1,8 +1,7 @@
 using DSUGrupp1.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using DSUGrupp1.Controllers;
-using Newtonsoft.Json;
+
 
 namespace DSUGrupp1.Controllers
 {
@@ -18,30 +17,20 @@ namespace DSUGrupp1.Controllers
             _apiController = new ApiController();     
         }
 
-        public IActionResult Index()
-        {
-            
-            return View();
-        }
 
-        public async Task<ActionResult> Privacy()
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
+
+        public async Task<ActionResult> Index()
         {
             //var apiResult = await _apiController.ScbApiCall("2380","2022");
             var apiResult = await _apiController.GetVaccinationsCount();
 
-			if (apiResult is OkObjectResult okResult)
-            {
+            
+            return View();
 
-                var jsonData = okResult.Value.ToString();
-
-
-                return View();
-            }
-            else
-            {
-
-                return View("Error");
-            }
 
         }
 
