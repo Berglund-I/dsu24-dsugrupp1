@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using DSUGrupp1.Models.API;
 using System.Text;
 using DSUGrupp1.Models.DTO;
+using System.Net;
+using DSUGrupp1.Infastructure;
 
 
 namespace DSUGrupp1.Controllers
@@ -10,17 +11,18 @@ namespace DSUGrupp1.Controllers
     [Route("[controller]")]
     public class ApiController : Controller
     {
-        private readonly HttpClient? _httpClient;
-
-        public ApiController()
-        {
-            _httpClient = new HttpClient();
-        }
-
+        /// <summary>
+        /// Gets the total population of a specified Deso for a specified year.
+        /// </summary>
+        /// <param name="desoCode"></param>
+        /// <param name="year"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> ScbApiCall(string desoCode,string year)
+        public async Task<IActionResult> GetPopulationCount(string desoCode, string year)
         {
-            var apiQuery = new ApiQuery
+            string requestUrl = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/BE/BE0101/BE0101A/BefolkningNy";
+
+			var apiQuery = new ApiQueryDto
             {
                 Query = new List<QueryItem>
                 {
@@ -47,54 +49,38 @@ namespace DSUGrupp1.Controllers
             string jsonRequest = JsonConvert.SerializeObject(apiQuery);
             var content = new StringContent(jsonRequest, Encoding.UTF8, "text/json");
 
-            try
+            var apiResponse = await ApiEngine.Fetch<PopulationDto>(requestUrl, HttpMethod.Post, content);
+            
+            if(apiResponse.IsSuccessful) 
             {
-                var response = await _httpClient.PostAsync("https://api.scb.se/OV0104/v1/doris/sv/ssd/START/BE/BE0101/BE0101A/BefolkningNy", content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-
-                    var responseObject = JsonConvert.DeserializeObject<ResponseObject>(responseContent);
-                    var values = responseObject.Data[0].Values[0];
-
-                    return Ok(values);
-                }
-				return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
-
-			}
-            catch (Exception ex)
-            {
-               
-                return StatusCode(500, ex.Message);
+                return Ok(apiResponse.Data);
             }
-        }
+            else
+            {
+				return StatusCode((int)apiResponse.StatusCode);
+			}
 
+		}
+        /// <summary>
+        /// Gets data for vaccinations in all Deso's. These are sorted after Deso thereafter after dose.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
         public async Task<IActionResult> GetVaccinationsCount()
         {
             string requestUrl = "https://grupp1.dsvkurs.miun.se/api/vaccinations/count";
-          
-            try
-            {
-				var response = await _httpClient.GetAsync($"{requestUrl}");
-				
-                if (response.IsSuccessStatusCode)
-				{
-					string responseContent = await response.Content.ReadAsStringAsync();
 
-					var responseObject = JsonConvert.DeserializeObject<SwaggerDTO>(responseContent);
+			var apiResponse = await ApiEngine.Fetch<VaccineCountDto>(requestUrl, HttpMethod.Get);
 
-					return Ok(responseObject);
-				}
-				return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
-			}
-			catch (Exception ex)
+			if (apiResponse.IsSuccessful)
 			{
-
-				return StatusCode(500, ex.Message);
+				return Ok(apiResponse.Data);
 			}
-
-        }
+			else
+			{
+				return StatusCode((int)apiResponse.StatusCode);
+			}
+		}
 
     }
 }
