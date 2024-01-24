@@ -1,4 +1,4 @@
-﻿using DSUGrupp1.Models.API;
+﻿using DSUGrupp1.Models.DTO;
 using Newtonsoft.Json;
 using System.Net;
 

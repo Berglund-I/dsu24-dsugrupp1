@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using DSUGrupp1.Models.API;
 using System.Text;
 using DSUGrupp1.Models.DTO;
 using System.Net;
@@ -11,11 +10,10 @@ namespace DSUGrupp1.Controllers
     [Route("[controller]")]
     public class ApiController : Controller
     {
-		private readonly HttpClient? _httpClient;
 
         public ApiController()
         {
-            _httpClient = new HttpClient();
+
         }
         public async Task<ApiResponse<T>> Fetch<T>(string apiUrl, HttpMethod method,HttpContent content = null)
         {
@@ -70,7 +68,7 @@ namespace DSUGrupp1.Controllers
         {
             string requestUrl = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/BE/BE0101/BE0101A/BefolkningNy";
 
-			var apiQuery = new ApiQuery
+			var apiQuery = new ApiQueryDto
             {
                 Query = new List<QueryItem>
                 {
@@ -97,7 +95,7 @@ namespace DSUGrupp1.Controllers
             string jsonRequest = JsonConvert.SerializeObject(apiQuery);
             var content = new StringContent(jsonRequest, Encoding.UTF8, "text/json");
 
-            var apiResponse = await Fetch<ResponseObject>(requestUrl, HttpMethod.Post, content);
+            var apiResponse = await Fetch<PopulationDto>(requestUrl, HttpMethod.Post, content);
             
             if(apiResponse.IsSuccessful) 
             {
@@ -114,7 +112,7 @@ namespace DSUGrupp1.Controllers
         {
             string requestUrl = "https://grupp1.dsvkurs.miun.se/api/vaccinations/count";
 
-			var apiResponse = await Fetch<SwaggerDTO>(requestUrl, HttpMethod.Get);
+			var apiResponse = await Fetch<VaccineCountDto>(requestUrl, HttpMethod.Get);
 
 			if (apiResponse.IsSuccessful)
 			{
