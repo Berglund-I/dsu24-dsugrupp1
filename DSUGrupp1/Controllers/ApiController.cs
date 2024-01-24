@@ -14,9 +14,7 @@ namespace DSUGrupp1.Controllers
 
         public ApiController()
         {
-            _httpClient = new HttpClient();
-            Call();
-            
+            _httpClient = new HttpClient();   
         }
 
         [HttpPost]
@@ -97,12 +95,6 @@ namespace DSUGrupp1.Controllers
 			}
 
         }
-        public async Task<string> Call()
-        {
-            var result = await GetVaccinationDataFromDeSo("2380A0010");
-            
-            return "ok";
-        }
 
         public async Task<VaccinationDataFromSpecifikDeSoDto> GetVaccinationDataFromDeSo(string deSoCode)
         {
@@ -111,20 +103,15 @@ namespace DSUGrupp1.Controllers
 
             string jsonRequest = requestUrl + deSoCode;
 
+
             var response = await _httpClient.GetAsync(jsonRequest);
 
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
-                vaccinationData = JsonConvert.DeserializeObject<VaccinationDataFromSpecifikDeSoDto>(responseContent);
-
-                
+                vaccinationData = JsonConvert.DeserializeObject<VaccinationDataFromSpecifikDeSoDto>(responseContent);    
             }
             return vaccinationData;
-
-
-
-
         }
 
     }
