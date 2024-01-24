@@ -11,6 +11,7 @@ namespace DSUGrupp1.Controllers
     [Route("[controller]")]
     public class ApiController : Controller
     {
+
         /// <summary>
         /// Gets the total population of a specified Deso for a specified year.
         /// </summary>
@@ -81,6 +82,24 @@ namespace DSUGrupp1.Controllers
 				return StatusCode((int)apiResponse.StatusCode);
 			}
 		}
+
+        public async Task<VaccinationDataFromSpecifikDeSoDto> GetVaccinationDataFromDeSo(string deSoCode)
+        {
+            string requestUrl = "https://grupp1.dsvkurs.miun.se/api/vaccinations/";
+            VaccinationDataFromSpecifikDeSoDto vaccinationData = new VaccinationDataFromSpecifikDeSoDto();  
+
+            string jsonRequest = requestUrl + deSoCode;
+
+
+            var response = await _httpClient.GetAsync(jsonRequest);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                vaccinationData = JsonConvert.DeserializeObject<VaccinationDataFromSpecifikDeSoDto>(responseContent);    
+            }
+            return vaccinationData;
+        }
 
     }
 }

@@ -14,8 +14,9 @@ namespace DSUGrupp1.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _apiController = new ApiController();
+            _apiController = new ApiController();     
         }
+
 
         //public IActionResult Index()
         //{
@@ -26,7 +27,6 @@ namespace DSUGrupp1.Controllers
         {
             //var apiResult = await _apiController.ScbApiCall("2380","2022");
             var apiResult = await _apiController.GetVaccinationsCount();
-            //var apiResult = await _apiController.Fetch<Object>("https://grupp1.dsvkurs.miun.se/api/vaccinations/count");
 
             
             return View();
