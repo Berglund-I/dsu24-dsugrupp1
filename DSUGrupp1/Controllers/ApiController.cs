@@ -4,6 +4,7 @@ using DSUGrupp1.Models.API;
 using System.Text;
 using DSUGrupp1.Models.DTO;
 using System.Net;
+using DSUGrupp1.Infastructure;
 
 
 namespace DSUGrupp1.Controllers
@@ -11,60 +12,6 @@ namespace DSUGrupp1.Controllers
     [Route("[controller]")]
     public class ApiController : Controller
     {
-		private readonly HttpClient? _httpClient;
-
-        public ApiController()
-        {
-            _httpClient = new HttpClient();
-        }
-        public async Task<ApiResponse<T>> Fetch<T>(string apiUrl, HttpMethod method,HttpContent content = null)
-        {
-			using HttpClient client = new HttpClient();
-			ApiResponse<T> apiResponse = new ApiResponse<T>();
-
-			try
-			{
-				if (!Uri.TryCreate(apiUrl, UriKind.Absolute, out _))
-				{
-					apiResponse.ErrorMessage = "Invalid URL";
-					HttpResponseMessage invalidUrlResponse = new HttpResponseMessage(HttpStatusCode.BadRequest)
-					{
-						ReasonPhrase = "Invalid URL"
-					};
-
-					apiResponse.Response = invalidUrlResponse;
-					return apiResponse;
-				}
-
-                HttpResponseMessage response;
-
-                if(method == HttpMethod.Post)
-                {
-                    response = await client.PostAsync(apiUrl, content);
-                }
-                else
-                {
-                    response = await client.GetAsync(apiUrl);
-                }
-				
-				if (response.IsSuccessStatusCode)
-				{
-					string responseData = await response.Content.ReadAsStringAsync();
-					apiResponse.Data = JsonConvert.DeserializeObject<T>(responseData);
-				}
-				else
-				{
-					apiResponse.StatusCode = response.StatusCode;
-				}
-			}
-			catch (Exception)
-			{
-
-				apiResponse.ErrorMessage = "Error";
-			}
-			return apiResponse;
-        }
-
         [HttpPost]
         public async Task<IActionResult> ScbApiCall(string desoCode, string year)
         {
@@ -97,7 +44,7 @@ namespace DSUGrupp1.Controllers
             string jsonRequest = JsonConvert.SerializeObject(apiQuery);
             var content = new StringContent(jsonRequest, Encoding.UTF8, "text/json");
 
-            var apiResponse = await Fetch<ResponseObject>(requestUrl, HttpMethod.Post, content);
+            var apiResponse = await ApiEngine.Fetch<ResponseObject>(requestUrl, HttpMethod.Post, content);
             
             if(apiResponse.IsSuccessful) 
             {
@@ -114,7 +61,7 @@ namespace DSUGrupp1.Controllers
         {
             string requestUrl = "https://grupp1.dsvkurs.miun.se/api/vaccinations/count";
 
-			var apiResponse = await Fetch<SwaggerDTO>(requestUrl, HttpMethod.Get);
+			var apiResponse = await ApiEngine.Fetch<SwaggerDTO>(requestUrl, HttpMethod.Get);
 
 			if (apiResponse.IsSuccessful)
 			{
