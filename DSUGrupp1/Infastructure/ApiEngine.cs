@@ -6,7 +6,7 @@ namespace DSUGrupp1.Infastructure
 {
     public static class ApiEngine
     {
-        public async static Task<ApiResponse<T>> Fetch<T>(string apiUrl)
+        public static async Task<ApiResponse<T>> Fetch<T>(string apiUrl, HttpMethod method, HttpContent content = null)
         {
             using HttpClient client = new HttpClient();
             ApiResponse<T> apiResponse = new ApiResponse<T>();
@@ -25,7 +25,17 @@ namespace DSUGrupp1.Infastructure
                     return apiResponse;
                 }
 
-                HttpResponseMessage response = await client.GetAsync(apiUrl);
+                HttpResponseMessage response;
+
+                if (method == HttpMethod.Post)
+                {
+                    response = await client.PostAsync(apiUrl, content);
+                }
+                else
+                {
+                    response = await client.GetAsync(apiUrl);
+                }
+
                 if (response.IsSuccessStatusCode)
                 {
                     string responseData = await response.Content.ReadAsStringAsync();
@@ -39,7 +49,7 @@ namespace DSUGrupp1.Infastructure
             catch (Exception)
             {
 
-                apiResponse.ErrorMessage = "nej";
+                apiResponse.ErrorMessage = "Error";
             }
             return apiResponse;
         }
