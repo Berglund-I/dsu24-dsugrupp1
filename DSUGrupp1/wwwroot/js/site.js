@@ -43,7 +43,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 
 
-let totalVaccinated = document.getElementById('myModel').value;
+let totalVaccinated = document.getElementById('totalVaccinations').value;
+console.log(totalVaccinated);
 
 document.addEventListener('DOMContentLoaded', (event) => {
     showDeSo();
