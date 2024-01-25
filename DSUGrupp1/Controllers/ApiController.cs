@@ -128,7 +128,7 @@ namespace DSUGrupp1.Controllers
                 throw new Exception("Antalet vaccinerade kan ej vara noll");
             }
 
-            double percentage = vaccinatedPeople / totalPopulation* 100;
+            double percentage = (double)vaccinatedPeople / totalPopulation* 100;
             return percentage;
         }
     }
