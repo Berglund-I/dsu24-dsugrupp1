@@ -107,5 +107,25 @@ namespace DSUGrupp1.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets DeSo names and DeSo codes
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> GetDeSoNames()
+        {
+            string requestUrl = "https://grupp1.dsvkurs.miun.se/api/deso";
+
+            var apiResponse = await ApiEngine.Fetch<DesoInfoDTO>(requestUrl, HttpMethod.Get);
+
+            if (apiResponse.IsSuccessful)
+            {
+                return Ok(apiResponse.Data);
+            }
+            else
+            {
+                return StatusCode((int)apiResponse.StatusCode);
+            }
+        }
+
     }
 }
