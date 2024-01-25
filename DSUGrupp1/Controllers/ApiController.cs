@@ -116,15 +116,16 @@ namespace DSUGrupp1.Controllers
         /// <exception cref="ArgumentException"></exception>
         public double CalculateVaccinationPercentage(int totalPopulation, int vaccinatedPeople)
         {
-            if (totalPopulation== null || vaccinatedPeople== null)
-            {
-                throw new ArgumentException("Objects cannot be null");
-            }
 
             //För att inte dela med noll
-            if (totalPopulation== 0)
+            if (totalPopulation <= 0)
             {
-                throw new ArgumentException("Antalet invånare kan ej vara noll");
+                throw new Exception("Antalet invånare kan ej vara noll");
+            }
+
+            if (vaccinatedPeople < 0)
+            {
+                throw new Exception("Antalet vaccinerade kan ej vara noll");
             }
 
             double percentage = vaccinatedPeople / totalPopulation* 100;
