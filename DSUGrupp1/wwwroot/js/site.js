@@ -40,3 +40,41 @@ document.addEventListener('DOMContentLoaded', (event) => {
     showStatistics();
 });
 
+
+
+
+let totalVaccinated = document.getElementById('myModel').value;
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    showDeSo();
+});
+
+/**Function that creates and presents a pie-chart */
+function showDeSo() {
+    const context = document.getElementById('deSoChart').getContext('2d');
+    var xValues = ["Vaccinerade med minst en dos", "Ovaccinerade"];
+    var yValues = [totalVaccinated, 40];
+    var barColors = [
+        "#b91d47",
+        "#00aba9"
+    ];
+
+    new Chart(context, {
+        type: "doughnut",
+        data: {
+            labels: xValues,
+            datasets: [{
+                backgroundColor: barColors,
+                data: yValues
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: "Vaccinationsgrad i DeSo-området: "
+            }
+        }
+    });
+
+}
+

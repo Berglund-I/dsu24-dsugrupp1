@@ -1,4 +1,7 @@
-﻿@{
+﻿@model DSUGrupp1.Models.HomeViewModel;
+
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -7,7 +10,10 @@
 }
 
 @section RightContent {
-
+    <input type="hidden" id="myModel" value="@Model.DataFromSpecificDeSo.Meta.TotalVaccinations"/>
+    <canvas id="deSoChart"></canvas>
+    <h2>@Model.DataFromSpecificDeSo.Meta.DeSoCode</h2>
+    <h3>@Model.DataFromSpecificDeSo.Meta.TotalVaccinations</h3>
 }
 
 @section CenterContent {

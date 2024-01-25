@@ -19,7 +19,7 @@ namespace DSUGrupp1.Controllers
         /// <param name="year"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> GetPopulationCount(string desoCode, string year)
+        public async Task<PopulationDto> GetPopulationCount(string desoCode, string year)
         {
             string requestUrl = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/BE/BE0101/BE0101A/BefolkningNy";
 
@@ -54,11 +54,11 @@ namespace DSUGrupp1.Controllers
             
             if(apiResponse.IsSuccessful) 
             {
-                return Ok(apiResponse.Data);
+                return apiResponse.Data;
             }
             else
             {
-				return StatusCode((int)apiResponse.StatusCode);
+				throw new Exception(apiResponse.ErrorMessage);
 			}
 
 		}
@@ -89,7 +89,7 @@ namespace DSUGrupp1.Controllers
         /// <param name="deSoCode"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetVaccinationDataFromDeSo(string deSoCode)
+        public async Task<VaccinationDataFromSpecificDeSoDto> GetVaccinationDataFromDeSo(string deSoCode)
         {
             string requestUrl = "https://grupp1.dsvkurs.miun.se/api/vaccinations/";
 
@@ -99,11 +99,11 @@ namespace DSUGrupp1.Controllers
 
             if (apiResponse.IsSuccessful)
             {
-                return Ok(apiResponse.Data);
+                return apiResponse.Data;
             }
             else
             {
-                return StatusCode((int)apiResponse.StatusCode);
+                throw new Exception(apiResponse.ErrorMessage);
             }
         }
 
