@@ -1,4 +1,5 @@
 using DSUGrupp1.Models;
+using DSUGrupp1.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -28,9 +29,8 @@ namespace DSUGrupp1.Controllers
             //var apiResult = await _apiController.ScbApiCall("2380","2022");
             var apiResult = await _apiController.GetVaccinationsCount();
 
-            
+            var forDropdown = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
             return View();
-
 
         }
 

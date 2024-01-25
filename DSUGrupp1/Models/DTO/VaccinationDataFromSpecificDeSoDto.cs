@@ -2,7 +2,7 @@
 
 namespace DSUGrupp1.Models.DTO
 {
-    public class VaccinationDataFromSpecifikDeSoDto
+    public class VaccinationDataFromSpecificDeSoDto
     {
 
         public TotalVaccinationsDto Meta { get; set; }

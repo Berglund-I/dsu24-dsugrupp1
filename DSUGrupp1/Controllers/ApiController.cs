@@ -83,22 +83,28 @@ namespace DSUGrupp1.Controllers
 			}
 		}
 
-        public async Task<VaccinationDataFromSpecifikDeSoDto> GetVaccinationDataFromDeSo(string deSoCode)
+        /// <summary>
+        /// Gets vaccination data from a specific DeSo
+        /// </summary>
+        /// <param name="deSoCode"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetVaccinationDataFromDeSo(string deSoCode)
         {
             string requestUrl = "https://grupp1.dsvkurs.miun.se/api/vaccinations/";
-            VaccinationDataFromSpecifikDeSoDto vaccinationData = new VaccinationDataFromSpecifikDeSoDto();  
 
             string jsonRequest = requestUrl + deSoCode;
 
+            var apiResponse = await ApiEngine.Fetch<VaccinationDataFromSpecificDeSoDto>(jsonRequest, HttpMethod.Get);
 
-            var response = await _httpClient.GetAsync(jsonRequest);
-
-            if (response.IsSuccessStatusCode)
+            if (apiResponse.IsSuccessful)
             {
-                string responseContent = await response.Content.ReadAsStringAsync();
-                vaccinationData = JsonConvert.DeserializeObject<VaccinationDataFromSpecifikDeSoDto>(responseContent);    
+                return Ok(apiResponse.Data);
             }
-            return vaccinationData;
+            else
+            {
+                return StatusCode((int)apiResponse.StatusCode);
+            }
         }
 
     }
