@@ -28,8 +28,10 @@ namespace DSUGrupp1.Controllers
         {
             //var apiResult = await _apiController.ScbApiCall("2380","2022");
             var apiResult = await _apiController.GetVaccinationsCount();
-
+            var deSoNames = await _apiController.GetDeSoNames();
             var forDropdown = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
+
+            
             return View();
 
         }
