@@ -110,7 +110,7 @@ namespace DSUGrupp1.Controllers
         [HttpPost]
         public async Task<PopulationDto> GetPopulationInSpecificDeSo(string desoCode, string year)
         {
-            string requestUrl = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/BE/BE0101/BE0101Y/FolkmDesoKonN";
+            string requestUrl = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/BE/BE0101/BE0101Y/FolkmDesoAldKonN";
 
             var apiQuery = new ApiQueryDto
             {
