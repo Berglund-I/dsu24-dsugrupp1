@@ -178,5 +178,32 @@ namespace DSUGrupp1.Controllers
 
         }
 
+        /// <summary>
+        /// Calculates the percentage of vaccinated people in a specified DeSo
+        /// </summary>
+        /// <param name="totalPopulation"></param>
+        /// <param name="vaccinatedPeople"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public double CalculateVaccinationPercentage(int totalPopulation, int vaccinatedPeople)
+        {
+
+            //För att inte dela med noll
+            if (totalPopulation <= 0)
+            {
+                throw new Exception("Antalet invånare kan ej vara noll");
+            }
+
+            if (vaccinatedPeople < 0)
+            {
+                throw new Exception("Antalet vaccinerade kan ej vara noll");
+            }
+
+            double percentage = (double)vaccinatedPeople / totalPopulation* 100;
+            return percentage;
+        }
     }
+
+
 }
+
