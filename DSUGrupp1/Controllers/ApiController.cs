@@ -13,7 +13,7 @@ namespace DSUGrupp1.Controllers
     {
 
         /// <summary>
-        /// Gets the total population of a specified Deso for a specified year.
+        /// Gets the total population of a regional code
         /// </summary>
         /// <param name="desoCode"></param>
         /// <param name="year"></param>
