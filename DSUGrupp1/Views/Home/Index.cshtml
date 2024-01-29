@@ -4,7 +4,7 @@
 }
 
 @section LeftContent {
-    <canvas id="myChart"></canvas>
+    @await Component.InvokeAsync("Chart","1")
 }
 
 @section RightContent {
@@ -19,7 +19,7 @@
 }
 
 @section CenterContent {
-
+    @await Component.InvokeAsync("Chart", "2")
 }
 
 
