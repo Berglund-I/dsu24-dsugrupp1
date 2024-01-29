@@ -1,9 +1,11 @@
-using DSUGrupp1.Models;
 using DSUGrupp1.Models.DTO;
+using DSUGrupp1.Models;
+using DSUGrupp1.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Diagnostics;
 using System.Reflection;
+using Newtonsoft.Json;
 
 
 namespace DSUGrupp1.Controllers
@@ -29,11 +31,14 @@ namespace DSUGrupp1.Controllers
         public async Task<ActionResult> Index()
         {
             //var apiResult = await _apiController.GetPopulationCount("2380","2022");
-            var apiResult = await _apiController.GetVaccinationsCount();
+            //var apiResult = await _apiController.GetVaccinationsCount();
 
-            HomeViewModel model = new HomeViewModel();
-            model.Population = await _apiController.GetPopulationInSpecificDeSo("2380A0010", "2022");   
-            model.DataFromSpecificDeSo = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
+            //HomeViewModel model = new HomeViewModel();
+            //model.Population = await _apiController.GetPopulationInSpecificDeSo("2380A0010", "2022");   
+            //model.DataFromSpecificDeSo = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
+            ChartViewModel model = new ChartViewModel();
+                        
+            
 
             return View(model);
 

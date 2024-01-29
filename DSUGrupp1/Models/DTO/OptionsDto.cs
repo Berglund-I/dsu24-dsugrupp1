@@ -2,7 +2,10 @@
 {
     public class OptionsDto
     {
-
-        public TitleDto Title { get; set; }
+        public OptionsDto()
+        {
+            Plugins = new PluginsDto();
+        }
+        public PluginsDto Plugins { get; set; }
     }
 }

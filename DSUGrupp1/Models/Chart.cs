@@ -4,9 +4,15 @@ namespace DSUGrupp1.Models
 {
     public class Chart
     {
+        public Chart() 
+        {
+            Type = "bar";
+            Data = new ChartDataDto();
+            Options = new OptionsDto();
+        }
         public string Type { get; set; }
         public ChartDataDto Data { get; set; }
-        public OptionsDto Options{ get; set; }  
+        public OptionsDto Options { get; set; }  
         
     }
 }

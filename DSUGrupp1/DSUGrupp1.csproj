@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <Folder Include="Models\API\" />
-    <Folder Include="Models\ViewModels\" />
   </ItemGroup>
 
 </Project>

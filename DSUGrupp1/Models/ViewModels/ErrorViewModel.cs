@@ -1,4 +1,4 @@
-namespace DSUGrupp1.Models
+namespace DSUGrupp1.Models.ViewModels
 {
     public class ErrorViewModel
     {
