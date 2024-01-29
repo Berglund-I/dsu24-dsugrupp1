@@ -4,11 +4,13 @@ namespace DSUGrupp1.Models.ViewModels
 {
     public class ChartViewModel
     {
-        public ChartViewModel() 
+        public ChartViewModel(string id) 
         {
+            Id = id;
             Chart = new Chart();    
             JsonChart = JsonConvert.SerializeObject(Chart).ToLower(); 
         }
+        public string Id { get; set; }  
         public Chart Chart { get; set; }
         public string JsonChart { get; set; }
 
