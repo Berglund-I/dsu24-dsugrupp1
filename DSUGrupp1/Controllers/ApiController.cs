@@ -156,6 +156,7 @@ namespace DSUGrupp1.Controllers
                 throw new Exception(apiResponse.ErrorMessage);
             }
 
+        }
 
         /// <summary>
         /// Gets DeSo names and DeSo codes
