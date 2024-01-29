@@ -67,21 +67,21 @@ namespace DSUGrupp1.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetVaccinationsCount()
+        public async Task<VaccineCountDto> GetVaccinationsCount()
         {
             string requestUrl = "https://grupp1.dsvkurs.miun.se/api/vaccinations/count";
 
 			var apiResponse = await ApiEngine.Fetch<VaccineCountDto>(requestUrl, HttpMethod.Get);
 
-			if (apiResponse.IsSuccessful)
-			{
-				return Ok(apiResponse.Data);
-			}
-			else
-			{
-				return StatusCode((int)apiResponse.StatusCode);
-			}
-		}
+            if (apiResponse.IsSuccessful)
+            {
+                return apiResponse.Data;
+            }
+            else
+            {
+                throw new Exception(apiResponse.ErrorMessage);
+            }
+        }
 
         /// <summary>
         /// Gets vaccination data from a specific DeSo
@@ -162,7 +162,7 @@ namespace DSUGrupp1.Controllers
         /// Gets DeSo names and DeSo codes
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> GetDeSoNames()
+        public async Task<DesoInfoDTO> GetDeSoNames()
         {
             string requestUrl = "https://grupp1.dsvkurs.miun.se/api/deso";
 
@@ -170,11 +170,11 @@ namespace DSUGrupp1.Controllers
 
             if (apiResponse.IsSuccessful)
             {
-                return Ok(apiResponse.Data);
+                return apiResponse.Data;
             }
             else
             {
-                return StatusCode((int)apiResponse.StatusCode);
+                throw new Exception(apiResponse.ErrorMessage);
             }
 
         }
