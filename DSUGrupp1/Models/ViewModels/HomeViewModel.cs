@@ -1,6 +1,6 @@
 ﻿using DSUGrupp1.Models.DTO;
 
-namespace DSUGrupp1.Models
+namespace DSUGrupp1.Models.ViewModels
 {
     public class HomeViewModel
     {
