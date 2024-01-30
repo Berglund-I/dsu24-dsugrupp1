@@ -39,10 +39,11 @@ namespace DSUGrupp1.Controllers
 
 
             VaccinationViewModel vaccinations = new VaccinationViewModel();
-            vaccinations.GetVaccinationValues();
-            ChartViewModel model = new ChartViewModel("3");
+            ChartViewModel chart = await vaccinations.GenerateChart();
+            //ChartViewModel model = new ChartViewModel("1");
 
-
+            HomeViewModel model = new HomeViewModel();
+            model.Charts.Add(chart);
 
             return View(model);
 

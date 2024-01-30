@@ -7,7 +7,7 @@ namespace DSUGrupp1.Models.ViewModels
         public ChartViewModel(string id) 
         {
             Id = id;
-            Chart = new Chart();    
+            Chart = new Chart();
             JsonChart = JsonConvert.SerializeObject(Chart).ToLower(); 
         }
         public string Id { get; set; }  

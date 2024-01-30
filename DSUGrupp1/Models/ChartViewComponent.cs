@@ -6,11 +6,12 @@ namespace DSUGrupp1.Models
     public class ChartViewComponent: ViewComponent
     {
 
-        public IViewComponentResult Invoke(string id)
+        public IViewComponentResult Invoke(string id, ChartViewModel chartModel)
         {
-            ChartViewModel model = new ChartViewModel(id);
 
-            return View(model);
+            chartModel.Id = id;
+
+            return View(chartModel);
         }
     }
 }

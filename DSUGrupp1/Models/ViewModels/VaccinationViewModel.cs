@@ -1,4 +1,5 @@
 ﻿using DSUGrupp1.Controllers;
+using Newtonsoft.Json;
 
 namespace DSUGrupp1.Models.ViewModels
 {
@@ -11,11 +12,19 @@ namespace DSUGrupp1.Models.ViewModels
             _apiController = new ApiController();
         }
 
+        public async Task<ChartViewModel> GenerateChart()
+        {
+            ChartViewModel chart = new ChartViewModel("1");
+            chart.Chart = chart.CreateChart("bar", ["En dos", "Två doser", "Tre doser eller fler"], "Vaccinationsgrad i Östersunds kommun i %", await GetVaccinationValues(), ["rgb(119, 0, 255)", "rgb(119, 0, 255)", "rgb(119, 0, 255)"], 10);
+            chart.JsonChart = JsonConvert.SerializeObject(chart.Chart).ToLower();
+            return chart;
+        }
+
         /// <summary>
         /// Fetches population and vaccinations from API, adds all the vaccinated people together in a variable and returns the total vaccination percentage.
         /// </summary>
         /// <returns></returns>
-        public async Task<Object> GetVaccinationValues()
+        public async Task<List<double>> GetVaccinationValues()
         {
             var populationData = await _apiController.GetPopulationCount("2380", "2022");
             var vaccineData = await _apiController.GetVaccinationsCount();
@@ -34,7 +43,7 @@ namespace DSUGrupp1.Models.ViewModels
             double vaccinatedPercentageDoseTwo = CalculateVaccinationPercentage(totalPopulation, secondDose);
             double vaccinatedPercentageDoseThree = CalculateVaccinationPercentage(totalPopulation, thirdDose);
 
-            double[] percentageValues = { vaccinatedPercentageDoseOne, vaccinatedPercentageDoseTwo, vaccinatedPercentageDoseThree };
+            List<double> percentageValues = [vaccinatedPercentageDoseOne, vaccinatedPercentageDoseTwo, vaccinatedPercentageDoseThree];
 
             return percentageValues;
         }
