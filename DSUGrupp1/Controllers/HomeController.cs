@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Diagnostics;
 using System.Reflection;
 using Newtonsoft.Json;
+using System.ComponentModel;
 
 
 namespace DSUGrupp1.Controllers
@@ -59,10 +60,13 @@ namespace DSUGrupp1.Controllers
 
         }
         //Not in use yet
-        public IActionResult PopulateDeSoDropDown()
+        public async Task<IActionResult> GetChartFromDeSoCode(string deSoCode)
         {
+
             var model = new PopulateDeSoDropDownViewModel();
-            return View(model);
+
+            return await ChartViewComponent.Invoke("5") ;
+            //@await Component.InvokeAsync("Chart", "3")
         }
 
 
