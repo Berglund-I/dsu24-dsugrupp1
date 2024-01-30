@@ -14,31 +14,43 @@ namespace DSUGrupp1.Models.ViewModels
         public Chart Chart { get; set; }
         public string JsonChart { get; set; }
 
-        //public Chart CreateChart(string type, List<string> labels, string DatasetLabel, List<int> data, List<string> bgcolor, int bWidth = 5,)
-        //{
-        //    Chart template = new Chart
-        //    {
-        //        Type = type,
-        //        Data = new ChartDataDto
-        //        {
-        //            Labels = labels,
-        //            Datasets = new List<DatasetsDto>
-        //            {
-        //                new DatasetsDto
-        //                {
-        //                    Label =  DatasetLabel,
-        //                    Data = data,
-        //                    BackgroundColor = bgcolor,
-        //                    BorderWidth = 0,
+        public Chart CreateChart(string type, List<string> labels, string DatasetLabel, List<int> data, List<string> bgcolor, int bWidth = 5)
+        {
+            Chart template = new Chart
+            {
+                Type = type,
+                Data = new ChartDataDto
+                {
+                    Labels = labels,
+                    Datasets = new List<DatasetsDto>
+                    {
+                        new DatasetsDto
+                        {
+                            Label = DatasetLabel,
+                            Data = data,
+                            BackgroundColor = bgcolor,
+                            BorderWidth = bWidth,
 
-        //                },
-        //            },
-        //        },
+                        },
+                    },
+                },
+                Options = new OptionsDto
+                {
 
-        //    };
+                    Plugins = new PluginsDto
+                    {
 
-        //    return null;
-        //}
+                        Title = new TitleDto
+                        {
+                            Display = true,
+                            Text = "",
+                        }
+                    }
+                }
+            };
+
+            return template;
+        }
 
     }
 }

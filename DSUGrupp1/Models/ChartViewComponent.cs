@@ -9,6 +9,7 @@ namespace DSUGrupp1.Models
         public IViewComponentResult Invoke(string id)
         {
             ChartViewModel model = new ChartViewModel(id);
+
             return View(model);
         }
     }
