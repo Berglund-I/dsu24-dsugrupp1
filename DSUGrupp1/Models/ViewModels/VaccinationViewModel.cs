@@ -12,6 +12,10 @@ namespace DSUGrupp1.Models.ViewModels
             _apiController = new ApiController();
         }
 
+        /// <summary>
+        /// Method that generates a chart that uses GetVaccinationValues & CalculateVaccinationPercentage for percentage values. Hard coded text for labels in the new chart.
+        /// </summary>
+        /// <returns></returns>
         public async Task<ChartViewModel> GenerateChart()
         {
             ChartViewModel chart = new ChartViewModel();

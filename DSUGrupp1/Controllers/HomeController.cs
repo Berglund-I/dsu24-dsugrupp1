@@ -30,30 +30,14 @@ namespace DSUGrupp1.Controllers
 
         public async Task<ActionResult> Index()
         {
-            //var apiResult = await _apiController.GetPopulationCount("2380","2022");
-            //var apiResult = await _apiController.GetVaccinationsCount();
-
-            //HomeViewModel model = new HomeViewModel();
-            //model.Population = await _apiController.GetPopulationInSpecificDeSo("2380A0010", "2022");   
-            //model.DataFromSpecificDeSo = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
-
-
             VaccinationViewModel vaccinations = new VaccinationViewModel();
             ChartViewModel chart = await vaccinations.GenerateChart();
-            //ChartViewModel model = new ChartViewModel("1");
 
             HomeViewModel model = new HomeViewModel();
             
             model.Charts.Add(chart);
 
             return View(model);
-
-            //var deSoNames = await _apiController.GetDeSoNames();
-            //var forDropdown = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
-
-            
-            //return View();
-
 
         }
 
