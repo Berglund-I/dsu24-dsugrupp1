@@ -22,12 +22,6 @@ namespace DSUGrupp1.Controllers
             _apiController = new ApiController();     
         }
 
-
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
-
         public async Task<ActionResult> Index()
         {
             VaccinationViewModel vaccinations = new VaccinationViewModel();
