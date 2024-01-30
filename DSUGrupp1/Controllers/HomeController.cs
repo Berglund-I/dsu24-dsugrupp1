@@ -58,6 +58,13 @@ namespace DSUGrupp1.Controllers
 
 
         }
+        //Not in use yet
+        public IActionResult PopulateDeSoDropDown()
+        {
+            var model = new PopulateDeSoDropDownViewModel();
+            return View(model);
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

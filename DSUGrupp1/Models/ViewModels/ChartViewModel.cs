@@ -9,10 +9,12 @@ namespace DSUGrupp1.Models.ViewModels
             Id = id;
             Chart = new Chart();    
             JsonChart = JsonConvert.SerializeObject(Chart).ToLower(); 
+            DeSoDropDown = new PopulateDeSoDropDownViewModel();
         }
         public string Id { get; set; }  
         public Chart Chart { get; set; }
         public string JsonChart { get; set; }
+        public PopulateDeSoDropDownViewModel DeSoDropDown { get; set; }
 
         //public Chart CreateChart(string type, List<string> labels, string DatasetLabel, List<int> data, List<string> bgcolor, int bWidth = 5,)
         //{

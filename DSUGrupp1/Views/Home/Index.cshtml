@@ -1,4 +1,6 @@
 ﻿@model DSUGrupp1.Models.ViewModels.ChartViewModel
+
+
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -8,14 +10,13 @@
 }
 
 @section RightContent {
-    <div class = "chart-container" width ="600" heigth="400">
-        <canvas id="myChart2"></canvas>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        var ctx = document.getElementById('myChart2');
-        var myChart2 = new Chart(ctx, @Html.Raw(Model.JsonChart))
-    </script>
+    @using (Html.BeginForm("PopulateDeSoDropDown", "home"))
+    {
+        @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj ett område")
+    }
+
+    @await Component.InvokeAsync("Chart", "3")
+    
 }
 
 @section CenterContent {
