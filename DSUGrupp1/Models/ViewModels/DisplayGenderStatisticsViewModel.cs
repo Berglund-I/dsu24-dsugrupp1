@@ -10,7 +10,7 @@ namespace DSUGrupp1.Models.ViewModels
         public int VaccinatiedMales { get; set; }
 
 
-        List<VaccinationDataFromSpecificDeSoDto> _vaccinationDataFromSpecificDeSoDto = null;
+        private List<VaccinationDataFromSpecificDeSoDto> _vaccinationDataFromSpecificDeSoDto = null;
 
         public DisplayGenderStatisticsViewModel(PopulationDto population, List<VaccinationDataFromSpecificDeSoDto> vaccinationDataFromSpecificDeSoDto)
         {
