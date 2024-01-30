@@ -36,6 +36,10 @@ namespace DSUGrupp1.Controllers
             //HomeViewModel model = new HomeViewModel();
             //model.Population = await _apiController.GetPopulationInSpecificDeSo("2380A0010", "2022");   
             //model.DataFromSpecificDeSo = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
+
+
+            VaccinationViewModel vaccinations = new VaccinationViewModel();
+            vaccinations.GetVaccinationValues();
             ChartViewModel model = new ChartViewModel("3");
 
 
