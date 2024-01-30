@@ -6,7 +6,6 @@ namespace DSUGrupp1.Models
 {
     public class ChartViewComponent: ViewComponent
     {
-
         public IViewComponentResult Invoke(string id, ChartViewModel chartModel)
         {
             if (chartModel == null)
