@@ -1,4 +1,6 @@
+
 ﻿@model DSUGrupp1.Models.ViewModels.HomeViewModel
+
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -8,6 +10,13 @@
 }
 
 @section RightContent {
+
+    @using (Html.BeginForm("PopulateDeSoDropDown", "home"))
+    {
+        @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj ett område")
+    }
+
+    @await Component.InvokeAsync("Chart", "3")
     
 }
 
