@@ -4,9 +4,15 @@ namespace DSUGrupp1.Models.ViewModels
 {
     public class HomeViewModel
     {
-        public VaccinationDataFromSpecificDeSoDto DataFromSpecificDeSo { get; set; }
+        public HomeViewModel() 
+        {
+            Charts = new List<ChartViewModel>(); 
+        }
+        public List<ChartViewModel> Charts { get; set; }
 
-        public PopulationDto Population { get; set; }
+        public VaccinationDataFromSpecificDeSoDto? DataFromSpecificDeSo { get; set; }
+
+        public PopulationDto? Population { get; set; }
 
     }
 }
