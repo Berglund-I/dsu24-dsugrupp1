@@ -34,7 +34,9 @@ namespace DSUGrupp1.Models.ViewModels
             double vaccinatedPercentageDoseTwo = CalculateVaccinationPercentage(totalPopulation, secondDose);
             double vaccinatedPercentageDoseThree = CalculateVaccinationPercentage(totalPopulation, thirdDose);
 
-            return vaccinatedPercentageDoseOne;
+            double[] percentageValues = { vaccinatedPercentageDoseOne, vaccinatedPercentageDoseTwo, vaccinatedPercentageDoseThree };
+
+            return percentageValues;
         }
 
         /// <summary>
