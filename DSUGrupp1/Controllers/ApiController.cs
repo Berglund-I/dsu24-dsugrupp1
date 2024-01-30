@@ -4,6 +4,8 @@ using System.Text;
 using DSUGrupp1.Models.DTO;
 using System.Net;
 using DSUGrupp1.Infastructure;
+using System.ComponentModel;
+using System.Collections.Specialized;
 
 
 namespace DSUGrupp1.Controllers
@@ -37,10 +39,15 @@ namespace DSUGrupp1.Controllers
                         Code = "ContentsCode",
                         Selection = new Selection { Filter = "item", Values = new List<string> { "BE0101N1" } }
                     },
-                     new QueryItem
+                    new QueryItem
                     {
                         Code = "Tid",
                         Selection = new Selection { Filter = "item", Values = new List<string> { $"{year}" } }
+                    },
+                    new QueryItem
+                    {
+                        Code = "Kon",
+                        Selection = new Selection { Filter = "item", Values = new List<string> { "1", "2" } }
                     },
 
                 },
@@ -106,6 +113,20 @@ namespace DSUGrupp1.Controllers
                 throw new Exception(apiResponse.ErrorMessage);
             }
         }
+
+        public async Task<List<VaccinationDataFromSpecificDeSoDto>> GetVaccinationDataFromAllDeSos(VaccineCountDto vaccineCountDto)
+        {
+            List<VaccinationDataFromSpecificDeSoDto> allVaccinationData = new List<VaccinationDataFromSpecificDeSoDto>();
+
+            foreach (VaccineData vaccindata in vaccineCountDto.Data)
+            {
+                var apiResponse = await GetVaccinationDataFromDeSo(vaccindata.Deso);
+                allVaccinationData.Add(apiResponse);
+
+            }
+                return allVaccinationData;
+        }
+
 
 
         [HttpPost]

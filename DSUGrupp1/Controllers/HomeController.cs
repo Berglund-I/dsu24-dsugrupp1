@@ -36,9 +36,17 @@ namespace DSUGrupp1.Controllers
             //HomeViewModel model = new HomeViewModel();
             //model.Population = await _apiController.GetPopulationInSpecificDeSo("2380A0010", "2022");   
             //model.DataFromSpecificDeSo = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
+
+
+            var apiResult1 = await _apiController.GetPopulationCount("2380", "2022");
+            var apiResult2 = await _apiController.GetVaccinationsCount();
+            var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
+
+
+            var genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, vaccineDataAllDeso);
+
+
             ChartViewModel model = new ChartViewModel("3");
-
-
 
             return View(model);
 
