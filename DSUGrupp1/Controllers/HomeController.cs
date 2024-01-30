@@ -43,15 +43,16 @@ namespace DSUGrupp1.Controllers
             //ChartViewModel model = new ChartViewModel("1");
 
             HomeViewModel model = new HomeViewModel();
+            
             model.Charts.Add(chart);
 
             return View(model);
 
-            var deSoNames = await _apiController.GetDeSoNames();
-            var forDropdown = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
+            //var deSoNames = await _apiController.GetDeSoNames();
+            //var forDropdown = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
 
             
-            return View();
+            //return View();
 
 
         }

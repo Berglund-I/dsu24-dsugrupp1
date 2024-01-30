@@ -14,7 +14,7 @@ namespace DSUGrupp1.Models.ViewModels
 
         public async Task<ChartViewModel> GenerateChart()
         {
-            ChartViewModel chart = new ChartViewModel("1");
+            ChartViewModel chart = new ChartViewModel();
             chart.Chart = chart.CreateChart("bar", ["En dos", "Två doser", "Tre doser eller fler"], "Vaccinationsgrad i Östersunds kommun i %", await GetVaccinationValues(), ["rgb(119, 0, 255)", "rgb(119, 0, 255)", "rgb(119, 0, 255)"], 10);
             chart.JsonChart = JsonConvert.SerializeObject(chart.Chart).ToLower();
             return chart;
