@@ -50,8 +50,10 @@ namespace DSUGrupp1.Controllers
 
             
             DisplayGenderStatisticsViewModel genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, vaccineDataAllDeso);
-            ChartViewModel chartGender = genderStatistics.GenerateChartFemales();
-            model.Charts.Add(chartGender);
+            ChartViewModel chartGenderFemales = genderStatistics.GenerateChartFemales();
+            ChartViewModel chartGenderMales = genderStatistics.GenerateChartMales();
+            model.Charts.Add(chartGenderFemales);
+            model.Charts.Add(chartGenderMales);
 
             //var ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
 

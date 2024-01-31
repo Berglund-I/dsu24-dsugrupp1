@@ -64,8 +64,9 @@
 }
 
 @section CenterContent2 {
-    <div class="female-chart">
+    <div class="chart-size">
     @await Component.InvokeAsync("Chart", new { Id = "4", ChartModel = Model.Charts[1] })
+        @await Component.InvokeAsync("Chart", new { Id = "5", ChartModel = Model.Charts[2] })
     </div>
 }
 
