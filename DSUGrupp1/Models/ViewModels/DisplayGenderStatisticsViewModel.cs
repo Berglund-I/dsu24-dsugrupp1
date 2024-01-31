@@ -11,6 +11,9 @@ namespace DSUGrupp1.Models.ViewModels
         public int VaccinatedMales { get; set; }
 
 
+        public int AgeAtVaccinationdDate { get; set; }
+
+
 
         private List<VaccinationDataFromSpecificDeSoDto> _vaccinationDataFromSpecificDeSoDto = null;
         private double vaccinatedFemalesPercent;

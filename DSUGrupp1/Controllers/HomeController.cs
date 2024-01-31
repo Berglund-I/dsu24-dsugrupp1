@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Diagnostics;
 using System.Reflection;
 using Newtonsoft.Json;
+using System.ComponentModel;
 
 
 namespace DSUGrupp1.Controllers
@@ -13,6 +14,7 @@ namespace DSUGrupp1.Controllers
     public class HomeController : Controller
     {
         private readonly ApiController _apiController;
+       
 
         private readonly ILogger<HomeController> _logger;
 
@@ -49,25 +51,26 @@ namespace DSUGrupp1.Controllers
             
             DisplayGenderStatisticsViewModel genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, vaccineDataAllDeso);
             ChartViewModel chartGender = genderStatistics.GenerateChartFemales();
-
             model.Charts.Add(chartGender);
+
+            //var ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
+
+
+            
 
             //ChartViewModel model = new ChartViewModel("3");
 
             return View(model);
 
-            var deSoNames = await _apiController.GetDeSoNames();
-            var forDropdown = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
-
-
         }
-        //Not in use yet
-        public IActionResult PopulateDeSoDropDown()
+        [HttpPost]
+        public IActionResult GetChartFromDeSoCode([FromBody] TestFetch data)
         {
-            var model = new PopulateDeSoDropDownViewModel();
-            return View(model);
+            var response = new DeSoChartViewModel(data.SelectedDeSo);
+            
+            return Ok(response.JsonChart);          
         }
-
+ 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
