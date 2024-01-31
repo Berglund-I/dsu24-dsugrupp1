@@ -4,9 +4,16 @@ namespace DSUGrupp1.Models.ViewModels
 {
     public class HomeViewModel
     {
-        public VaccinationDataFromSpecificDeSoDto DataFromSpecificDeSo { get; set; }
+        public HomeViewModel() 
+        {
+            Charts = new List<ChartViewModel>();
+            DeSoDropDown = new PopulateDeSoDropDownViewModel();
+        }
+        public List<ChartViewModel> Charts { get; set; }
+        public PopulateDeSoDropDownViewModel DeSoDropDown { get; set; }
+        //public VaccinationDataFromSpecificDeSoDto? DataFromSpecificDeSo { get; set; }
 
-        public PopulationDto Population { get; set; }
+        //public PopulationDto? Population { get; set; }
 
     }
 }
