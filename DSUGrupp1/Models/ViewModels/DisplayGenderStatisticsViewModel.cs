@@ -62,6 +62,7 @@ namespace DSUGrupp1.Models.ViewModels
         {
             ChartViewModel chart = new ChartViewModel();
             chart.Chart = chart.CreateChart(
+                text: "Vaccination för kön",
                 type: "pie",
                 labels: ["Vaccinerade kvinnor i procent", "Ovaccinerade kvinnor i procent"],
                 DatasetLabel: "Vaccinationsgrad bland kvinnor",
