@@ -14,6 +14,7 @@ namespace DSUGrupp1.Controllers
     public class HomeController : Controller
     {
         private readonly ApiController _apiController;
+       
 
         private readonly ILogger<HomeController> _logger;
 
@@ -23,14 +24,12 @@ namespace DSUGrupp1.Controllers
             _apiController = new ApiController();     
         }
 
-
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
-
         public async Task<ActionResult> Index()
         {
+
+            VaccinationViewModel vaccinations = new VaccinationViewModel();
+            ChartViewModel chart = await vaccinations.GenerateChart();
+
             //var apiResult = await _apiController.GetPopulationCount("2380","2022");
             //var apiResult = await _apiController.GetVaccinationsCount();
 
@@ -38,25 +37,23 @@ namespace DSUGrupp1.Controllers
             //model.Population = await _apiController.GetPopulationInSpecificDeSo("2380A0010", "2022");   
             //model.DataFromSpecificDeSo = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
 
-
-            var apiResult1 = await _apiController.GetPopulationCount("2380", "2022");
-            var apiResult2 = await _apiController.GetVaccinationsCount();
-            var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
-
-
-            var genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, vaccineDataAllDeso);
-
-
-            ChartViewModel model = new ChartViewModel("3");
-
-            return View(model);
-
-            var deSoNames = await _apiController.GetDeSoNames();
-            var forDropdown = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
+            HomeViewModel model = new HomeViewModel();
+            
+            model.Charts.Add(chart);
 
             
-            return View();
+            //var apiResult1 = await _apiController.GetPopulationCount("2380", "2022");
+            //var apiResult2 = await _apiController.GetVaccinationsCount();
+            //var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
+            
 
+            //var genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, vaccineDataAllDeso);
+            //var ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
+
+
+            //ChartViewModel model = new ChartViewModel("3");
+
+            return View(model);
 
         }
         [HttpPost]
