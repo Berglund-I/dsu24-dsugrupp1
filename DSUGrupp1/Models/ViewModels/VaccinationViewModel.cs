@@ -33,7 +33,7 @@ namespace DSUGrupp1.Models.ViewModels
             var populationData = await _apiController.GetPopulationCount("2380", "2022");
             var vaccineData = await _apiController.GetVaccinationsCount();
 
-            int totalPopulation = int.Parse(populationData.Data[0].Values[0]);
+            int totalPopulation = int.Parse(populationData.Data[0].Values[0]) + int.Parse(populationData.Data[1].Values[0]);            
             int oneDose = 0, secondDose = 0, thirdDose = 0;
 
             foreach (var deSo in vaccineData.Data)

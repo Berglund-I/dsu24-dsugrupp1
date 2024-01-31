@@ -1,5 +1,4 @@
-
-﻿@model DSUGrupp1.Models.ViewModels.HomeViewModel
+@model DSUGrupp1.Models.ViewModels.HomeViewModel
 
 @{
     ViewData["Title"] = "Home Page";
@@ -21,7 +20,7 @@
 }
 
 @section CenterContent {
-    @await Component.InvokeAsync("Chart", "2")
+    @await Component.InvokeAsync("Chart", new { Id = "2", ChartModel = Model.Charts[1] })
 }
 
 
