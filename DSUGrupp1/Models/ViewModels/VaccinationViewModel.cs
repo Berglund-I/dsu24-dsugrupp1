@@ -62,7 +62,6 @@ namespace DSUGrupp1.Models.ViewModels
         {
             var populationData = await _apiController.GetPopulationCount("2380", "2022");
             int totalPopulation = int.Parse(populationData.Data[0].Values[0]) + int.Parse(populationData.Data[1].Values[0]);
-
             return totalPopulation;
         }
 
