@@ -29,25 +29,33 @@ namespace DSUGrupp1.Controllers
             VaccinationViewModel vaccinations = new VaccinationViewModel();
             ChartViewModel chart = await vaccinations.GenerateChart();
 
+
+
             //var apiResult = await _apiController.GetPopulationCount("2380","2022");
             //var apiResult = await _apiController.GetVaccinationsCount();
 
             //HomeViewModel model = new HomeViewModel();
             //model.Population = await _apiController.GetPopulationInSpecificDeSo("2380A0010", "2022");   
             //model.DataFromSpecificDeSo = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
-
-            HomeViewModel model = new HomeViewModel();
-            
-            model.Charts.Add(chart);
-
-            
             var apiResult1 = await _apiController.GetPopulationCount("2380", "2022");
             var apiResult2 = await _apiController.GetVaccinationsCount();
             var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
+
+            HomeViewModel model = new HomeViewModel();
+            DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
+
+            ChartViewModel ageChart = await ageStatistics.GenerateChart();
+
+
+            
+            model.Charts.Add(chart);
+            model.Charts.Add(ageChart);
+
+            
+            
             
 
             var genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, vaccineDataAllDeso);
-            var ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
 
 
             //ChartViewModel model = new ChartViewModel("3");

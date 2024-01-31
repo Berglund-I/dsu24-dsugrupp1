@@ -5,13 +5,12 @@ namespace DSUGrupp1.Models.ViewModels
     public class DisplayAgeStatisticsViewModel
     {
         public List<VaccinationDataFromSpecificDeSoDto> VaccinationDataFromSpecificDeso { get; set; }
-        public int AgesWhenVaccinated { get; set; }
-        public int FirstDoseCount { get; set; }
-        public int SecondDoseCount { get; set; }
-        public int BoosterDoseCount { get; set; }
+        
 
         public Dictionary<string, AgeGroupDoseCounts> AgeGroupDoseCounts { get; set; }
 
+        public List<string> doseColors = new List<string> { "rgb(255, 99, 132)", "rgb(54, 162, 235)", "rgb(255, 206, 86)" };
+        public List<string> labels = new List<string> { "16-30", "31-45", "46-60", "61+" };
 
 
         public DisplayAgeStatisticsViewModel(List<VaccinationDataFromSpecificDeSoDto> vaccinationDataFromSpecificDeso)
@@ -21,12 +20,21 @@ namespace DSUGrupp1.Models.ViewModels
             CalculateAgeAndDoseCounts();
         }
 
+        public async Task<ChartViewModel> GenerateChart()
+        {
+            ChartViewModel chart = new ChartViewModel();
+            chart.Chart = chart.CreateAgeChart("bar", labels, await CalculateAgeAndDoseCounts(), doseColors, 10);
+            chart.JsonChart = chart.SerializeJson(chart.Chart);
+            return chart;
+        }
+
         /// <summary>
         /// Calulates the age of the patients when they got vaccinated and how many doses they got
         /// </summary>
 
-        private void CalculateAgeAndDoseCounts()
+        private async Task<Dictionary<string, AgeGroupDoseCounts>> CalculateAgeAndDoseCounts()
         {
+            List<double> groupAgeAndDoseCount = new List<double>();
             foreach (var data in VaccinationDataFromSpecificDeso)
             {
                 foreach (var patient in data.Patients)
@@ -70,6 +78,10 @@ namespace DSUGrupp1.Models.ViewModels
 
                 
             }
+            
+            
+
+            return AgeGroupDoseCounts;
         }
 
         /// <summary>

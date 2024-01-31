@@ -7,5 +7,7 @@
             Plugins = new PluginsDto();
         }
         public PluginsDto Plugins { get; set; }
-    }
+        public bool Responsive { get; set; } 
+        public bool MaintainAspectRatio { get; set; }
+    }   
 }
