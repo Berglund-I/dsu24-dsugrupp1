@@ -35,11 +35,11 @@ namespace DSUGrupp1.Models.ViewModels
         /// <exception cref="Exception"></exception>
         public void CountVaccinatedGenderPercent() 
         {
-            if (VaccinatedFemales <= 0 || PopulationFemales <= 0)
+            if (PopulationFemales <= 0)
             {
                 throw new Exception("Antalet kvinnor kan ej vara noll");
             }
-            if (VaccinatedMales <= 0 || PopulationMales <= 0)
+            if (PopulationMales <= 0)
             {
                 throw new Exception("Antalet män kan ej vara noll");
             }
