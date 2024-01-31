@@ -19,21 +19,23 @@ namespace DSUGrupp1.Models.ViewModels
         public async Task<ChartViewModel> GenerateChart()
         {
             ChartViewModel chart = new ChartViewModel();
-            chart.Chart = chart.CreateChart("bar", ["En dos", "Två doser", "Tre doser eller fler"], "Vaccinationsgrad i Östersunds kommun i %", await GetVaccinationValues(), ["rgb(119, 0, 255)", "rgb(119, 0, 255)", "rgb(119, 0, 255)"], 10);
+
+
+            int population = await GetMunicipalityPopulation();
+            chart.Chart = chart.CreateChart("Vaccinationsgrad i Östersunds kommun", "bar", ["En dos", "Två doser", "Tre doser eller fler"], $"% av totalt {population} invånare", await GetVaccinationValues(), ["rgb(29, 52, 97)", "rgb(55, 105, 150)", "rgb(130, 156, 188)"], 5);
             chart.JsonChart = chart.SerializeJson(chart.Chart);
             return chart;
         }
 
         /// <summary>
-        /// Fetches population and vaccinations from API, adds all the vaccinated people together in a variable and returns the total vaccination percentage.
+        /// Fetches vaccinations from API, calls for municipality population, adds all the vaccinated people together in a list and returns the total vaccination percentage.
         /// </summary>
         /// <returns></returns>
         public async Task<List<double>> GetVaccinationValues()
         {
-            var populationData = await _apiController.GetPopulationCount("2380", "2022");
             var vaccineData = await _apiController.GetVaccinationsCount();
 
-            int totalPopulation = int.Parse(populationData.Data[0].Values[0]) + int.Parse(populationData.Data[1].Values[0]);            
+            int totalPopulation = await GetMunicipalityPopulation();        
             int oneDose = 0, secondDose = 0, thirdDose = 0;
 
             foreach (var deSo in vaccineData.Data)
@@ -50,6 +52,17 @@ namespace DSUGrupp1.Models.ViewModels
             List<double> percentageValues = [vaccinatedPercentageDoseOne, vaccinatedPercentageDoseTwo, vaccinatedPercentageDoseThree];
 
             return percentageValues;
+        }
+
+        /// <summary>
+        /// Method that fetches population statistics, aswell as merges genders together to get a full population count.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<int> GetMunicipalityPopulation()
+        {
+            var populationData = await _apiController.GetPopulationCount("2380", "2022");
+            int totalPopulation = int.Parse(populationData.Data[0].Values[0]) + int.Parse(populationData.Data[1].Values[0]);
+            return totalPopulation;
         }
 
         /// <summary>

@@ -6,7 +6,7 @@
         {
             Label = "test";
             Data = new List<double> { 1, 2, 3 };
-            BackgroundColor = new List<string> { "rgb(220, 174, 198)" };
+            BackgroundColor = new List<string> {};
             BorderWidth = 10;   
         }
         public string Label { get; set; }
