@@ -62,15 +62,11 @@ namespace DSUGrupp1.Controllers
         [HttpPost]
         public IActionResult GetChartFromDeSoCode([FromBody] TestFetch data)
         {
-            var variable = data;
             var response = new DeSoChartViewModel(data.SelectedDeSo);
             
             return Ok(response.JsonChart);          
         }
-        //return Json(new { success = true });
-
-        //return await ChartViewComponent.Invoke("5") ;
-        //@await Component.InvokeAsync("Chart", "3")
+ 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
