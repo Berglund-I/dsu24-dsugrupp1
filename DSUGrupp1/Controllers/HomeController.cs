@@ -46,8 +46,8 @@ namespace DSUGrupp1.Controllers
             //var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
             
 
-            var genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, vaccineDataAllDeso);
-            var ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
+            //var genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, vaccineDataAllDeso);
+            //var ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
 
 
             //ChartViewModel model = new ChartViewModel("3");
