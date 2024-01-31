@@ -59,16 +59,18 @@ namespace DSUGrupp1.Controllers
 
 
         }
-        //Not in use yet
-        public async Task<IActionResult> GetChartFromDeSoCode(string deSoCode)
+        [HttpPost]
+        public IActionResult GetChartFromDeSoCode([FromBody] TestFetch data)
         {
-
-            var model = new PopulateDeSoDropDownViewModel();
-
-            return await ChartViewComponent.Invoke("5") ;
-            //@await Component.InvokeAsync("Chart", "3")
+            var variable = data;
+            var response = new DeSoChartViewModel(data.SelectedDeSo);
+            
+            return Ok(response.JsonChart);          
         }
+        //return Json(new { success = true });
 
+        //return await ChartViewComponent.Invoke("5") ;
+        //@await Component.InvokeAsync("Chart", "3")
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

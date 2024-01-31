@@ -17,6 +17,7 @@
     }
     -->
     @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj ett område", new{@id = "deSo-dropdown"})
+    <canvas id="deSo-chart"></canvas>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const deSoDropdown = document.getElementById('deSo-dropdown');
@@ -25,10 +26,30 @@
                 let selectedDeSo = this.value;
                 console.log(selectedDeSo);
 
-                fetch('/HomeController/GetChartFromDeSoCode?selectedDeSo=${selectedDeSo}')
-                    .then(response => response.text())
-                    .then(html => {
-                        this.innerHTML = html;
+
+                fetch('/Home/GetChartFromDeSoCode', {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json',
+
+                    },
+                    body: JSON.stringify({ selectedDeSo }),
+                })
+
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Inte bra');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Succes:', data);
+                        const ctx = document.getElementById('deSo-chart').getContext('2d');
+
+                        new Chart(ctx, data); 
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
                     });
             });
         });
