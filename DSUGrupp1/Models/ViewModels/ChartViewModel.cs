@@ -28,7 +28,6 @@ namespace DSUGrupp1.Models.ViewModels
                     NamingStrategy = new CamelCaseNamingStrategy()
                 }
             };
-
             var json = JsonConvert.SerializeObject(chart, settings);
             return json;
         }
