@@ -38,6 +38,11 @@ header {
 }
 .center {
     width: 98%;
+    height: 600px;
+}
+.female-chart {
+    width: 30%;
+    height: 30%;
 }
 footer {
     padding: 10px;

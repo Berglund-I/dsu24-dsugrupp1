@@ -1,4 +1,5 @@
 ﻿using DSUGrupp1.Models.DTO;
+using Newtonsoft.Json;
 
 namespace DSUGrupp1.Models.ViewModels
 {
@@ -7,10 +8,16 @@ namespace DSUGrupp1.Models.ViewModels
         public int PopulationFemales { get; set; }
         public int VaccinatedFemales { get; set; }
         public int PopulationMales { get; set; }
-        public int VaccinatiedMales { get; set; }
+        public int VaccinatedMales { get; set; }
+
 
 
         private List<VaccinationDataFromSpecificDeSoDto> _vaccinationDataFromSpecificDeSoDto = null;
+        private double vaccinatedFemalesPercent;
+        private double vaccinatedMalesPercent;
+        private double notVaccinatedFemalesPercent;
+        private double notVaccinatedMalesPercent;
+
 
         public DisplayGenderStatisticsViewModel(PopulationDto population, List<VaccinationDataFromSpecificDeSoDto> vaccinationDataFromSpecificDeSoDto)
         {
@@ -18,9 +25,38 @@ namespace DSUGrupp1.Models.ViewModels
             PopulationFemales = int.Parse(population.Data[1].Values[0]);
             _vaccinationDataFromSpecificDeSoDto = vaccinationDataFromSpecificDeSoDto;
             CountVaccinatedGender();
+            CountVaccinatedGenderPercent();
 
 
         }
+
+        public void CountVaccinatedGenderPercent() 
+        {
+            vaccinatedFemalesPercent = Math.Round((double)VaccinatedFemales / PopulationFemales * 100, 2);
+            vaccinatedMalesPercent = Math.Round((double)VaccinatedMales / PopulationMales * 100, 2);
+            notVaccinatedFemalesPercent = Math.Round(100 - vaccinatedFemalesPercent, 2);
+            notVaccinatedMalesPercent = Math.Round(100 - vaccinatedMalesPercent, 2);
+
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ChartViewModel> GenerateChart()
+        {
+            ChartViewModel chart = new ChartViewModel();
+            chart.Chart = chart.CreateChart(
+                type: "pie",
+                labels: ["Vaccinerade kvinnor i procent", "Ovaccinerade kvinnor i procent"],
+                DatasetLabel: "Vaccinationsgrad bland kvinnor",
+                data: [vaccinatedFemalesPercent, notVaccinatedFemalesPercent],
+                bgcolor: ["rgb(119, 0, 255)", "rgb(119, 0, 255)"], 5);
+            chart.JsonChart = JsonConvert.SerializeObject(chart.Chart).ToLower();
+            return chart;
+        }
+
 
         /// <summary>
         /// This method counts the number of vaccinated males and females by iterating through vaccination data for specific Deso codes. 
@@ -35,7 +71,7 @@ namespace DSUGrupp1.Models.ViewModels
                 {
                     if (patient.Gender == "Male")
                     {
-                        VaccinatiedMales++;
+                        VaccinatedMales++;
                     }
                     else if (patient.Gender == "Female")
                     {
@@ -43,8 +79,6 @@ namespace DSUGrupp1.Models.ViewModels
                     }
                 }
             }
-
-
         }
 
     }
