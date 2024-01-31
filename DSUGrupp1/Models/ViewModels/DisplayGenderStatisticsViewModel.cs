@@ -27,11 +27,22 @@ namespace DSUGrupp1.Models.ViewModels
             CountVaccinatedGender();
             CountVaccinatedGenderPercent();
 
-
         }
 
+        /// <summary>
+        /// A method that calculates the percentage of vaccinated and unvaccinated women and men.
+        /// </summary>
+        /// <exception cref="Exception"></exception>
         public void CountVaccinatedGenderPercent() 
         {
+            if (VaccinatedFemales <= 0 || PopulationFemales <= 0)
+            {
+                throw new Exception("Antalet kvinnor kan ej vara noll");
+            }
+            if (VaccinatedMales <= 0 || PopulationMales <= 0)
+            {
+                throw new Exception("Antalet män kan ej vara noll");
+            }
             vaccinatedFemalesPercent = Math.Round((double)VaccinatedFemales / PopulationFemales * 100, 2);
             vaccinatedMalesPercent = Math.Round((double)VaccinatedMales / PopulationMales * 100, 2);
             notVaccinatedFemalesPercent = Math.Round(100 - vaccinatedFemalesPercent, 2);
@@ -41,10 +52,10 @@ namespace DSUGrupp1.Models.ViewModels
 
 
         /// <summary>
-        /// 
+        /// A method that generates a Chart for the vaccination percentage of women.
         /// </summary>
         /// <returns></returns>
-        public async Task<ChartViewModel> GenerateChart()
+        public ChartViewModel GenerateChartFemales()
         {
             ChartViewModel chart = new ChartViewModel();
             chart.Chart = chart.CreateChart(
@@ -59,8 +70,7 @@ namespace DSUGrupp1.Models.ViewModels
 
 
         /// <summary>
-        /// This method counts the number of vaccinated males and females by iterating through vaccination data for specific Deso codes. 
-        /// It checks the gender of each patient and increments counters accordingly, returning an array with the count of vaccinated males and females.
+        /// A method that checks through the patients in different desos and sorts them into women and men.
         /// </summary>
         /// <returns></returns>
         public void CountVaccinatedGender()
