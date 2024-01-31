@@ -4,8 +4,8 @@
     {
         public PluginsDto() 
         {
-            Title = new TitleDto();
+            title = new TitleDto();
         } 
-        public TitleDto Title { get; set; }
+        public TitleDto title { get; set; }
     }
 }

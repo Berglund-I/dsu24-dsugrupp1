@@ -4,8 +4,8 @@
     {
         public OptionsDto()
         {
-            Plugins = new PluginsDto();
+            plugins = new PluginsDto();
         }
-        public PluginsDto Plugins { get; set; }
+        public PluginsDto plugins { get; set; }
     }
 }

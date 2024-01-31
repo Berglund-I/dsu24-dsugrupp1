@@ -18,31 +18,31 @@ namespace DSUGrupp1.Models.ViewModels
         {
             Chart template = new Chart
             {
-                Type = type,
-                Data = new ChartDataDto
+                type = type,
+                data = new ChartDataDto
                 {
-                    Labels = labels,
-                    Datasets = new List<DatasetsDto>
+                    labels = labels,
+                    datasets = new List<DatasetsDto>
                     {
                         new DatasetsDto
                         {
-                            Label = DatasetLabel,
-                            Data = data,
-                            BackgroundColor = bgcolor,
-                            BorderWidth = bWidth,
+                            label = DatasetLabel,
+                            data = data,
+                            backgroundColor = bgcolor,
+                            borderWidth = bWidth,
                         },
                     },
                 },
-                Options = new OptionsDto
+                options = new OptionsDto
                 {
 
-                    Plugins = new PluginsDto
+                    plugins = new PluginsDto
                     {
 
-                        Title = new TitleDto
+                        title = new TitleDto
                         {
-                            Display = true,
-                            Text = "",
+                            display = true,
+                            text = "",
                         }
                     }
                 }

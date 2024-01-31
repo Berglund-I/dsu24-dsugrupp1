@@ -4,10 +4,10 @@
     {
         public TitleDto() 
         {
-            Display = true;
-            Text = "Vad som helst";
+            display = true;
+            text = "Vad som helst";
         }
-        public bool Display {  get; set; }
-        public string Text { get; set; }
+        public bool display {  get; set; }
+        public string text { get; set; }
     }
 }
