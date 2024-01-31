@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Diagnostics;
 using System.Reflection;
 using Newtonsoft.Json;
+using System.ComponentModel;
 
 
 namespace DSUGrupp1.Controllers
@@ -55,13 +56,14 @@ namespace DSUGrupp1.Controllers
             return View(model);
 
         }
-        //Not in use yet
-        public IActionResult PopulateDeSoDropDown()
+        [HttpPost]
+        public IActionResult GetChartFromDeSoCode([FromBody] TestFetch data)
         {
-            var model = new PopulateDeSoDropDownViewModel();
-            return View(model);
+            var response = new DeSoChartViewModel(data.SelectedDeSo);
+            
+            return Ok(response.JsonChart);          
         }
-
+ 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
