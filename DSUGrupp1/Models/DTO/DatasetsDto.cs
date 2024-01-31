@@ -4,15 +4,15 @@
     {
         public DatasetsDto() 
         {
-            label = "test";
-            data = new List<double> { 1, 2, 3 };
-            backgroundColor = new List<string> {};
-            borderWidth = 10;   
+            Label = "test";
+            Data = new List<double> { 1, 2, 3 };
+            BackgroundColor = new List<string> {};
+            BorderWidth = 10;   
         }
-        public string label { get; set; }
-        public List<double> data { get; set; }
-        public List<string> backgroundColor { get; set;}
-        public int borderWidth { get; set;}
+        public string Label { get; set; }
+        public List<double> Data { get; set; }
+        public List<string> BackgroundColor { get; set;}
+        public int BorderWidth { get; set;}
 
     }
 }

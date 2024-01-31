@@ -6,13 +6,13 @@ namespace DSUGrupp1.Models
     {
         public Chart() 
         {
-            type = "bar";
-            data = new ChartDataDto();
-            options = new OptionsDto();
+            Type = "bar";
+            Data = new ChartDataDto();
+            Options = new OptionsDto();
         }
-        public string type { get; set; }
-        public ChartDataDto data { get; set; }
-        public OptionsDto options { get; set; }  
+        public string Type { get; set; }
+        public ChartDataDto Data { get; set; }
+        public OptionsDto Options { get; set; }  
         
     }
 }

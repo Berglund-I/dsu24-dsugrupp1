@@ -4,11 +4,11 @@
     {
         public ChartDataDto() 
         {
-            labels = new List<string>() { "Ja", "Nej" };
-            datasets = [new DatasetsDto()];
+            Labels = new List<string>() { "Ja", "Nej" };
+            Datasets = [new DatasetsDto()];
         }
-        public List<string> labels { get; set; }
-        public List<DatasetsDto> datasets { get; set; }
+        public List<string> Labels { get; set; }
+        public List<DatasetsDto> Datasets { get; set; }
 
     }
 }

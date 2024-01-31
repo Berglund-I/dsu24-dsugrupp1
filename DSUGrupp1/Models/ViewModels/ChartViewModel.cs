@@ -14,35 +14,35 @@ namespace DSUGrupp1.Models.ViewModels
         public string JsonChart { get; set; }
 
 
-        public Chart CreateChart(string type, List<string> labels, string DatasetLabel, List<double> data, List<string> bgcolor, int bWidth = 5)
+        public Chart CreateChart(string text, string type, List<string> labels, string DatasetLabel, List<double> data, List<string> bgcolor, int bWidth = 5)
         {
             Chart template = new Chart
             {
-                type = type,
-                data = new ChartDataDto
+                Type = type,
+                Data = new ChartDataDto
                 {
-                    labels = labels,
-                    datasets = new List<DatasetsDto>
+                    Labels = labels,
+                    Datasets = new List<DatasetsDto>
                     {
                         new DatasetsDto
                         {
-                            label = DatasetLabel,
-                            data = data,
-                            backgroundColor = bgcolor,
-                            borderWidth = bWidth,
+                            Label = DatasetLabel,
+                            Data = data,
+                            BackgroundColor = bgcolor,
+                            BorderWidth = bWidth,
                         },
                     },
                 },
-                options = new OptionsDto
+                Options = new OptionsDto
                 {
 
-                    plugins = new PluginsDto
+                    Plugins = new PluginsDto
                     {
 
-                        title = new TitleDto
+                        Title = new TitleDto
                         {
-                            display = true,
-                            text = "",
+                            Display = true,
+                            Text = text,
                         }
                     }
                 }
