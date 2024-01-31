@@ -10,5 +10,9 @@ namespace DSUGrupp1.Models.DTO
 
         [JsonProperty("year-of-birth")]
         public string YearOfBirth { get; set; }
+
+        [JsonProperty("vaccinations")]
+        public List<VaccinationInformationDto> Vaccinations { get; set; }
+       
     }
 }

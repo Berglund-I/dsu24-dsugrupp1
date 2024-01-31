@@ -13,6 +13,7 @@ namespace DSUGrupp1.Controllers
     public class HomeController : Controller
     {
         private readonly ApiController _apiController;
+       
 
         private readonly ILogger<HomeController> _logger;
 
@@ -44,6 +45,7 @@ namespace DSUGrupp1.Controllers
 
 
             var genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, vaccineDataAllDeso);
+            var ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
 
 
             ChartViewModel model = new ChartViewModel("3");

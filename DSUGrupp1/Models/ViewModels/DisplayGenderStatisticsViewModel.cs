@@ -8,6 +8,7 @@ namespace DSUGrupp1.Models.ViewModels
         public int VaccinatedFemales { get; set; }
         public int PopulationMales { get; set; }
         public int VaccinatiedMales { get; set; }
+        public int AgeAtVaccinationdDate { get; set; }
 
 
         private List<VaccinationDataFromSpecificDeSoDto> _vaccinationDataFromSpecificDeSoDto = null;
