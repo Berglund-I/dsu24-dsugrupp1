@@ -43,7 +43,7 @@
                         return response.json();
                     })
                     .then(data => {
-                        console.log('Succes:', data);
+                        console.log('Success:', data);
                         const ctx = document.getElementById('deSo-chart').getContext('2d');
 
                         new Chart(ctx, data); 
@@ -59,10 +59,11 @@
     
 }
 
-@section CenterContent1 {
-    @await Component.InvokeAsync("Chart", "2") 
-}
 
+@section CenterContent1 {
+    @await Component.InvokeAsync("Chart", new { Id = "2", ChartModel = Model.Charts[1]})
+
+}
 @section CenterContent2 {
     <h1 id="title-gender">Statistik fördelat efter kön i hela Östersunds kommun</h1>
     <div class="center2">
@@ -80,7 +81,6 @@
             <p class="gender-paragraf">Cirkeldiagram som presenterar vaccinationsgraden i procent mellan kvinnor och män.</p>
 
         </div>
-
     </div>
 }
 
