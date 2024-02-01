@@ -36,8 +36,23 @@ header {
 .right {
     width: 57%;
 }
+.municipality-text {
+    text-align: center;
+}
 .center {
     width: 98%;
+}
+
+.age-chart-text {
+    text-align: center;
+}
+#canvas2{
+    height: 500px;
+    width: 100%;
+}
+.female-chart {
+    width: 30%;
+    height: 30%;
 }
 .center-two {
     display: flex;
@@ -63,6 +78,7 @@ header {
 .chart-both-genders {
     margin: 3%;
     width: 25%;
+
 }
 footer {
     padding: 10px;

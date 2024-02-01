@@ -5,7 +5,11 @@
 }
 
 @section LeftContent {
-    @await Component.InvokeAsync("Chart", new { Id = "1", ChartModel = Model.Charts[3] })
+    <div class="municipality-text">
+        <h1>Vaccinationsgrad i Östersunds kommun</h1>
+    </div>
+    @await Component.InvokeAsync("Chart", new { Id = "1", ChartModel = Model.Charts[0] })
+
 }
 
 @section RightContent {
@@ -60,9 +64,12 @@
 }
 
 
-@section CenterContentOne {
-    @await Component.InvokeAsync("Chart", new { Id = "2", ChartModel = Model.Charts[4]})
 
+@section CenterContent1 {
+    <div class="age-chart-text">
+        <h1>Vaccinationsstatistik utifrån åldersgrupper</h1>
+    </div>
+    @await Component.InvokeAsync("Chart", new { Id = "canvas2", ChartModel = Model.Charts[1]})
 }
 @section CenterContentTwo {
     <h1 id="title-gender">Statistik fördelat efter kön i hela Östersunds kommun</h1>
