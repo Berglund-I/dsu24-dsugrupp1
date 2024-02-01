@@ -9,17 +9,13 @@
 }
 
 @section RightContent {
+     
+@Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj ett område", new { @id = "deSo-dropdown" })
 
-   
-    <div id="deSo-statistics">
-        @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj ett område", new { @id = "deSo-dropdown" })
+<div id="deSo-statistics">
 
-    </div>
-    <p id="total-population"></p>
-    <p id="total-vaccinations"></p>
-    <p id="dose-one"></p>
-    <p id="dose-two"></p>
-    <p id="dose-three"></p>
+</div>
+
     <canvas id="deSo-chart"></canvas>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -27,8 +23,6 @@
 
             deSoDropdown.addEventListener('change', function () {
                 let selectedDeSo = this.value;
-                console.log(selectedDeSo);
-
 
                 fetch('/Home/GetChartFromDeSoCode', {
                     method: 'POST',
@@ -47,24 +41,28 @@
                     })
                     .then(data => {
 
+                        
                         const deSoStatisticContainer = document.getElementById('deSo-statistics');
 
                         const population = document.createElement('p');
                         population.innerText = 'Invånare i området: ' + data.population;
-
                         deSoStatisticContainer.appendChild(population);
+                        
+                        const doseOne = document.createElement('p');
+                        doseOne.innerText = 'Antal dos 1 injektioner: ' + data.doseOne;
+                        deSoStatisticContainer.appendChild(doseOne)
 
-                        const vaccinations = document.getElementById('total-vaccinations');
-                        vaccinations.innerText = data.totalPatients;
+                        const doseTwo = document.createElement('p');
+                        doseTwo.innerText = 'Antal dos 2 injektioner: ' + data.doseTwo;
+                        deSoStatisticContainer.appendChild(doseTwo)
 
-                        const doseOne = document.getElementById('dose-one');
-                        doseOne.innerText = data.doseOne;
+                        const doseThree = document.createElement('p');
+                        doseThree.innerText = 'Antal dos 3 injektioner: ' + data.doseThree;
+                        deSoStatisticContainer.appendChild(doseThree)
 
-                        const doseTwo = document.getElementById('dose-two');
-                        doseTwo.innerText = data.doseTwo;
-
-                        const doseThree = document.getElementById('dose-three');
-                        doseThree.innerText = data.booster;
+                        const totalInjections = document.createElement('p');
+                        totalInjections.innerText = 'Totala antalet injektioner i området: ' + data.totalInjections;
+                        deSoStatisticContainer.appendChild(totalInjections)
 
                         console.log('Succes:', data);
                         const ctx = document.getElementById('deSo-chart').getContext('2d');
@@ -79,6 +77,8 @@
                     });
             });
         });
+
+        
     </script>
 
     

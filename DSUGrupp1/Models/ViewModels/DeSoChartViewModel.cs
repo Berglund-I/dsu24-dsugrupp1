@@ -16,20 +16,14 @@ namespace DSUGrupp1.Models.ViewModels
         public int TotalPatients { get; set; }
         public int DoseOne { get; set; }
         public int DoseTwo { get; set; }
-        public int Booster { get; set; }
+        public int DoseThree { get; set; }
+        public int TotalInjections { get; set; }
         public int TotalVaccinations { get; set; }
         public DeSoChartViewModel(string deSoCode)
         {
             var chart = GetSetValuesForChart(deSoCode);
             JsonChart = _chartViewModel.SerializeJson(chart.Result);
-            //Chart = new Chart();
-            //JsonChart = JsonConvert.SerializeObject(Chart).ToLower();
-            int fem = 5;
         }
-        //CreateChart(string text, string type, 
-        //    List<string> labels, string DatasetLabel, List<double> data, List<string> bgcolor, 
-        //    int bWidth = 5)
-
         private async Task<Chart> GetSetValuesForChart(string deSoCode)
         {
             var vaccinationDataResponse = await _apiController.GetVaccinationDataFromDeSo(deSoCode);
@@ -41,7 +35,8 @@ namespace DSUGrupp1.Models.ViewModels
             var doseCount = CalculateDoseCounts(vaccinationDataResponse);
             DoseOne = doseCount[0];
             DoseTwo = doseCount[1];
-            Booster = doseCount[2];
+            DoseThree = doseCount[2];
+            TotalInjections = doseCount[0] + doseCount[1] + doseCount[2] + doseCount[3];
 
             List<string> labels = new List<string>()
             {
@@ -53,7 +48,7 @@ namespace DSUGrupp1.Models.ViewModels
             {
                 DoseOne,
                 DoseTwo,
-                Booster,
+                DoseThree,
             };
             List<string> colors = new List<string>()
             {
@@ -70,6 +65,7 @@ namespace DSUGrupp1.Models.ViewModels
             List<int> doseCount = new List<int>();
             int doseOne = 0;
             int doseTwo = 0;
+            int doseThree = 0;
             int booster = 0;
 
             for (int i = 0; i < data.Patients.Count(); i++)
@@ -84,15 +80,19 @@ namespace DSUGrupp1.Models.ViewModels
                     {
                         doseTwo++;
                     }
-                    else if (dose.DoseNumber > 2)
+                    else if (dose.DoseNumber == 3)
+                    {
+                        doseThree++;                   
+                    }
+                    else if (dose.DoseNumber > 3)
                     {
                         booster++;
-                        break;
                     }
                 }             
             }
             doseCount.Add(doseOne);
             doseCount.Add(doseTwo);
+            doseCount.Add(doseThree);
             doseCount.Add(booster);
 
             return doseCount;
