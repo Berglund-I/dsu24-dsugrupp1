@@ -64,16 +64,21 @@
 }
 
 @section CenterContent2 {
-    <h1>Statistik fördelat efter kön i hela Östersunds kommun</h1>
+    <h1 id="title-gender">Statistik fördelat efter kön i hela Östersunds kommun</h1>
     <div class="center2">
         <div class="chart-females">
             @await Component.InvokeAsync("Chart", new { Id = "4", ChartModel = Model.Charts[1] })
+            <p class="gender-paragraf">Cirkeldiagram som presenterar vaccinationsgraden i procent hos alla kvinnor.</p>
         </div>
         <div class="chart-males">
             @await Component.InvokeAsync("Chart", new { Id = "5", ChartModel = Model.Charts[2] })
+            <p class="gender-paragraf">Cirkeldiagram som presenterar vaccinationsgraden i procent hos alla män.</p>
+
         </div>
         <div class="chart-both-genders">
             @await Component.InvokeAsync("Chart", new { Id = "6", ChartModel = Model.Charts[3] })
+            <p class="gender-paragraf">Cirkeldiagram som presenterar vaccinationsgraden i procent mellan kvinnor och män.</p>
+
         </div>
 
     </div>
