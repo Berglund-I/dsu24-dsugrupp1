@@ -28,7 +28,7 @@ namespace DSUGrupp1.Controllers
         {
 
             VaccinationViewModel vaccinations = new VaccinationViewModel();
-            ChartViewModel chart = await vaccinations.GenerateChart();
+            ChartViewModel municipalityChart = await vaccinations.GenerateChart();
    
 
             //HomeViewModel model = new HomeViewModel();
@@ -47,12 +47,12 @@ namespace DSUGrupp1.Controllers
             ChartViewModel chartGenderFemales = genderStatistics.GenerateChartFemales();
             ChartViewModel chartGenderMales = genderStatistics.GenerateChartMales();
             ChartViewModel chartGenderBoth = genderStatistics.GenerateChartBothGenders();
+            model.Charts.Add(municipalityChart);
+            model.Charts.Add(ageChart);    
             model.Charts.Add(chartGenderFemales);
             model.Charts.Add(chartGenderMales);
             model.Charts.Add(chartGenderBoth);
  
-            model.Charts.Add(chart);
-            model.Charts.Add(ageChart);    
 
 
 
