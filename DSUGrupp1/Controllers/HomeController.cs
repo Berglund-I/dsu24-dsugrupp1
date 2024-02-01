@@ -68,7 +68,7 @@ namespace DSUGrupp1.Controllers
         {
             var response = new DeSoChartViewModel(data.SelectedDeSo);
             
-            return Ok(response.JsonChart);          
+            return Ok(response);          
         }
  
 

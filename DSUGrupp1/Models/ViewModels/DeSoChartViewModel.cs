@@ -8,89 +8,94 @@ namespace DSUGrupp1.Models.ViewModels
     {
         private readonly ChartViewModel _chartViewModel = new ChartViewModel();
         private readonly ApiController _apiController = new ApiController();
-        //private readonly DisplayAgeStatisticsViewModel _displayAgeStatisticsViewModel = new DisplayAgeStatisticsViewModel();
+
         public string Id { get; set; } = "10";
-        //public ChartViewModel ChartViewModel { get; set; }
         public Chart Chart { get; set; }
         public string JsonChart { get; set; }
-
+        public int Population {  get; set; }
+        public int TotalPatients { get; set; }
+        public int DoseOne { get; set; }
+        public int DoseTwo { get; set; }
+        public int Booster { get; set; }
+        public int TotalVaccinations { get; set; }
         public DeSoChartViewModel(string deSoCode)
         {
             var chart = GetSetValuesForChart(deSoCode);
+            JsonChart = _chartViewModel.SerializeJson(chart.Result);
             //Chart = new Chart();
             //JsonChart = JsonConvert.SerializeObject(Chart).ToLower();
+            int fem = 5;
         }
+        //CreateChart(string text, string type, 
+        //    List<string> labels, string DatasetLabel, List<double> data, List<string> bgcolor, 
+        //    int bWidth = 5)
 
         private async Task<Chart> GetSetValuesForChart(string deSoCode)
         {
-            var model = await _apiController.GetVaccinationDataFromDeSo(deSoCode);
+            var vaccinationDataResponse = await _apiController.GetVaccinationDataFromDeSo(deSoCode);
+            var populationDataResponse = await _apiController.GetPopulationInSpecificDeSo(deSoCode, "2022");
 
-            var model2 = await _apiController.GetPopulationInSpecificDeSo(deSoCode, "2022");
+            Population = int.Parse(populationDataResponse.Data[0].Values[0]);
+            TotalPatients = vaccinationDataResponse.Meta.TotalRecordsPatients;
 
-            int population = int.Parse(model2.Data[0].Values[0]);
-            int totalPatients = model.Meta.TotalRecordsPatients;
+            var doseCount = CalculateDoseCounts(vaccinationDataResponse);
+            DoseOne = doseCount[0];
+            DoseTwo = doseCount[1];
+            Booster = doseCount[2];
 
-            CalculateDoseCounts(model);
-
-            return null;
+            List<string> labels = new List<string>()
+            {
+                "1 Dos",
+                "2 Doser",
+                "3 eller fler Doser"
+            };
+            List<double> values = new List<double>()
+            {
+                DoseOne,
+                DoseTwo,
+                Booster,
+            };
+            List<string> colors = new List<string>()
+            {
+                "#3e95cd",
+                "#8e5ea2",
+                "#3cba9f"
+            };
+            Chart chart = _chartViewModel.CreateChart("Vaccinationsgrad i område: ", "bar", labels, "Borde ändras till lista?", values, colors, 5);
+            return chart;
         }    
 
-        private void CalculateDoseCounts(VaccinationDataFromSpecificDeSoDto data)
+        private List<int> CalculateDoseCounts(VaccinationDataFromSpecificDeSoDto data)
         {
-            for(int i = 0; i < data.Patients.Count(); i++)
+            List<int> doseCount = new List<int>();
+            int doseOne = 0;
+            int doseTwo = 0;
+            int booster = 0;
+
+            for (int i = 0; i < data.Patients.Count(); i++)
             {
                 foreach(var dose in data.Patients[i].Vaccinations)
                 {
-
-                }
-                //for (int j = 0; j < ); j++)
-                //{
-
-                //}
+                    if(dose.DoseNumber == 1)
+                    {
+                        doseOne++; 
+                    }
+                    else if (dose.DoseNumber == 2)
+                    {
+                        doseTwo++;
+                    }
+                    else if (dose.DoseNumber > 2)
+                    {
+                        booster++;
+                        break;
+                    }
+                }             
             }
-        //    foreach (var data in VaccinationDataFromSpecificDeso)
-        //    {
-        //        foreach (var patient in data.Patients)
-        //        {
-        //            foreach (var vaccination in patient.Vaccinations)
-        //            {
+            doseCount.Add(doseOne);
+            doseCount.Add(doseTwo);
+            doseCount.Add(booster);
 
-
-        //                int ageWhenVaccinated = DateTime.Parse(vaccination.DateOfVaccination).Year - int.Parse(patient.YearOfBirth);
-
-
-        //                string ageGroup = DetermineAgeGroup(ageWhenVaccinated);
-        //                bool doesContainAgeGroup = AgeGroupDoseCounts.ContainsKey(ageGroup);
-
-
-        //                if (!doesContainAgeGroup)
-        //                {
-        //                    AgeGroupDoseCounts[ageGroup] = new AgeGroupDoseCounts();
-        //                }
-
-        //                if (vaccination.DoseNumber == 1)
-        //                {
-        //                    AgeGroupDoseCounts[ageGroup].FirstDoseCount++;
-        //                }
-        //                else if (vaccination.DoseNumber == 2)
-        //                {
-        //                    AgeGroupDoseCounts[ageGroup].SecondDoseCount++;
-        //                }
-        //                else if (vaccination.DoseNumber == 3)
-        //                {
-        //                    AgeGroupDoseCounts[ageGroup].BoosterDoseCount++;
-        //                }
-
-
-        //                if (vaccination.DoseNumber == 3)
-        //                {
-        //                    break;
-        //                }
-        //            }
-        //        }
-
-
-            //}
+            return doseCount;
         }
     }
 }

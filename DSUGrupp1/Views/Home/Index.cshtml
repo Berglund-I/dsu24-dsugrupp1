@@ -10,13 +10,16 @@
 
 @section RightContent {
 
-    @using (Html.BeginForm("PopulateDeSoDropDown", "home"))
-    {
-        @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj ett område")
-    }
+   
+    <div id="deSo-statistics">
+        @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj ett område", new { @id = "deSo-dropdown" })
 
-
-    @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj ett område", new{@id = "deSo-dropdown"})
+    </div>
+    <p id="total-population"></p>
+    <p id="total-vaccinations"></p>
+    <p id="dose-one"></p>
+    <p id="dose-two"></p>
+    <p id="dose-three"></p>
     <canvas id="deSo-chart"></canvas>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -43,10 +46,33 @@
                         return response.json();
                     })
                     .then(data => {
+
+                        const deSoStatisticContainer = document.getElementById('deSo-statistics');
+
+                        const population = document.createElement('p');
+                        population.innerText = 'Invånare i området: ' + data.population;
+
+                        deSoStatisticContainer.appendChild(population);
+
+                        const vaccinations = document.getElementById('total-vaccinations');
+                        vaccinations.innerText = data.totalPatients;
+
+                        const doseOne = document.getElementById('dose-one');
+                        doseOne.innerText = data.doseOne;
+
+                        const doseTwo = document.getElementById('dose-two');
+                        doseTwo.innerText = data.doseTwo;
+
+                        const doseThree = document.getElementById('dose-three');
+                        doseThree.innerText = data.booster;
+
                         console.log('Succes:', data);
                         const ctx = document.getElementById('deSo-chart').getContext('2d');
 
-                        new Chart(ctx, data); 
+                        const chart = JSON.parse(data.jsonChart);
+
+                        new Chart(ctx, chart); 
+                        
                     })
                     .catch((error) => {
                         console.error('Error:', error);
