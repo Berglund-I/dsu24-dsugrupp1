@@ -36,22 +36,26 @@ header {
 .right {
     width: 57%;
 }
-.center {
+.center1 {
     width: 98%;
 }
 .center2 {
+    
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content:center;
+    
+    
 }
 .chart-females {
-
-    
+   margin: 5%;
 }
 .chart-males {
-    
+    margin: 5%;
 }
 .chart-both-genders {
-    
+    margin: 5%;
 }
 footer {
     padding: 10px;

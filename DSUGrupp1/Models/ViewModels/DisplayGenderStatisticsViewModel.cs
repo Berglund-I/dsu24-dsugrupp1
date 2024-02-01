@@ -67,11 +67,15 @@ namespace DSUGrupp1.Models.ViewModels
                 labels: ["Vaccinerade kvinnor i procent", "Ovaccinerade kvinnor i procent"],
                 DatasetLabel: "Vaccinationsgrad bland kvinnor",
                 data: [vaccinatedFemalesPercent, notVaccinatedFemalesPercent],
-                bgcolor: ["rgb(159, 199, 148)", "rgb(245, 180, 182)"], 3);
+                bgcolor: ["rgb(178, 102, 255)", "rgb(255, 153, 204)"], 3);
                 chart.JsonChart = chart.SerializeJson(chart.Chart);
             return chart;
         }
 
+        /// <summary>
+        /// A method that generates a Chart for the vaccination percentage of men.
+        /// </summary>
+        /// <returns></returns>
         public ChartViewModel GenerateChartMales()
         {
             ChartViewModel chart = new ChartViewModel();
@@ -81,11 +85,15 @@ namespace DSUGrupp1.Models.ViewModels
                 labels: ["Vaccinerade män i procent", "Ovaccinerade män i procent"],
                 DatasetLabel: "Vaccinationsgrad bland män",
                 data: [vaccinatedMalesPercent, notVaccinatedMalesPercent],
-                bgcolor: ["rgb(159, 199, 148)", "rgb(245, 180, 182)"], 3);
+                bgcolor: ["rgb(0, 204, 0)", "rgb(0, 102, 204)"], 3);
                 chart.JsonChart = chart.SerializeJson(chart.Chart);
             return chart;
         }
 
+        /// <summary>
+        /// A method that generates a Chart for the vaccination percentage of women and men.
+        /// </summary>
+        /// <returns></returns>
         public ChartViewModel GenerateChartBothGenders()
         {
             ChartViewModel chart = new ChartViewModel();
@@ -95,7 +103,7 @@ namespace DSUGrupp1.Models.ViewModels
                 labels: ["Vaccinerade män i procent", "Vaccinerade kvinnor i procent"],
                 DatasetLabel: "Vaccinationsgrad mellan könen",
                 data: [vaccinatedMalesPercent, vaccinatedFemalesPercent],
-                bgcolor: ["rgb(102, 139, 104)", "rgb(214, 139, 198)"], 3);
+                bgcolor: ["rgb(0, 76, 153)", "rgb(255, 102, 178)"], 3);
             chart.JsonChart = chart.SerializeJson(chart.Chart);
             return chart;
         }

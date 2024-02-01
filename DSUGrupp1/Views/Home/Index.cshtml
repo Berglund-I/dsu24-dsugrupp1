@@ -64,14 +64,18 @@
 }
 
 @section CenterContent2 {
-    <div class="chart-females">
-        @await Component.InvokeAsync("Chart", new { Id = "4", ChartModel = Model.Charts[1] })
-    </div>
-    <div class="chart-males">
-        @await Component.InvokeAsync("Chart", new { Id = "5", ChartModel = Model.Charts[2] })
-    </div>
-    <div class="chart-both-genders">
-        @await Component.InvokeAsync("Chart", new { Id = "6", ChartModel = Model.Charts[3] })
+    <h1>Statistik fördelat efter kön i hela Östersunds kommun</h1>
+    <div class="center2">
+        <div class="chart-females">
+            @await Component.InvokeAsync("Chart", new { Id = "4", ChartModel = Model.Charts[1] })
+        </div>
+        <div class="chart-males">
+            @await Component.InvokeAsync("Chart", new { Id = "5", ChartModel = Model.Charts[2] })
+        </div>
+        <div class="chart-both-genders">
+            @await Component.InvokeAsync("Chart", new { Id = "6", ChartModel = Model.Charts[3] })
+        </div>
+
     </div>
 }
 
