@@ -23,7 +23,7 @@ namespace DSUGrupp1.Models.ViewModels
         public async Task<ChartViewModel> GenerateChart()
         {
             ChartViewModel chart = new ChartViewModel();
-            chart.Chart = chart.CreateAgeChart("bar", labels, await CalculateAgeAndDoseCounts(), doseColors, 10);
+            chart.Chart = chart.CreateAgeChart("bar", labels, await CalculateAgeAndDoseCounts(), doseColors, 5);
             chart.JsonChart = chart.SerializeJson(chart.Chart);
             return chart;
         }

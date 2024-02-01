@@ -40,6 +40,10 @@ header {
     width: 98%;
     height: 600px;
 }
+#canvas2{
+    height: 500px;
+    width: 100%;
+}
 .female-chart {
     width: 30%;
     height: 30%;

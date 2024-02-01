@@ -54,7 +54,7 @@ namespace DSUGrupp1.Models.ViewModels
                 Options = new OptionsDto
                 {
                     Responsive = true,
-                    MaintainAspectRatio = false,
+                    MaintainAspectRatio = true,
                    
                     Plugins = new PluginsDto
                     {
@@ -84,7 +84,7 @@ namespace DSUGrupp1.Models.ViewModels
                     {
                         new DatasetsDto
                         {
-                            Label = "Dose 1",
+                            Label = "Dos 1",
                             Data = new List<double>
                             {
                                 data["16-30"].FirstDoseCount,
@@ -97,7 +97,7 @@ namespace DSUGrupp1.Models.ViewModels
                         },
                         new DatasetsDto
                         {
-                            Label = "Dose 2",
+                            Label = "Dos 2",
                             Data = new List<double>
                             {
                                 data["16-30"].SecondDoseCount,
@@ -110,7 +110,7 @@ namespace DSUGrupp1.Models.ViewModels
                         },
                         new DatasetsDto
                         {
-                            Label = "Booster Dose",
+                            Label = "Påfyllnadsdos",
                             Data = new List<double>
                             {
                                 data["16-30"].BoosterDoseCount,
@@ -132,7 +132,7 @@ namespace DSUGrupp1.Models.ViewModels
                         Title = new TitleDto
                         {
                             Display = true,
-                            Text = "Åldersgrupp "
+                            Text = "Åldersgrupp"
                         }
                     }
                 }
