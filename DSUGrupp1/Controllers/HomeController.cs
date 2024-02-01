@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Diagnostics;
 using System.Reflection;
 using Newtonsoft.Json;
+using System.ComponentModel;
 
 
 namespace DSUGrupp1.Controllers
@@ -29,8 +30,6 @@ namespace DSUGrupp1.Controllers
             VaccinationViewModel vaccinations = new VaccinationViewModel();
             ChartViewModel chart = await vaccinations.GenerateChart();
 
-
-
             //var apiResult = await _apiController.GetPopulationCount("2380","2022");
             //var apiResult = await _apiController.GetVaccinationsCount();
 
@@ -51,29 +50,35 @@ namespace DSUGrupp1.Controllers
             model.Charts.Add(chart);
             model.Charts.Add(ageChart);
 
+
+            var apiResult1 = await _apiController.GetPopulationCount("2380", "2022");
+            var apiResult2 = await _apiController.GetVaccinationsCount();
+            var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
+
             
-            
-            
+            DisplayGenderStatisticsViewModel genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, vaccineDataAllDeso);
+            ChartViewModel chartGender = genderStatistics.GenerateChartFemales();
+            model.Charts.Add(chartGender);
+
 
             var genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, vaccineDataAllDeso);
+
+            //var ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
 
 
             //ChartViewModel model = new ChartViewModel("3");
 
             return View(model);
 
-            var deSoNames = await _apiController.GetDeSoNames();
-            var forDropdown = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
-
-
         }
-        //Not in use yet
-        public IActionResult PopulateDeSoDropDown()
+        [HttpPost]
+        public IActionResult GetChartFromDeSoCode([FromBody] TestFetch data)
         {
-            var model = new PopulateDeSoDropDownViewModel();
-            return View(model);
+            var response = new DeSoChartViewModel(data.SelectedDeSo);
+            
+            return Ok(response.JsonChart);          
         }
-
+ 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

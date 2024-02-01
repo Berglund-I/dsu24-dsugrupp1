@@ -8,7 +8,7 @@ namespace DSUGrupp1.Models.ViewModels
     {
         private readonly ApiController _apiController;
 
-        public int SelectedDeso { get; set; }
+        public string SelectedDeso { get; set; }
         public List<SelectListItem> DeSos { get; set; }
 
         public PopulateDeSoDropDownViewModel()

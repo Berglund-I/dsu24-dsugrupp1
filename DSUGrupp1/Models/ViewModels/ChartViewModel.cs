@@ -32,7 +32,7 @@ namespace DSUGrupp1.Models.ViewModels
             return json;
         }
 
-        public Chart CreateChart(string type, List<string> labels, string DatasetLabel, List<double> data, List<string> bgcolor, int bWidth = 5)
+        public Chart CreateChart(string text, string type, List<string> labels, string DatasetLabel, List<double> data, List<string> bgcolor, int bWidth = 5)
         {
             Chart template = new Chart
             {
@@ -62,7 +62,7 @@ namespace DSUGrupp1.Models.ViewModels
                         Title = new TitleDto
                         {
                             Display = true,
-                            Text = "",
+                            Text = text,
                         }
                     }
                 }

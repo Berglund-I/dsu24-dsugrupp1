@@ -3,42 +3,6 @@
 
 // Write your JavaScript code.
 
-function showStatistics () {
-    const ctx = document.getElementById('myChart').getContext('2d');
-    const data = {
-        labels: ['1 Dos', '2 Doser', '4 Doser eller fler', 'Ingen dos'],
-        datasets: [{
-            label: 'Vaccinationsgraden i %',
-            data: [80, 75, 68, 54],
-            backgroundColor: ['rgb(220, 174, 198)', 'rgb(162, 221, 109)', 'rgb(255, 239, 107)', 'rgb(0, 0, 0)'],
-            borderWidth: 1
-        }]
-    };
-    const options = {
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    stepSize: 5,
-                    min: 0,
-                    max: 100
-                }
-            }
-        }
-    };
-
-    
-    new Chart(ctx, {
-        type: 'bar',
-        data: data,
-        options: options
-    });
-}
-
-
-document.addEventListener('DOMContentLoaded', (event) => {
-    showStatistics();
-});
 
 
 
