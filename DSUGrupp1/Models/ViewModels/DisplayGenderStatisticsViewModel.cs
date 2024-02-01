@@ -16,10 +16,10 @@ namespace DSUGrupp1.Models.ViewModels
 
 
         private List<VaccinationDataFromSpecificDeSoDto> _vaccinationDataFromSpecificDeSoDto = null;
-        private double vaccinatedFemalesPercent;
-        private double vaccinatedMalesPercent;
-        private double notVaccinatedFemalesPercent;
-        private double notVaccinatedMalesPercent;
+        private double _vaccinatedFemalesPercent;
+        private double _vaccinatedMalesPercent;
+        private double _notVaccinatedFemalesPercent;
+        private double _notVaccinatedMalesPercent;
 
 
         public DisplayGenderStatisticsViewModel(PopulationDto population, List<VaccinationDataFromSpecificDeSoDto> vaccinationDataFromSpecificDeSoDto)
@@ -46,10 +46,10 @@ namespace DSUGrupp1.Models.ViewModels
             {
                 throw new Exception("Antalet män kan ej vara noll");
             }
-            vaccinatedFemalesPercent = Math.Round((double)VaccinatedFemales / PopulationFemales * 100, 2);
-            vaccinatedMalesPercent = Math.Round((double)VaccinatedMales / PopulationMales * 100, 2);
-            notVaccinatedFemalesPercent = Math.Round(100 - vaccinatedFemalesPercent, 2);
-            notVaccinatedMalesPercent = Math.Round(100 - vaccinatedMalesPercent, 2);
+            _vaccinatedFemalesPercent = Math.Round((double)VaccinatedFemales / PopulationFemales * 100, 2);
+            _vaccinatedMalesPercent = Math.Round((double)VaccinatedMales / PopulationMales * 100, 2);
+            _notVaccinatedFemalesPercent = Math.Round(100 - _vaccinatedFemalesPercent, 2);
+            _notVaccinatedMalesPercent = Math.Round(100 - _vaccinatedMalesPercent, 2);
 
         }
 
@@ -66,7 +66,7 @@ namespace DSUGrupp1.Models.ViewModels
                 type: "pie",
                 labels: ["Vaccinerade kvinnor i procent", "Ovaccinerade kvinnor i procent"],
                 DatasetLabel: "Vaccinationsgrad bland kvinnor",
-                data: [vaccinatedFemalesPercent, notVaccinatedFemalesPercent],
+                data: [_vaccinatedFemalesPercent, _notVaccinatedFemalesPercent],
                 bgcolor: ["rgb(178, 102, 255)", "rgb(255, 153, 204)"], 3);
                 chart.JsonChart = chart.SerializeJson(chart.Chart);
             return chart;
@@ -84,7 +84,7 @@ namespace DSUGrupp1.Models.ViewModels
                 type: "pie",
                 labels: ["Vaccinerade män i procent", "Ovaccinerade män i procent"],
                 DatasetLabel: "Vaccinationsgrad bland män",
-                data: [vaccinatedMalesPercent, notVaccinatedMalesPercent],
+                data: [_vaccinatedMalesPercent, _notVaccinatedMalesPercent],
                 bgcolor: ["rgb(0, 204, 0)", "rgb(0, 102, 204)"], 3);
                 chart.JsonChart = chart.SerializeJson(chart.Chart);
             return chart;
@@ -102,7 +102,7 @@ namespace DSUGrupp1.Models.ViewModels
                 type: "pie",
                 labels: ["Vaccinerade män i procent", "Vaccinerade kvinnor i procent"],
                 DatasetLabel: "Vaccinationsgrad mellan könen",
-                data: [vaccinatedMalesPercent, vaccinatedFemalesPercent],
+                data: [_vaccinatedMalesPercent, _vaccinatedFemalesPercent],
                 bgcolor: ["rgb(0, 76, 153)", "rgb(255, 102, 178)"], 3);
             chart.JsonChart = chart.SerializeJson(chart.Chart);
             return chart;
