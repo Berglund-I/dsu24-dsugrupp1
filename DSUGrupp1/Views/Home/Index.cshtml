@@ -13,23 +13,22 @@
 }
 
 @section RightContent {
+     
+@Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj ett område", new { @id = "deSo-dropdown" })
 
-    @using (Html.BeginForm("PopulateDeSoDropDown", "home"))
-    {
-        @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj ett område")
-    }
+<div id="deSo-statistics">
 
+</div>
 
-    @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj ett område", new{@id = "deSo-dropdown"})
     <canvas id="deSo-chart"></canvas>
     <script>
+        let myChart;
+
         document.addEventListener('DOMContentLoaded', function () {
             const deSoDropdown = document.getElementById('deSo-dropdown');
 
             deSoDropdown.addEventListener('change', function () {
                 let selectedDeSo = this.value;
-                console.log(selectedDeSo);
-
 
                 fetch('/Home/GetChartFromDeSoCode', {
                     method: 'POST',
@@ -47,16 +46,59 @@
                         return response.json();
                     })
                     .then(data => {
-                        console.log('Success:', data);
-                        const ctx = document.getElementById('deSo-chart').getContext('2d');
 
-                        new Chart(ctx, data); 
+
+                        clearDeSoInformation();
+                        const deSoStatisticContainer = document.getElementById('deSo-statistics');
+
+                        const population = document.createElement('p');
+                        population.innerText = 'Invånare i området: ' + data.population;
+                        deSoStatisticContainer.appendChild(population);
+                        
+                        const doseOne = document.createElement('p');
+                        doseOne.innerText = 'Antal dos 1 injektioner: ' + data.doseOne;
+                        deSoStatisticContainer.appendChild(doseOne)
+
+                        const doseTwo = document.createElement('p');
+                        doseTwo.innerText = 'Antal dos 2 injektioner: ' + data.doseTwo;
+                        deSoStatisticContainer.appendChild(doseTwo)
+
+                        const doseThree = document.createElement('p');
+                        doseThree.innerText = 'Antal dos 3 injektioner: ' + data.doseThree;
+                        deSoStatisticContainer.appendChild(doseThree)
+
+                        const totalInjections = document.createElement('p');
+                        totalInjections.innerText = 'Totala antalet injektioner i området: ' + data.totalInjections;
+                        deSoStatisticContainer.appendChild(totalInjections)
+
+
+
+                        console.log('Success:', data);
+
+                        const ctx = document.getElementById('deSo-chart').getContext('2d');
+                        const chart = JSON.parse(data.jsonChart);
+
+                        if (myChart) {
+                            myChart.destroy();
+                        }
+
+                        myChart = new Chart(ctx, chart); 
+                        
                     })
                     .catch((error) => {
                         console.error('Error:', error);
                     });
             });
         });
+
+
+        function clearDeSoInformation() {
+            const deSoStatisticContainer = document.getElementById('deSo-statistics');
+
+            while (deSoStatisticContainer.firstChild) {
+                deSoStatisticContainer.removeChild(deSoStatisticContainer.firstChild);
+            }
+        }
     </script>
 
     
