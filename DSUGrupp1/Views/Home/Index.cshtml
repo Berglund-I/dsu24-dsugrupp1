@@ -41,7 +41,7 @@
                     })
                     .then(data => {
 
-                        
+                        clearDeSoInformation();
                         const deSoStatisticContainer = document.getElementById('deSo-statistics');
 
                         const population = document.createElement('p');
@@ -78,7 +78,14 @@
             });
         });
 
-        
+
+        function clearDeSoInformation() {
+            const deSoStatisticContainer = document.getElementById('deSo-statistics');
+
+            while (deSoStatisticContainer.firstChild) {
+                deSoStatisticContainer.removeChild(deSoStatisticContainer.firstChild);
+            }
+        }
     </script>
 
     
