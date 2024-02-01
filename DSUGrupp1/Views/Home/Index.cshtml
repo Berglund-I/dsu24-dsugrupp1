@@ -18,6 +18,8 @@
 
     <canvas id="deSo-chart"></canvas>
     <script>
+        let myChart;
+
         document.addEventListener('DOMContentLoaded', function () {
             const deSoDropdown = document.getElementById('deSo-dropdown');
 
@@ -64,12 +66,15 @@
                         totalInjections.innerText = 'Totala antalet injektioner i området: ' + data.totalInjections;
                         deSoStatisticContainer.appendChild(totalInjections)
 
-                        console.log('Succes:', data);
-                        const ctx = document.getElementById('deSo-chart').getContext('2d');
 
+                        const ctx = document.getElementById('deSo-chart').getContext('2d');
                         const chart = JSON.parse(data.jsonChart);
 
-                        new Chart(ctx, chart); 
+                        if (myChart) {
+                            myChart.destroy();
+                        }
+
+                        myChart = new Chart(ctx, chart); 
                         
                     })
                     .catch((error) => {

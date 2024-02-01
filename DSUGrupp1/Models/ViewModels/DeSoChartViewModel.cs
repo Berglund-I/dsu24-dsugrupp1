@@ -8,9 +8,8 @@ namespace DSUGrupp1.Models.ViewModels
     {
         private readonly ChartViewModel _chartViewModel = new ChartViewModel();
         private readonly ApiController _apiController = new ApiController();
+        private readonly VaccinationViewModel _vaccinationViewModel = new VaccinationViewModel();
 
-        public string Id { get; set; } = "10";
-        public Chart Chart { get; set; }
         public string JsonChart { get; set; }
         public int Population {  get; set; }
         public int TotalPatients { get; set; }
@@ -18,7 +17,7 @@ namespace DSUGrupp1.Models.ViewModels
         public int DoseTwo { get; set; }
         public int DoseThree { get; set; }
         public int TotalInjections { get; set; }
-        public int TotalVaccinations { get; set; }
+
         public DeSoChartViewModel(string deSoCode)
         {
             var chart = GetSetValuesForChart(deSoCode);
@@ -38,26 +37,29 @@ namespace DSUGrupp1.Models.ViewModels
             DoseThree = doseCount[2];
             TotalInjections = doseCount[0] + doseCount[1] + doseCount[2] + doseCount[3];
 
+            //double[] vaccinationPercentage = new double[3];
+            List<double> vaccinationPercentage = new List<double>();
+
+            for (int i = 0; i < doseCount.Count() - 1; i++)
+            {
+                vaccinationPercentage.Add(_vaccinationViewModel.CalculateVaccinationPercentage(Population, doseCount[i]));
+            }
+
             List<string> labels = new List<string>()
-            {
-                "1 Dos",
-                "2 Doser",
-                "3 eller fler Doser"
-            };
-            List<double> values = new List<double>()
-            {
-                DoseOne,
-                DoseTwo,
-                DoseThree,
-            };
-            List<string> colors = new List<string>()
-            {
-                "#3e95cd",
-                "#8e5ea2",
-                "#3cba9f"
-            };
-            Chart chart = _chartViewModel.CreateChart("Vaccinationsgrad i område: ", "bar", labels, "Borde ändras till lista?", values, colors, 5);
-            return chart;
+                {
+                    "1 Dos",
+                    "2 Doser",
+                    "3 eller fler Doser"
+                };
+
+                List<string> colors = new List<string>()
+                {
+                    "#3e95cd",
+                    "#8e5ea2",
+                    "#3cba9f"
+                };
+                Chart chart = _chartViewModel.CreateChart("Vaccinationsgrad i område: ", "bar", labels, "Borde ändras till lista?", vaccinationPercentage, colors, 5);
+                return chart;
         }    
 
         private List<int> CalculateDoseCounts(VaccinationDataFromSpecificDeSoDto data)
