@@ -36,9 +36,15 @@ header {
 .right {
     width: 57%;
 }
+.municipality-text {
+    text-align: center;
+}
 .center {
     width: 98%;
     height: 600px;
+}
+.age-chart-text {
+    text-align: center;
 }
 #canvas2{
     height: 500px;
