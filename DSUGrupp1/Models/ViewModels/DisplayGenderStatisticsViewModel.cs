@@ -86,6 +86,19 @@ namespace DSUGrupp1.Models.ViewModels
             return chart;
         }
 
+        public ChartViewModel GenerateChartBothGenders()
+        {
+            ChartViewModel chart = new ChartViewModel();
+            chart.Chart = chart.CreateChart(
+                text: "Vaccinationsgrad i % mellan könen",
+                type: "pie",
+                labels: ["Vaccinerade män i procent", "Vaccinerade kvinnor i procent"],
+                DatasetLabel: "Vaccinationsgrad mellan könen",
+                data: [vaccinatedMalesPercent, vaccinatedFemalesPercent],
+                bgcolor: ["rgb(102, 139, 104)", "rgb(214, 139, 198)"], 3);
+            chart.JsonChart = chart.SerializeJson(chart.Chart);
+            return chart;
+        }
 
 
         /// <summary>
