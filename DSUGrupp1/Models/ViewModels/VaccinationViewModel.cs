@@ -22,7 +22,7 @@ namespace DSUGrupp1.Models.ViewModels
 
 
             int population = await GetMunicipalityPopulation();
-            chart.Chart = chart.CreateChart("Vaccinationsgrad i Östersunds kommun", "bar", ["En dos", "Två doser", "Tre doser eller fler"], $"% av totalt {population} invånare", await GetVaccinationValues(), ["rgb(29, 52, 97)", "rgb(55, 105, 150)", "rgb(130, 156, 188)"], 5);
+            chart.Chart = chart.CreateChart("", "bar", ["En dos", "Två doser", "Tre doser eller fler"], $"% av totalt {population} invånare", await GetVaccinationValues(), ["rgb(29, 52, 97)", "rgb(55, 105, 150)", "rgb(130, 156, 188)"], 5);
             chart.JsonChart = chart.SerializeJson(chart.Chart);
             return chart;
         }

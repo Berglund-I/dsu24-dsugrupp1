@@ -5,7 +5,11 @@
 }
 
 @section LeftContent {
+    <div class="municipality-text">
+        <h1>Vaccinationsgrad i Östersunds kommun</h1>
+    </div>
     @await Component.InvokeAsync("Chart", new { Id = "1", ChartModel = Model.Charts[0] })
+
 }
 
 @section RightContent {
@@ -43,6 +47,7 @@
                     })
                     .then(data => {
 
+
                         clearDeSoInformation();
                         const deSoStatisticContainer = document.getElementById('deSo-statistics');
 
@@ -66,6 +71,9 @@
                         totalInjections.innerText = 'Totala antalet injektioner i området: ' + data.totalInjections;
                         deSoStatisticContainer.appendChild(totalInjections)
 
+
+
+                        console.log('Success:', data);
 
                         const ctx = document.getElementById('deSo-chart').getContext('2d');
                         const chart = JSON.parse(data.jsonChart);
@@ -97,13 +105,31 @@
     
 }
 
-@section CenterContent1 {
-    @await Component.InvokeAsync("Chart", "2") 
-}
 
-@section CenterContent2 {
-    <div class="female-chart">
-    @await Component.InvokeAsync("Chart", new { Id = "4", ChartModel = Model.Charts[1] })
+
+@section CenterContentOne {
+    <div class="age-chart-text">
+        <h1>Vaccinationsstatistik utifrån åldersgrupper</h1>
+    </div>
+    @await Component.InvokeAsync("Chart", new { Id = "canvas2", ChartModel = Model.Charts[1]})
+}
+@section CenterContentTwo {
+    <h1 id="title-gender">Statistik fördelat efter kön i hela Östersunds kommun</h1>
+    <div class="center-two">
+        <div class="chart-females">
+            @await Component.InvokeAsync("Chart", new { Id = "4", ChartModel = Model.Charts[2] })
+            <p class="gender-paragraf">Cirkeldiagram som presenterar vaccinationsgraden i procent hos alla kvinnor.</p>
+        </div>
+        <div class="chart-males">
+            @await Component.InvokeAsync("Chart", new { Id = "5", ChartModel = Model.Charts[3] })
+            <p class="gender-paragraf">Cirkeldiagram som presenterar vaccinationsgraden i procent hos alla män.</p>
+
+        </div>
+        <div class="chart-both-genders">
+            @await Component.InvokeAsync("Chart", new { Id = "6", ChartModel = Model.Charts[4] })
+            <p class="gender-paragraf">Cirkeldiagram som presenterar vaccinationsgraden i procent mellan kvinnor och män.</p>
+
+        </div>
     </div>
 }
 
