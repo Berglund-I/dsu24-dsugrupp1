@@ -43,7 +43,7 @@
                         return response.json();
                     })
                     .then(data => {
-                        console.log('Succes:', data);
+                        console.log('Success:', data);
                         const ctx = document.getElementById('deSo-chart').getContext('2d');
 
                         new Chart(ctx, data); 
@@ -60,13 +60,13 @@
 }
 
 
-@section CenterContent {
+@section CenterContent1 {
     @await Component.InvokeAsync("Chart", new { Id = "2", ChartModel = Model.Charts[1]})
 
 }
 @section CenterContent2 {
     <div class="female-chart">
-    @await Component.InvokeAsync("Chart", new { Id = "4", ChartModel = Model.Charts[1] })
+    @await Component.InvokeAsync("Chart", new { Id = "4", ChartModel = Model.Charts[2] })
     </div>
 }
 
