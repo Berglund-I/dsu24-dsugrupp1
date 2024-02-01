@@ -12,7 +12,14 @@ header {
     background-color: #376996;
     padding: 40px;
     color: #ffffff;
-    text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+#logo {
+    width: 7%;
+    margin-left: 2%;
 }
 #header-title {
     font-size: 68px;
