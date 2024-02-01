@@ -1,6 +1,7 @@
 ﻿using DSUGrupp1.Models.DTO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.Drawing;
 namespace DSUGrupp1.Models.ViewModels
 {
     public class ChartViewModel
@@ -48,6 +49,7 @@ namespace DSUGrupp1.Models.ViewModels
                             Data = data,
                             BackgroundColor = bgcolor,
                             BorderWidth = bWidth,
+                           
                         },
                     },
                 },

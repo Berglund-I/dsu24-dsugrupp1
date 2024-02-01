@@ -38,11 +38,31 @@ header {
 }
 .center {
     width: 98%;
-    height: 600px;
 }
-.female-chart {
+.center-two {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+#title-gender {
+    text-align:center;
+}
+.gender-paragraf {
+    text-align:center;
+    font-size: 20px;
+}
+.chart-females {
+    margin: 3%;
     width: 30%;
-    height: 30%;
+}
+.chart-males {
+    margin: 3%;
+    width: 30%;
+}
+.chart-both-genders {
+    margin: 3%;
+    width: 30%;
 }
 footer {
     padding: 10px;
