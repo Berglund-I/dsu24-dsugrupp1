@@ -58,7 +58,7 @@ namespace DSUGrupp1.Models.ViewModels
                     "#8e5ea2",
                     "#3cba9f"
                 };
-                Chart chart = _chartViewModel.CreateChart("Vaccinationsgrad i område: ", "bar", labels, "Borde ändras till lista?", vaccinationPercentage, colors, 5);
+                Chart chart = _chartViewModel.CreateChart("Vaccinationsgrad i området: ", "bar", labels, "Procentuell vaccinationsgrad", vaccinationPercentage, colors, 5);
                 return chart;
         }    
 

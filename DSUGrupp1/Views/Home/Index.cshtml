@@ -13,11 +13,12 @@
 }
 
 @section RightContent {
-     
+
+<h2 class="container-headline">Statistik från DeSo områden i kommunen år 2022</h2>
 @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj ett område", new { @id = "deSo-dropdown" })
 
 <div id="deSo-statistics">
-
+    
 </div>
 
     <canvas id="deSo-chart"></canvas>
