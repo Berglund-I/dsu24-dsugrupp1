@@ -27,17 +27,17 @@ namespace DSUGrupp1.Controllers
 
         public async Task<ActionResult> Index()
         {
-            var jsonModel = TempData["Model"] as string;
-            if (jsonModel != null)
-            {
-                HomeViewModel existingModel = JsonConvert.DeserializeObject<HomeViewModel>(jsonModel);
-                jsonModel = JsonConvert.SerializeObject(existingModel);
-                TempData["Model"] = jsonModel;
+            //var jsonModel = TempData["Model"] as string;
+            //if (jsonModel != null)
+            //{
+            //    HomeViewModel existingModel = JsonConvert.DeserializeObject<HomeViewModel>(jsonModel);
+            //    jsonModel = JsonConvert.SerializeObject(existingModel);
+            //    TempData["Model"] = jsonModel;
 
-                return View(existingModel);
-            }
-            else
-            {
+            //    return View(existingModel);
+            //}
+            //else
+            //{
 
 
 
@@ -67,35 +67,35 @@ namespace DSUGrupp1.Controllers
                 model.Charts.Add(chartGenderMales);
                 model.Charts.Add(chartGenderBoth);
 
-                jsonModel = JsonConvert.SerializeObject(model);
+                var jsonModel = JsonConvert.SerializeObject(model);
                 TempData["Model"] = jsonModel;
                 //ChartViewModel model = new ChartViewModel("3");
 
                 return View(model);
 
-            }
+            //}
         }
 
-        public ActionResult Detail()
+            public ActionResult Detail()
         {
-            var jsonModel = TempData["Model"] as string;
-            if(jsonModel != null)
-            {
-                HomeViewModel existingModel = JsonConvert.DeserializeObject<HomeViewModel>(jsonModel);
-                
-                jsonModel = JsonConvert.SerializeObject(existingModel);
-                TempData["Model"] = jsonModel;
-                
-                return View(existingModel);
-            }
+                var jsonModel = TempData["Model"] as string;
+                if (jsonModel != null)
+                {
+                    HomeViewModel existingModel = JsonConvert.DeserializeObject<HomeViewModel>(jsonModel);
 
-            HomeViewModel model = JsonConvert.DeserializeObject<HomeViewModel>(jsonModel);
+                    jsonModel = JsonConvert.SerializeObject(existingModel);
+                    TempData["Model"] = jsonModel;
 
-            jsonModel = JsonConvert.SerializeObject(model);
-            TempData["Model"] = jsonModel;
+                    return View(existingModel);
+                }
+
+                //HomeViewModel model = JsonConvert.DeserializeObject<HomeViewModel>(jsonModel);
+
+                //jsonModel = JsonConvert.SerializeObject(model);
+                //TempData["Model"] = jsonModel;
 
 
-            return View(model);
+                return View(/*model*/);
         }
 
         [HttpPost]
