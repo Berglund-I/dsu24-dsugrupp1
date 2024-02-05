@@ -95,21 +95,49 @@ footer {
 }
 
 /**Css for Detail*/
-h2{
+.center h2{
     text-align: center;
+    margin-bottom: 25px;
 }
 
-.right-div{
+.deSo-container{
+    width: 100%;
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
 }
-.left-div{
 
+.left-div{
+    margin: 1%;
+    width: 49%;
 }
-.left-deSo-chart{
-    width: 500px;
+
+.left-div div {
+   width: 100%;
+   display: flex;
+   flex-direction: row;
+}
+
+#left-deSo-statistics {
+    padding: 5px;
+}
+
+.right-div {
+    margin: 1%;
+    width: 49%;
+}
+
+.right-div div{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+#right-deSo-statistics {
+    padding: 5px;
+}
+
+.charts{
+    width: 98% !important;
 }
 
 
