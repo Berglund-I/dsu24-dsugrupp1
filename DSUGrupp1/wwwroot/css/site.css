@@ -94,6 +94,24 @@ footer {
     color: #ffffff;
 }
 
+/**Css for Detail*/
+h2{
+    text-align: center;
+}
+
+.right-div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.left-div{
+
+}
+.left-deSo-chart{
+    width: 500px;
+}
+
 
 @media (min-width: 768px) {
     html {
