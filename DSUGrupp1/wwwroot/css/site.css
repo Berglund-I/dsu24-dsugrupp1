@@ -25,6 +25,33 @@ header {
     font-size: 68px;
 }
 
+/*Navigation bar with buttons*/
+.navbar {
+    display: flex;
+    justify-content: left;
+    background-color: #1D3461;
+    border-bottom: 2px solid black;
+    padding: 0;
+}
+.nav-button {
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    height: 50px;
+    width: 10%;
+    background-color: #1D3461;
+    border: none;
+    transition-duration: 0.4s;
+}
+    .nav-button a{
+        text-decoration: none;
+        color: white;
+    }
+    .nav-button:hover {
+        cursor: pointer;
+        background-color: #376996;
+    }
+
 .flex-container {
     display: flex;
     flex-wrap: wrap;
