@@ -64,6 +64,12 @@ namespace DSUGrupp1.Controllers
             return View(model);
 
         }
+
+        public ActionResult Detail()
+        {
+            return View();
+        }
+
         [HttpPost]
         public IActionResult GetChartFromDeSoCode([FromBody] TestFetch data)
         {
