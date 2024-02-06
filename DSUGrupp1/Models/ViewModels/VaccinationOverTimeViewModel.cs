@@ -9,7 +9,8 @@ namespace DSUGrupp1.Models.ViewModels
         public VaccinationOverTimeViewModel(PopulationDto population, List<VaccinationDataFromSpecificDeSoDto> vaccinationDataFromSpecificDeSoDtos)
         {
             _vaccinationDataFromSpecificDeSoDto = vaccinationDataFromSpecificDeSoDtos;
-            
+
+            StoreVaccinationsByYear("2022");
 
 
         }
@@ -29,12 +30,9 @@ namespace DSUGrupp1.Models.ViewModels
         }
 
 
-        private int CountVaccinationsBetweenDates(string startDateString, string endDateString)
+        private List<string> StoreVaccinationsByYear(string year)
         {
-            DateTime startDate = DateTime.Parse(startDateString);
-            DateTime endDate = DateTime.Parse(endDateString);
-
-            int vaccinationThatWeek = 0;
+            List<string> vaccinationsInGivenYear = new List<string>();
 
             foreach (var list in _vaccinationDataFromSpecificDeSoDto)
             {
@@ -42,17 +40,21 @@ namespace DSUGrupp1.Models.ViewModels
                 {
                     foreach (var vaccination in patient.Vaccinations)
                     {
-                        DateTime dateOfVaccination = DateTime.Parse(vaccination.DateOfVaccination);
-
-                        if (dateOfVaccination >= startDate && dateOfVaccination <= endDate)
+                        if(DateTime.TryParse(vaccination.DateOfVaccination, out DateTime vaccinationDate))
                         {
-                            vaccinationThatWeek++;
+                            if(vaccinationDate.Year.ToString() == year)
+                            {
+                                vaccinationsInGivenYear.Add(vaccination.DateOfVaccination);
+                            }
+
                         }
+                        
                     }
                 }
             }
+            
+            return vaccinationsInGivenYear;
 
-            return vaccinationThatWeek;
         }
 
       
