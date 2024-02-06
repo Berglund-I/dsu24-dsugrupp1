@@ -27,6 +27,7 @@ namespace DSUGrupp1.Controllers
 
         public async Task<ActionResult> Index()
         {
+
             if(HomeModelStorage.ViewModel == null)
             {
                 VaccinationViewModel vaccinations = new VaccinationViewModel();
@@ -42,6 +43,8 @@ namespace DSUGrupp1.Controllers
 
                 HomeViewModel model = new HomeViewModel();
                 DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
+                VaccinationOverTimeViewModel vaccinationOverTimeStatistics = new VaccinationOverTimeViewModel(apiResult1, vaccineDataAllDeso);
+                ChartViewModel chartLineOverTime = vaccinationOverTimeStatistics.GenerateLineChart();
 
                 ChartViewModel ageChart = await ageStatistics.GenerateChart();
 
