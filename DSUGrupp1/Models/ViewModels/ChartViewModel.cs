@@ -2,6 +2,8 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Drawing;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Reflection.Emit;
 namespace DSUGrupp1.Models.ViewModels
 {
     public class ChartViewModel
@@ -73,8 +75,47 @@ namespace DSUGrupp1.Models.ViewModels
 
             return template;
         }
+        public Chart CreateMultiSetChart(string text, string type, List<string> labels, List<DatasetsDto> datasets)
+        {
+            Chart template = new Chart
+            {
+                Type = type,
+                Data = new ChartDataDto
+                {
+                    Labels = labels,
+                    Datasets = datasets,
+                },
+                Options = new OptionsDto
+                {
+                    Responsive = true,
+                    MaintainAspectRatio = true,
 
+                    Plugins = new PluginsDto
+                    {
 
+                        Title = new TitleDto
+                        {
+                            Display = true,
+                            Text = text,
+                        }
+                    }
+                }
+            };
+
+            return template;
+        }
+        public DatasetsDto GenerateDataSet(List<string> labels, string DatasetLabel, List<double> data, List<string> bgcolor, int bWidth = 5)
+        {
+            DatasetsDto dataSet = new DatasetsDto
+            {
+                Label = DatasetLabel,
+                Data = data,
+                BackgroundColor = bgcolor,
+                BorderWidth = bWidth,
+                Fill = false,
+            };
+            return dataSet;
+        }
 
         public Chart CreateAgeChart(string type, List<string> labels, Dictionary<string, AgeGroupDoseCounts> data, List<string> doseColors, int bWidth = 5)
         {
