@@ -2,5 +2,6 @@
 {
     public class DoseTypeDto
     {
+        public List<BatchDto> Batches { get; set; }
     }
 }

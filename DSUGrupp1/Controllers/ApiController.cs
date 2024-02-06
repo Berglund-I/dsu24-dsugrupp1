@@ -199,6 +199,27 @@ namespace DSUGrupp1.Controllers
             }
 
         }
+
+        /// <summary>
+        /// Gets a the dose types aswell as total uses of it
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<DoseTypeDto> GetDoseTypes()
+        {
+            string requestUrl = "https://grupp1.dsvkurs.miun.se/api/batches";
+
+            var apiResponse = await ApiEngine.Fetch<DoseTypeDto>(requestUrl, HttpMethod.Get);
+
+            if (apiResponse.IsSuccessful)
+            {
+                return apiResponse.Data;
+            }
+            else
+            {
+                throw new Exception(apiResponse.ErrorMessage);
+            }
+        }
     }
 
 

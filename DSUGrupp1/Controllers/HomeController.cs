@@ -39,7 +39,9 @@ namespace DSUGrupp1.Controllers
             //else
             //{
 
-
+                // ONLY HERE TO GET DATA FOR FUTURE USE
+                DoseTypeViewModel batches = new DoseTypeViewModel();
+                var batchTest = await batches.GetBatches();
 
                 VaccinationViewModel vaccinations = new VaccinationViewModel();
                 ChartViewModel municipalityChart = await vaccinations.GenerateChart();
