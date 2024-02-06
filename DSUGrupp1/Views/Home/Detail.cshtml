@@ -1,4 +1,6 @@
-﻿@{
+﻿@model DSUGrupp1.Models.ViewModels.HomeViewModel
+
+@{
     ViewData["Title"] = "Detaljsida";
 }
 
@@ -11,6 +13,31 @@
 }
 
 @section CenterContentOne {
+    <h2>Statistik från DeSo områden i kommunen</h2>
+  <div class="deSo-container">      
+    <div class="left-div">
+        @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj ett område", new { @id = "left-deSo-dropdown" })
+        <div id="left-deSo-statistics">
+            
+        </div>
+        <div class="charts">
+            <canvas id="left-deSo-chart"></canvas>
+        </div>
+        
+    </div>
+
+    <div class="right-div">
+        @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj ett område", new { @id = "right-deSo-dropdown" })
+        <div id="right-deSo-statistics">
+            
+        </div>
+        <div class="charts">
+            <canvas id="right-deSo-chart"></canvas>
+        </div>
+        
+    </div>
+    </div>
+    
 
 }
 @section CenterContentTwo {

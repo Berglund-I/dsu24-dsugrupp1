@@ -25,6 +25,33 @@ header {
     font-size: 68px;
 }
 
+/*Navigation bar with buttons*/
+.navbar {
+    display: flex;
+    justify-content: left;
+    background-color: #1D3461;
+    border-bottom: 2px solid black;
+    padding: 0;
+}
+.nav-button {
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    height: 50px;
+    width: 10%;
+    background-color: #1D3461;
+    border: none;
+    transition-duration: 0.4s;
+}
+    .nav-button a{
+        text-decoration: none;
+        color: white;
+    }
+    .nav-button:hover {
+        cursor: pointer;
+        background-color: #376996;
+    }
+
 .flex-container {
     display: flex;
     flex-wrap: wrap;
@@ -92,6 +119,52 @@ footer {
     background-color: #376996;
     text-align:center;
     color: #ffffff;
+}
+
+/**Css for Detail*/
+.center h2{
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.deSo-container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.left-div{
+    margin: 1%;
+    width: 49%;
+}
+
+.left-div div {
+   width: 100%;
+   display: flex;
+   flex-direction: row;
+}
+
+#left-deSo-statistics {
+    padding: 5px;
+}
+
+.right-div {
+    margin: 1%;
+    width: 49%;
+}
+
+.right-div div{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+#right-deSo-statistics {
+    padding: 5px;
+}
+
+.charts{
+    width: 98% !important;
 }
 
 
