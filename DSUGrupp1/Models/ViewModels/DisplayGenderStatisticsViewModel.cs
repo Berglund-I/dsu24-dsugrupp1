@@ -21,14 +21,28 @@ namespace DSUGrupp1.Models.ViewModels
         private double _notVaccinatedFemalesPercent;
         private double _notVaccinatedMalesPercent;
 
+        public DisplayGenderStatisticsViewModel()
+        {
 
+        }
         public DisplayGenderStatisticsViewModel(PopulationDto population, List<VaccinationDataFromSpecificDeSoDto> vaccinationDataFromSpecificDeSoDto)
         {
-            PopulationMales = int.Parse(population.Data[0].Values[0]);
-            PopulationFemales = int.Parse(population.Data[1].Values[0]);
+            int populationMales = int.Parse(population.Data[0].Values[0]);
+            int populationFemales = int.Parse(population.Data[1].Values[0]);
             _vaccinationDataFromSpecificDeSoDto = vaccinationDataFromSpecificDeSoDto;
-            CountVaccinatedGender();
-            CountVaccinatedGenderPercent();
+
+            List<List<int>> totalGender = new List<List<int>>();
+            foreach(var list in vaccinationDataFromSpecificDeSoDto)
+            {
+                totalGender.Add(CountVaccinatedGender(list));
+            }
+
+            List<int> sortedGender = SortingListOfGender(totalGender);
+
+            VaccinatedMales = sortedGender[0];
+            VaccinatedFemales = sortedGender[1];
+
+            CountVaccinatedGenderPercent(populationMales, populationFemales, sortedGender[0], sortedGender[1]);
 
         }
 
@@ -36,21 +50,25 @@ namespace DSUGrupp1.Models.ViewModels
         /// A method that calculates the percentage of vaccinated and unvaccinated women and men.
         /// </summary>
         /// <exception cref="Exception"></exception>
-        public void CountVaccinatedGenderPercent() 
+        public List<double> CountVaccinatedGenderPercent(int populationMales, int populationFemales, int vaccinatedMales, int vaccinatedFemales) 
         {
-            if (PopulationFemales <= 0)
+            if (populationFemales <= 0|| populationMales <= 0)
             {
-                throw new Exception("Antalet kvinnor kan ej vara noll");
+                throw new Exception("Antalet kan ej vara noll");
             }
-            if (PopulationMales <= 0)
-            {
-                throw new Exception("Antalet män kan ej vara noll");
-            }
-            _vaccinatedFemalesPercent = Math.Round((double)VaccinatedFemales / PopulationFemales * 100, 2);
-            _vaccinatedMalesPercent = Math.Round((double)VaccinatedMales / PopulationMales * 100, 2);
-            _notVaccinatedFemalesPercent = Math.Round(100 - _vaccinatedFemalesPercent, 2);
-            _notVaccinatedMalesPercent = Math.Round(100 - _vaccinatedMalesPercent, 2);
 
+            List<double> vaccinationPercent = new List<double>();    
+            _vaccinatedMalesPercent = Math.Round((double)vaccinatedMales / populationMales * 100, 2);
+            _vaccinatedFemalesPercent = Math.Round((double)vaccinatedFemales / populationFemales * 100, 2);          
+            _notVaccinatedMalesPercent = Math.Round(100 - _vaccinatedMalesPercent, 2);
+            _notVaccinatedFemalesPercent = Math.Round(100 - _vaccinatedFemalesPercent, 2);
+
+            vaccinationPercent.Add(_vaccinatedMalesPercent);
+            vaccinationPercent.Add(_vaccinatedFemalesPercent);
+            vaccinationPercent.Add(_notVaccinatedMalesPercent);
+            vaccinationPercent.Add(_notVaccinatedFemalesPercent);
+
+            return vaccinationPercent;
         }
 
 
@@ -113,22 +131,55 @@ namespace DSUGrupp1.Models.ViewModels
         /// A method that checks through the patients in different desos and sorts them into women and men.
         /// </summary>
         /// <returns></returns>
-        public void CountVaccinatedGender()
+        public List<int> CountVaccinatedGender(VaccinationDataFromSpecificDeSoDto patients)
         {
-            foreach (var list in _vaccinationDataFromSpecificDeSoDto)
+            List<int> genders = new List<int>();
+            int male = 0;
+            int female = 0;
+
+            foreach (var patient in patients.Patients)
             {
-                foreach (var patient in list.Patients)
+                if (patient.Gender == "Male")
                 {
-                    if (patient.Gender == "Male")
-                    {
-                        VaccinatedMales++;
-                    }
-                    else if (patient.Gender == "Female")
-                    {
-                        VaccinatedFemales++;
-                    }
+                    male++;
+                }
+                else if (patient.Gender == "Female")
+                {
+                    female++;
                 }
             }
+            genders.Add(male);
+            genders.Add(female);
+
+            return genders;
+        }
+
+        public List<int> SortingListOfGender(List<List<int>> genders)
+        {
+            List<int> sorted = new List<int>();
+
+            int male = 0;
+            int females = 0;
+
+            foreach (var gender in genders)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    if (i == 0)
+                    {
+                        male += gender[i];
+                    }
+                    else
+                    {
+                        females += gender[i];
+                    }
+
+                }
+            }
+            sorted.Add(male);
+            sorted.Add(females);
+
+            return sorted;
         }
 
     }

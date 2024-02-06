@@ -9,27 +9,71 @@ namespace DSUGrupp1.Models.ViewModels
         private readonly ChartViewModel _chartViewModel = new ChartViewModel();
         private readonly ApiController _apiController = new ApiController();
         private readonly VaccinationViewModel _vaccinationViewModel = new VaccinationViewModel();
+        private readonly DisplayGenderStatisticsViewModel _displayGenderStatistics = new DisplayGenderStatisticsViewModel();
 
-        public string JsonChart { get; set; }
+        public string JsonChartDose { get; set; }
+        public string JsonChartGender { get; set; }
         public int Population {  get; set; }
         public int TotalPatients { get; set; }
         public int DoseOne { get; set; }
         public int DoseTwo { get; set; }
         public int DoseThree { get; set; }
         public int TotalInjections { get; set; }
+        public List<double> TotalPopulationVaccinationPercentage { get; set; }
+        public double VaccinatedMalesPercent { get; set; }
+        public double VaccinatedFemalesPercent { get; set; }
+        public double NotVaccinatedMalesPercent { get; set; }
+        public double NotVaccinatedFemalesPercent { get; set; }
+
+
 
         public DeSoChartViewModel(string deSoCode)
         {
-            var chart = GetSetValuesForChart(deSoCode);
-            JsonChart = _chartViewModel.SerializeJson(chart.Result);
+            var chartValues = GetSetValuesForChart(deSoCode);
+            var chart = GetChartDose(chartValues);
+
+            JsonChartDose = _chartViewModel.SerializeJson(chart);
+
+
         }
+
+        private Chart GetChartDose(Task<Chart> chartValues)
+        {
+           
+            List<string> labels = new List<string>()
+                {
+                    "1 Dos",
+                    "2 Doser",
+                    "3 eller fler Doser"
+                };
+
+            List<string> colors = new List<string>()
+                {
+                    "#3e95cd",
+                    "#8e5ea2",
+                    "#3cba9f"
+                };
+            Chart chart = _chartViewModel.CreateChart("Vaccinationsgrad i området: ", "bar", labels, "Procentuell vaccinationsgrad", TotalPopulationVaccinationPercentage, colors, 5);
+            return chart;
+
+        }
+
         private async Task<Chart> GetSetValuesForChart(string deSoCode)
         {
             var vaccinationDataResponse = await _apiController.GetVaccinationDataFromDeSo(deSoCode);
-            var populationDataResponse = await _apiController.GetPopulationInSpecificDeSo(deSoCode, "2022");
+            var populationMales = await _apiController.GetPopulationInSpecificDeSo(deSoCode, "2022", "1");
+            var populationFemales = await _apiController.GetPopulationInSpecificDeSo(deSoCode, "2022", "2");
 
-            Population = int.Parse(populationDataResponse.Data[0].Values[0]);
+            Population = int.Parse(populationMales.Data[0].Values[0]) + int.Parse(populationFemales.Data[0].Values[0]);
             TotalPatients = vaccinationDataResponse.Meta.TotalRecordsPatients;
+
+            List<int> vaccinatedGender = _displayGenderStatistics.CountVaccinatedGender(vaccinationDataResponse);
+            List<double> vaccinatedGenderPercent = _displayGenderStatistics.CountVaccinatedGenderPercent(int.Parse(populationMales.Data[0].Values[0]), int.Parse(populationFemales.Data[0].Values[0]), vaccinatedGender[0], vaccinatedGender[1]);
+
+            VaccinatedMalesPercent = vaccinatedGenderPercent[0];
+            VaccinatedFemalesPercent = vaccinatedGenderPercent[1];
+            NotVaccinatedMalesPercent = vaccinatedGenderPercent[2];
+            NotVaccinatedFemalesPercent = vaccinatedGenderPercent[3];
 
             var doseCount = CalculateDoseCounts(vaccinationDataResponse);
             DoseOne = doseCount[0];
@@ -37,13 +81,14 @@ namespace DSUGrupp1.Models.ViewModels
             DoseThree = doseCount[2];
             TotalInjections = doseCount[0] + doseCount[1] + doseCount[2] + doseCount[3];
 
-            //double[] vaccinationPercentage = new double[3];
+
             List<double> vaccinationPercentage = new List<double>();
 
             for (int i = 0; i < doseCount.Count() - 1; i++)
             {
                 vaccinationPercentage.Add(_vaccinationViewModel.CalculateVaccinationPercentage(Population, doseCount[i]));
             }
+            TotalPopulationVaccinationPercentage = vaccinationPercentage;
 
             List<string> labels = new List<string>()
                 {

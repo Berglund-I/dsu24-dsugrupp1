@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('Success:', data);
 
                 const ctx = document.getElementById('left-deSo-chart').getContext('2d');
-                const chart = JSON.parse(data.jsonChart);
+                const chart = JSON.parse(data.jsonChartDose);
 
                 if (leftChart) {
                     leftChart.destroy();
