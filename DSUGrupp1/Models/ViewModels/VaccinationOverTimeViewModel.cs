@@ -44,7 +44,7 @@ namespace DSUGrupp1.Models.ViewModels
                 datasets.Add(dataset);
             }
             chart.Chart = chart.CreateMultiSetChart(          
-                    text: "Vaccinationsgrad över alla veckor på året",
+                    text: "Antal vaccinationer per vecka",
                     type: "line",
                     labels: weekLabel,
                     datasets:datasets);
