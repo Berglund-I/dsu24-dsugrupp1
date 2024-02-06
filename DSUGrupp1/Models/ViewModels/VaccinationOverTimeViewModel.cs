@@ -1,15 +1,17 @@
 ﻿using DSUGrupp1.Models.DTO;
+using System.Globalization;
 
 namespace DSUGrupp1.Models.ViewModels
 {
     public class VaccinationOverTimeViewModel
     {
-        private List<VaccinationDataFromSpecificDeSoDto> _vaccinationDataFromSpecificDeSoDto = null;
+        private List<VaccinationDataFromSpecificDeSoDto> _vaccinationDataFromSpecificDeSoDto;
+
+        public List<int> VaccinationsperWeek {  get; set; }
 
         public VaccinationOverTimeViewModel(PopulationDto population, List<VaccinationDataFromSpecificDeSoDto> vaccinationDataFromSpecificDeSoDtos)
         {
             _vaccinationDataFromSpecificDeSoDto = vaccinationDataFromSpecificDeSoDtos;
-            
 
 
         }
@@ -28,34 +30,27 @@ namespace DSUGrupp1.Models.ViewModels
             return chart;
         }
 
-
-        private int CountVaccinationsBetweenDates(string startDateString, string endDateString)
+        public static DateTime FirstDateOfWeek(int year,int weekOfYear,CultureInfo ci)
         {
-            DateTime startDate = DateTime.Parse(startDateString);
-            DateTime endDate = DateTime.Parse(endDateString);
-
-            int vaccinationThatWeek = 0;
-
-            foreach (var list in _vaccinationDataFromSpecificDeSoDto)
+            DateTime jan1 = new DateTime(year, 1, 1);
+            int daysOffset = (int)DayOfWeek.Monday - (int)jan1.DayOfWeek;
+            DateTime firstWeekDay = jan1.AddDays(daysOffset);
+            var calendar = ci.Calendar;
+            var firstWeek = calendar.GetWeekOfYear(jan1, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+            
+            weekOfYear -= 1;
+            
+            if (firstWeek >= 52)
             {
-                foreach (var patient in list.Patients)
-                {
-                    foreach (var vaccination in patient.Vaccinations)
-                    {
-                        DateTime dateOfVaccination = DateTime.Parse(vaccination.DateOfVaccination);
-
-                        if (dateOfVaccination >= startDate && dateOfVaccination <= endDate)
-                        {
-                            vaccinationThatWeek++;
-                        }
-                    }
-                }
+                firstWeekDay = jan1.AddDays(daysOffset + 7);
             }
+            
 
-            return vaccinationThatWeek;
+            return firstWeekDay.AddDays(weekOfYear * 7);
         }
 
-      
+
+
 
 
 
