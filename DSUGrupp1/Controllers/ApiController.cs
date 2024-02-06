@@ -151,7 +151,7 @@ namespace DSUGrupp1.Controllers
                     new QueryItem
                     {
                         Code = "Kon",
-                        Selection = new Selection { Filter = "item", Values = new List<string> { "1+2" } }
+                        Selection = new Selection { Filter = "item", Values = new List<string> { "1", "2" } }
                     },
                      new QueryItem
                     {

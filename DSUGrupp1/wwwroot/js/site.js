@@ -149,5 +149,77 @@ function clearDeSoInformation(id) {
 
 
 
+document.addEventListener('DOMContentLoaded', function () {
+    const leftDeSoDropdown = document.getElementById('left-deSo-dropdown');
+
+    leftDeSoDropdown.addEventListener('change', function () {
+        let selectedDeSo = this.value;
+
+        fetch('/Home/GetGenderChartFromDeSoCode', { 
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify({ selectedDeSo }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Inte bra');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const ctx = document.getElementById('first-deSo-chart').getContext('2d');
+                const chartData = JSON.parse(data.jsonChart); 
+
+                if (window.firstChart) {
+                    window.firstChart.destroy();
+                }
+
+                window.firstChart = new Chart(ctx, chartData);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const leftDeSoDropdown = document.getElementById('right-deSo-dropdown');
+
+    leftDeSoDropdown.addEventListener('change', function () {
+        let selectedDeSo = this.value;
+
+        fetch('/Home/GetGenderChartFromDeSoCode', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify({ selectedDeSo }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Inte bra');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const ctx = document.getElementById('second-deSo-chart').getContext('2d');
+                const chartData = JSON.parse(data.jsonChart);
+
+                if (window.secondChart) {
+                    window.secondChart.destroy();
+                }
+
+                window.secondChart = new Chart(ctx, chartData);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
+});
+
+
+
 
 

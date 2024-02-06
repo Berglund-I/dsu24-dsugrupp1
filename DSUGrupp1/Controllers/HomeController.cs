@@ -105,7 +105,24 @@ namespace DSUGrupp1.Controllers
             
             return Ok(response);          
         }
- 
+
+
+        [HttpPost]
+        public async Task<ActionResult> GetGenderChartFromDeSoCode([FromBody] TestFetch data)
+        {
+            var population = await _apiController.GetPopulationInSpecificDeSo(data.SelectedDeSo, "2022");
+            var deSoAreas = await _apiController.GetVaccinationsCount();
+            var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(deSoAreas);
+          
+
+            var response = new DisplayGenderStatisticsViewModel(population, data.SelectedDeSo, vaccineDataAllDeso);
+            ChartViewModel chartGenderFemales = response.GenerateChartFemalesDeSo();
+
+            return Ok(chartGenderFemales);
+        }
+
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
