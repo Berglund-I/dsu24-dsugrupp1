@@ -53,6 +53,7 @@ namespace DSUGrupp1.Controllers
                 ChartViewModel chartGenderMales = genderStatistics.GenerateChartMales();
                 ChartViewModel chartGenderBoth = genderStatistics.GenerateChartBothGenders();
                 model.Charts.Add(municipalityChart);
+                model.Charts.Add(chartLineOverTime);
                 model.Charts.Add(ageChart);
                 model.Charts.Add(chartGenderFemales);
                 model.Charts.Add(chartGenderMales);
