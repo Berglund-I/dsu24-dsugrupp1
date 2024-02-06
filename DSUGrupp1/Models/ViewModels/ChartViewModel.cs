@@ -49,6 +49,7 @@ namespace DSUGrupp1.Models.ViewModels
                             Data = data,
                             BackgroundColor = bgcolor,
                             BorderWidth = bWidth,
+                            Fill = false 
                            
                         },
                     },
@@ -72,6 +73,7 @@ namespace DSUGrupp1.Models.ViewModels
 
             return template;
         }
+
 
 
         public Chart CreateAgeChart(string type, List<string> labels, Dictionary<string, AgeGroupDoseCounts> data, List<string> doseColors, int bWidth = 5)

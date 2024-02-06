@@ -13,6 +13,7 @@
         public List<double> Data { get; set; }
         public List<string> BackgroundColor { get; set;}
         public int BorderWidth { get; set;}
+        public bool Fill { get; set; }
 
     }
 }

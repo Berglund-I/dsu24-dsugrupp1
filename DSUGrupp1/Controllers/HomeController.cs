@@ -40,14 +40,17 @@ namespace DSUGrupp1.Controllers
 
             HomeViewModel model = new HomeViewModel();
             DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
-
             ChartViewModel ageChart = await ageStatistics.GenerateChart();
+
+            VaccinationOverTimeViewModel vaccinationOverTimeStatistics = new VaccinationOverTimeViewModel(apiResult1, vaccineDataAllDeso);
+            ChartViewModel chartLineOverTime = vaccinationOverTimeStatistics.GenerateLineChart();
 
             DisplayGenderStatisticsViewModel genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, vaccineDataAllDeso);
             ChartViewModel chartGenderFemales = genderStatistics.GenerateChartFemales();
             ChartViewModel chartGenderMales = genderStatistics.GenerateChartMales();
             ChartViewModel chartGenderBoth = genderStatistics.GenerateChartBothGenders();
             model.Charts.Add(municipalityChart);
+            model.Charts.Add(chartLineOverTime);
             model.Charts.Add(ageChart);    
             model.Charts.Add(chartGenderFemales);
             model.Charts.Add(chartGenderMales);
