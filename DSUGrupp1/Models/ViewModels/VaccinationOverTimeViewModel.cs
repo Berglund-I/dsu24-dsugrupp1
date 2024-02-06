@@ -49,6 +49,59 @@ namespace DSUGrupp1.Models.ViewModels
             return firstWeekDay.AddDays(weekOfYear * 7);
         }
 
+        private List<string> StoreVaccinationsByYear(string year)
+        {
+            List<string> vaccinationsInGivenYear = new List<string>();
+
+            foreach (var list in _vaccinationDataFromSpecificDeSoDto)
+            {
+                foreach (var patient in list.Patients)
+                {
+                    foreach (var vaccination in patient.Vaccinations)
+                    {
+                        if (DateTime.TryParse(vaccination.DateOfVaccination, out DateTime vaccinationDate))
+                        {
+                            if (vaccinationDate.Year.ToString() == year)
+                            {
+                                vaccinationsInGivenYear.Add(vaccination.DateOfVaccination);
+                            }
+
+                        }
+
+                    }
+                }
+            }
+
+            return vaccinationsInGivenYear;
+
+        }
+
+        //private int CountVaccinationsBetweenDates(string startDateString, string endDateString)
+        //{
+        //    DateTime startDate = DateTime.Parse(startDateString);
+        //    DateTime endDate = DateTime.Parse(endDateString);
+
+        //    int vaccinationThatWeek = 0;
+
+        //    foreach (var list in _vaccinationDataFromSpecificDeSoDto)
+        //    {
+        //        foreach (var patient in list.Patients)
+        //        {
+        //            foreach (var vaccination in patient.Vaccinations)
+        //            {
+        //                DateTime dateOfVaccination = DateTime.Parse(vaccination.DateOfVaccination);
+
+        //                if (dateOfVaccination >= startDate && dateOfVaccination <= endDate)
+        //                {
+        //                    vaccinationThatWeek++;
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    return vaccinationThatWeek;
+        //}
+
 
 
 
