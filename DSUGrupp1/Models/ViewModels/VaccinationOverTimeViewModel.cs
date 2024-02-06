@@ -2,42 +2,58 @@
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using System.Globalization;
+using System;
 
 namespace DSUGrupp1.Models.ViewModels
 {
     public class VaccinationOverTimeViewModel
     {
+
         private List<VaccinationDataFromSpecificDeSoDto> _vaccinationDataFromSpecificDeSoDto;
 
         public List<double> VaccinationsperWeek {  get; set; }
 
-        public List<double> DataPoints { get; set; }
+        public List<double>? DataPoints { get; set; }
 
         public VaccinationOverTimeViewModel(PopulationDto population, List<VaccinationDataFromSpecificDeSoDto> vaccinationDataFromSpecificDeSoDtos)
         {
             _vaccinationDataFromSpecificDeSoDto = vaccinationDataFromSpecificDeSoDtos;
 
-            VaccinationsperWeek = CountVaccinationsWeekByWeek(2021);
             
         }
         public ChartViewModel GenerateLineChart()
         {
-            var weekLabels = Enumerable.Range(1, 52).Select(i => i.ToString()).ToList();
-            var dataPoints = Enumerable.Range(1, VaccinationsperWeek.Count)
-            .Zip(VaccinationsperWeek, (week, count) => new { x = week.ToString(), y = count })
-            .ToList();
             ChartViewModel chart = new ChartViewModel();
-            chart.Chart = chart.CreateChart(
-                text: "Vaccinationsgrad över alla veckor på året",
-                type: "line",
-                labels: weekLabels,
-                DatasetLabel: "Vaccinationsgrad över veckorna under detta år",
-                data: VaccinationsperWeek,
-                bgcolor: ["rgb(178, 102, 255)", "rgb(255, 153, 204)"], 3);
+
+            List<DatasetsDto>? datasets = new List<DatasetsDto>();
+
+            var weekLabel = Enumerable.Range(1, 52).Select(i => i.ToString()).ToList();
+
+            for (int year=2020;year <= 2023;year++)
+            {
+                VaccinationsperWeek = CountVaccinationsWeekByWeek(year);
+
+                string color = ChartViewModel.GenerateRandomColor();
+                DatasetsDto dataset = chart.GenerateDataSet(
+                    DatasetLabel: $"{year}",
+                    data: VaccinationsperWeek,
+                    bgcolor: [color],
+                    bColor: color, 3
+                    );
+                
+                datasets.Add(dataset);
+            }
+            chart.Chart = chart.CreateMultiSetChart(          
+                    text: "Vaccinationsgrad över alla veckor på året",
+                    type: "line",
+                    labels: weekLabel,
+                    datasets:datasets);
+            
             chart.JsonChart = chart.SerializeJson(chart.Chart);
             
             return chart;
         }
+
         private List<double> CountVaccinationsWeekByWeek(int year)
         {
             var ci = new CultureInfo("sv-SE");
