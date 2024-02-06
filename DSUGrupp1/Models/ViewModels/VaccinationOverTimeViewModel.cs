@@ -30,31 +30,7 @@ namespace DSUGrupp1.Models.ViewModels
         }
 
 
-        private List<string> StoreVaccinationsByYear(string year)
-        {
-            List<string> vaccinationsInGivenYear = new List<string>();
-
-            foreach (var list in _vaccinationDataFromSpecificDeSoDto)
-            {
-                foreach (var patient in list.Patients)
-                {
-                    foreach (var vaccination in patient.Vaccinations)
-                    {
-                        if(DateTime.TryParse(vaccination.DateOfVaccination, out DateTime vaccinationDate))
-                        {
-                            if(vaccinationDate.Year.ToString() == year)
-                            {
-                                vaccinationsInGivenYear.Add(vaccination.DateOfVaccination);
-                            }
-
-                        }
-                        
-                    }
-                }
-            }
-            
-            return vaccinationsInGivenYear;
-
+       
         }
 
       
