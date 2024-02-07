@@ -58,6 +58,10 @@ namespace DSUGrupp1.Controllers
                 var apiResult2 = await _apiController.GetVaccinationsCount();
                 var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
 
+                Stopwatch stopwatch = Stopwatch.StartNew();
+                var testList = PopulateFiltersViewModel.GetVaccinationSites(vaccineDataAllDeso);
+                stopwatch.Stop();
+                System.Diagnostics.Debug.WriteLine($"duration: {stopwatch.ElapsedMilliseconds} ms");
                 HomeViewModel model = new HomeViewModel();
                 DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
                 VaccinationOverTimeViewModel vaccinationOverTimeStatistics = new VaccinationOverTimeViewModel(apiResult1, vaccineDataAllDeso);

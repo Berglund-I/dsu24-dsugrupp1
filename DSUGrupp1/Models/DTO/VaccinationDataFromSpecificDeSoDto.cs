@@ -12,7 +12,6 @@ namespace DSUGrupp1.Models.DTO
 
         
 
-       
 
 
     }

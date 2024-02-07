@@ -63,6 +63,36 @@ namespace DSUGrupp1.Models.ViewModels
             return sortedCentralData;
 
         }
+        /// <summary>
+        /// Gets all vaccination centrals from bulk vaccinationdata. Note there is designated apicall for this but sorting through the data already collected is faster.
+        /// </summary>
+        /// <param name="vaccinationData"></param>
+        /// <returns></returns>
+        public static List<VaccinationCentralDto> GetVaccinationSites(List<VaccinationDataFromSpecificDeSoDto> vaccinationData) 
+        {
+            List<VaccinationCentralDto> newList = new List<VaccinationCentralDto>();
+
+            foreach (var list in vaccinationData)
+            {
+                foreach (var patient in list.Patients)
+                {
+                    foreach (var vaccination in patient.Vaccinations)
+                    {
+                        var vaccinationCentral = vaccination.VaccinationSite;
+                        
+                        if (newList.Any(v => v.SiteId == vaccinationCentral.SiteId) == false)
+                        {
+                            newList.Add(vaccinationCentral);
+                        }
+                        if(newList.Count > 20)
+                        {
+                            return newList;
+                        }
+                    }                   
+                }
+            }
+            return newList;
+        }
     }
             
 }
