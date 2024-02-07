@@ -1,5 +1,6 @@
 ﻿using DSUGrupp1.Controllers;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace DSUGrupp1.Models.ViewModels
 {
@@ -20,9 +21,15 @@ namespace DSUGrupp1.Models.ViewModels
         {
             ChartViewModel chart = new ChartViewModel();
 
+            var populationTask = GetMunicipalityPopulation();
+            var vaccinationValuesTask = GetVaccinationValues();
 
-            int population = await GetMunicipalityPopulation();
-            chart.Chart = chart.CreateChart("", "bar", ["En dos", "Två doser", "Tre doser eller fler"], $"% av totalt {population} invånare", await GetVaccinationValues(), ["rgb(29, 52, 97)", "rgb(55, 105, 150)", "rgb(130, 156, 188)"], 5);
+            await Task.WhenAll(populationTask, vaccinationValuesTask);
+
+            int population = populationTask.Result;
+            List<double> vaccinationValues = vaccinationValuesTask.Result;
+
+            chart.Chart = chart.CreateChart("", "bar", ["En dos", "Två doser", "Tre doser eller fler"], $"% av totalt {population} invånare", vaccinationValues, ["rgb(29, 52, 97)", "rgb(55, 105, 150)", "rgb(130, 156, 188)"], 5);
             chart.JsonChart = chart.SerializeJson(chart.Chart);
             return chart;
         }

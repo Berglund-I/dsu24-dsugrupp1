@@ -99,7 +99,6 @@ namespace DSUGrupp1.Controllers
         [HttpGet]
         public async Task<VaccinationDataFromSpecificDeSoDto> GetVaccinationDataFromDeSo(string deSoCode)
         {
-            var stopwatch = Stopwatch.StartNew();
             string requestUrl = "https://grupp1.dsvkurs.miun.se/api/vaccinations/";
 
             string jsonRequest = requestUrl + deSoCode;
@@ -108,15 +107,11 @@ namespace DSUGrupp1.Controllers
 
             if (apiResponse.IsSuccessful)
             {
-                stopwatch.Stop();
-                System.Diagnostics.Debug.WriteLine($"Duration: {stopwatch.ElapsedMilliseconds} milliseconds");
                 return apiResponse.Data;
 
             }
             else
             {
-                stopwatch.Stop();
-                System.Diagnostics.Debug.WriteLine($"Duration: {stopwatch.ElapsedMilliseconds} milliseconds");
                 throw new Exception(apiResponse.ErrorMessage);
             }
         }
