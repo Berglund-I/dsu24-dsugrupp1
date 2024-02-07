@@ -20,12 +20,14 @@ namespace DSUGrupp1.Models.ViewModels
         public int DoseThree { get; set; }
         public int TotalInjections { get; set; }
         public List<double> TotalPopulationVaccinationPercentage { get; set; }
-        public double VaccinatedMalesPercent { get; set; }
-        public double VaccinatedFemalesPercent { get; set; }
-        public double NotVaccinatedMalesPercent { get; set; }
-        public double NotVaccinatedFemalesPercent { get; set; }
+        public double VaccinatedMalesPercentage { get; set; }
+        public double VaccinatedFemalesPercentage { get; set; }
+        public double NotVaccinatedMalesPercentage { get; set; }
+        public double NotVaccinatedFemalesPercentage { get; set; }
         public int VaccinatedMales { get; set; }
         public int VaccinatedFemales { get; set; }
+        public List<Batch> Batches { get; set; }
+
 
 
         public DeSoChartViewModel(string deSoCode)
@@ -107,10 +109,10 @@ namespace DSUGrupp1.Models.ViewModels
             VaccinatedMales = vaccinatedGender[0];
             VaccinatedFemales = vaccinatedGender[1];
 
-            VaccinatedMalesPercent = vaccinatedGenderPercent[0];
-            VaccinatedFemalesPercent = vaccinatedGenderPercent[1];
-            NotVaccinatedMalesPercent = vaccinatedGenderPercent[2];
-            NotVaccinatedFemalesPercent = vaccinatedGenderPercent[3];
+            VaccinatedMalesPercentage = vaccinatedGenderPercent[0];
+            VaccinatedFemalesPercentage = vaccinatedGenderPercent[1];
+            NotVaccinatedMalesPercentage = vaccinatedGenderPercent[2];
+            NotVaccinatedFemalesPercentage = vaccinatedGenderPercent[3];
 
             var doseCount = CalculateDoseCounts(vaccinationDataResponse);
             DoseOne = doseCount[0];
@@ -126,6 +128,8 @@ namespace DSUGrupp1.Models.ViewModels
                 vaccinationPercentage.Add(_vaccinationViewModel.CalculateVaccinationPercentage(Population, doseCount[i]));
             }
             TotalPopulationVaccinationPercentage = vaccinationPercentage;
+
+            GetBatches(vaccinationDataResponse);
 
             //List<string> labels = new List<string>()
             //    {
@@ -180,6 +184,55 @@ namespace DSUGrupp1.Models.ViewModels
             doseCount.Add(booster);
 
             return doseCount;
+        }
+
+        /// <summary>
+        /// Gets all used batches in deSo and gender 
+        /// </summary>
+        /// <param name="data"></param>
+        public void GetBatches(VaccinationDataFromSpecificDeSoDto data)
+        {
+            Dictionary<string, Batch> batches = new Dictionary<string, Batch>();
+            
+            foreach(var patients in data.Patients)
+            {
+                
+                for(int i = 0; i < patients.Vaccinations.Count(); i++)
+                {
+                    string batchNumber = patients.Vaccinations[i].BatchNumber;
+
+                    if (!batches.ContainsKey(batchNumber))
+                    {
+                        Batch batch = new Batch()
+                        {
+                            BatchNumber = batchNumber                           
+                        };
+                        if (patients.Gender == "Male")
+                        {
+                            batch.Male++;
+                        }
+                        else
+                        {
+                            batch.Female++;
+                        }
+                        batches.Add(batchNumber, batch);
+                    }
+                    else
+                    {
+                        Batch existingBatch = batches[batchNumber];
+
+                        if (patients.Gender == "Male")
+                        {
+                            existingBatch.Male++;
+                        }
+                        else
+                        {
+                            existingBatch.Female++;
+                        }
+                    }
+                }                                      
+            }
+            Batches = batches.Values.ToList();
         }
     }
 }
