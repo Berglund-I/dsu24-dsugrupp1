@@ -28,11 +28,28 @@ namespace DSUGrupp1.Controllers
         public async Task<ActionResult> Index()
         {
 
+            //var jsonModel = TempData["Model"] as string;
+            //if (jsonModel != null)
+            //{
+            //    HomeViewModel existingModel = JsonConvert.DeserializeObject<HomeViewModel>(jsonModel);
+            //    jsonModel = JsonConvert.SerializeObject(existingModel);
+            //    TempData["Model"] = jsonModel;
+
+            //    return View(existingModel);
+            //}
+            //else
+            //{
+
+
             if(HomeModelStorage.ViewModel == null)
             {
                 VaccinationViewModel vaccinations = new VaccinationViewModel();
                 ChartViewModel municipalityChart = await vaccinations.GenerateChart();
 
+
+                 // Code exists here for future use when working with batches/filters
+                DoseTypeViewModel batches = new DoseTypeViewModel();
+                var batchTest = await batches.GetBatches();
 
                 //HomeViewModel model = new HomeViewModel();
                 //model.Population = await _apiController.GetPopulationInSpecificDeSo("2380A0010", "2022");   
