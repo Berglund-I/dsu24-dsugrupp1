@@ -43,3 +43,26 @@
 @section CenterContentTwo {
 
 }
+@section CenterContentThree {
+    <h4>Filtrering</h4>
+
+    <div class="filters">
+        @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj Batch-nummer")
+        @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj vaccintyp")
+        @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj vaccinationscentral")
+        <p>Åldersintervall (Slider)</p>
+    
+        <div class="gender-man">
+            <label>Man
+                <input type="checkbox">
+                <span class ="checkmark"></span>
+            </label>
+        </div>
+        <div class="gender-girl">
+            <label>Kvinna
+                <input type="checkbox">
+                <span class="checkmark"></span>
+            </label>
+        </div>
+    </div>
+}
