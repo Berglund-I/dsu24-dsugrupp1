@@ -28,6 +28,19 @@ namespace DSUGrupp1.Controllers
         public async Task<ActionResult> Index()
         {
 
+            //var jsonModel = TempData["Model"] as string;
+            //if (jsonModel != null)
+            //{
+            //    HomeViewModel existingModel = JsonConvert.DeserializeObject<HomeViewModel>(jsonModel);
+            //    jsonModel = JsonConvert.SerializeObject(existingModel);
+            //    TempData["Model"] = jsonModel;
+
+            //    return View(existingModel);
+            //}
+            //else
+            //{
+
+
             if(HomeModelStorage.ViewModel == null)
             {
                 
@@ -35,6 +48,15 @@ namespace DSUGrupp1.Controllers
 
                 ChartViewModel municipalityChart = await vaccinations.GenerateChart();
 
+
+                 // Code exists here for future use when working with batches/filters
+                DoseTypeViewModel batches = new DoseTypeViewModel();
+                var batchTest = await batches.GetBatches();
+
+                //HomeViewModel model = new HomeViewModel();
+                //model.Population = await _apiController.GetPopulationInSpecificDeSo("2380A0010", "2022");   
+                //model.DataFromSpecificDeSo = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
+                
                 var apiResult1 = await _apiController.GetPopulationCount("2380", "2022");
                 var apiResult2 = await _apiController.GetVaccinationsCount();
                 var vaccineDataAllDeso =  await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);               

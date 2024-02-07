@@ -13,6 +13,8 @@ namespace DSUGrupp1.Models.DTO
             public string BatchNumber { get; set; }
             [JsonProperty("place-of-injection")]
             public string PlaceOfInjection { get; set; }
+            [JsonProperty("vaccination-site")]
+            public VaccinationCentralDto? VaccinationCentral { get; set; }
             
         }
 

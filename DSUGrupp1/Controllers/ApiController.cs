@@ -136,7 +136,7 @@ namespace DSUGrupp1.Controllers
 
 
         [HttpPost]
-        public async Task<PopulationDto> GetPopulationInSpecificDeSo(string desoCode, string year)
+        public async Task<PopulationDto> GetPopulationInSpecificDeSo(string desoCode, string year, string gender)
         {
             string requestUrl = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/BE/BE0101/BE0101Y/FolkmDesoAldKonN";
 
@@ -157,7 +157,7 @@ namespace DSUGrupp1.Controllers
                     new QueryItem
                     {
                         Code = "Kon",
-                        Selection = new Selection { Filter = "item", Values = new List<string> { "1+2" } }
+                        Selection = new Selection { Filter = "item", Values = new List<string> { $"{gender}" } }
                     },
                      new QueryItem
                     {
@@ -203,8 +203,29 @@ namespace DSUGrupp1.Controllers
             {
                 throw new Exception(apiResponse.ErrorMessage);
             }
+        }
 
-        }   
+        /// <summary>
+        /// Gets a the dose types aswell as total uses of it
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<DoseTypeDto> GetDoseTypes()
+        {
+            string requestUrl = "https://grupp1.dsvkurs.miun.se/api/batches";
+
+            var apiResponse = await ApiEngine.Fetch<DoseTypeDto>(requestUrl, HttpMethod.Get);
+
+            if (apiResponse.IsSuccessful)
+            {
+                return apiResponse.Data;
+            }
+            else
+            {
+                throw new Exception(apiResponse.ErrorMessage);
+            }
+        }
+       
     }
 
 }
