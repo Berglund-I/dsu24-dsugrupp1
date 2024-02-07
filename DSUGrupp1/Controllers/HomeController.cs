@@ -44,15 +44,18 @@ namespace DSUGrupp1.Controllers
 
                 // 80 ms
                 var apiResult2 = await _apiController.GetVaccinationsCount();
-                //2111 ms
-                var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
+                var stopwatch = Stopwatch.StartNew();
+                //2000 ms avg -> 1600 ms avg
+                var vaccineDataAllDeso =  await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
+                stopwatch.Stop();
+                System.Diagnostics.Debug.WriteLine($"Duration: {stopwatch.ElapsedMilliseconds} milliseconds");
                 //31 ms
                 HomeViewModel model = new HomeViewModel();
                 //41 ms
                 DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
                 //0 ms
                 VaccinationOverTimeViewModel vaccinationOverTimeStatistics = new VaccinationOverTimeViewModel(apiResult1, vaccineDataAllDeso);
-                //1615 ms
+                //1615 ms -> 221ms
                 ChartViewModel chartLineOverTime = vaccinationOverTimeStatistics.GenerateLineChart();
 
 

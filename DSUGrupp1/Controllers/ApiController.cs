@@ -6,6 +6,7 @@ using System.Net;
 using DSUGrupp1.Infastructure;
 using System.ComponentModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 
 
 namespace DSUGrupp1.Controllers
@@ -98,6 +99,7 @@ namespace DSUGrupp1.Controllers
         [HttpGet]
         public async Task<VaccinationDataFromSpecificDeSoDto> GetVaccinationDataFromDeSo(string deSoCode)
         {
+            var stopwatch = Stopwatch.StartNew();
             string requestUrl = "https://grupp1.dsvkurs.miun.se/api/vaccinations/";
 
             string jsonRequest = requestUrl + deSoCode;
@@ -106,13 +108,19 @@ namespace DSUGrupp1.Controllers
 
             if (apiResponse.IsSuccessful)
             {
+                stopwatch.Stop();
+                System.Diagnostics.Debug.WriteLine($"Duration: {stopwatch.ElapsedMilliseconds} milliseconds");
                 return apiResponse.Data;
+
             }
             else
             {
+                stopwatch.Stop();
+                System.Diagnostics.Debug.WriteLine($"Duration: {stopwatch.ElapsedMilliseconds} milliseconds");
                 throw new Exception(apiResponse.ErrorMessage);
             }
         }
+
         /// <summary>
         /// Gets vaccinationdata from all DeSos 
         /// </summary>
@@ -120,16 +128,13 @@ namespace DSUGrupp1.Controllers
         /// <returns></returns>
         public async Task<List<VaccinationDataFromSpecificDeSoDto>> GetVaccinationDataFromAllDeSos(VaccineCountDto vaccineCount)
         {
-            List<Task<VaccinationDataFromSpecificDeSoDto>> tasks = new List<Task<VaccinationDataFromSpecificDeSoDto>>();
+            var tasks = vaccineCount.Data.Select(vaccineData =>
+                GetVaccinationDataFromDeSo(vaccineData.Deso)).ToList();
 
-            foreach (VaccineData vaccindata in vaccineCount.Data)
-            {
-                tasks.Add(GetVaccinationDataFromDeSo(vaccindata.Deso));
-            }
+            var responses = await Task.WhenAll(tasks);
 
-            var response = await Task.WhenAll(tasks);
-
-            List<VaccinationDataFromSpecificDeSoDto> allVaccinationData = response.ToList();
+            
+            var allVaccinationData = responses.ToList();
 
             return allVaccinationData;
         }
