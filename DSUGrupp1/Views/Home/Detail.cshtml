@@ -47,21 +47,21 @@
     <h4>Filtrering</h4>
 
     <div class="filters">
-        @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj Batch-nummer")
-        @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj vaccintyp")
-        @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj vaccinationscentral")
+        @Html.DropDownListFor(d => d.FilterDropDown.SelectedBatch, Model.FilterDropDown.Batches, "Välj Batch-nummer", new { @class = "dropdown-filter"})
+        @Html.DropDownListFor(d => d.FilterDropDown.SelectedBatch, Model.FilterDropDown.VaccineName, "Välj vaccintyp", new { @class = "dropdown-filter" })
+        @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj vaccinationscentral", new { @class = "dropdown-filter" })
 
         <p>Åldersintervall (Slider)</p>
 
         <div class="genderbox">
             <label>Man
-                <input type="checkbox" name="GenderMale" checked="checked" value="@Model.GenderMale">
+            <input type="checkbox" name="GenderMale" checked="checked" value="@Html.CheckBoxFor(x => x.GenderMale)">
                 <span class ="checkmark"></span>
             </label>
         </div>
         <div class="genderbox">
             <label>Kvinna
-                <input type="checkbox" name="GenderFemale" checked="checked" value="@Model.GenderFemale">
+                <input type="checkbox" name="GenderFemale" checked="checked" value="@Html.CheckBoxFor(x => x.GenderFemale)">
                 <span class="checkmark"></span>
             </label>
         </div>

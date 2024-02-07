@@ -9,14 +9,13 @@ namespace DSUGrupp1.Models.ViewModels
         {
             Charts = new List<ChartViewModel>();
             DeSoDropDown = new PopulateDeSoDropDownViewModel();
+            FilterDropDown = new PopulateFiltersViewModel();
         }
         public List<ChartViewModel> Charts { get; set; }
         public PopulateDeSoDropDownViewModel DeSoDropDown { get; set; }
         public bool GenderMale { get; set; }
         public bool GenderFemale { get; set; }
-        //public VaccinationDataFromSpecificDeSoDto? DataFromSpecificDeSo { get; set; }
-
-        //public PopulationDto? Population { get; set; }
+        public PopulateFiltersViewModel FilterDropDown { get; set; }
 
     }
 }

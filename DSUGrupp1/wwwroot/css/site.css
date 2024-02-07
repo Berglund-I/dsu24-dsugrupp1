@@ -173,6 +173,12 @@ footer {
     width: 12%;
     gap: 10px;
 }
+.dropdown-filter {
+    border: solid 2px #6290C8;
+    background-color: #1D3461;
+    border-radius: 20px;
+    color: white;
+}
 
 @media (min-width: 768px) {
     html {
