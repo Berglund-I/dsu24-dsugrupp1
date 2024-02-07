@@ -55,18 +55,16 @@
 
         <div class="genderbox">
             <label>Man
-                <input type="checkbox" name="GenderMale" value="true" @(Model.GenderMale ? "checked=\"checked\"" : "")>
+                <input type="checkbox" name="GenderMale" checked="checked" value="@Model.GenderMale">
                 <span class ="checkmark"></span>
             </label>
         </div>
         <div class="genderbox">
             <label>Kvinna
-                <input type="checkbox" name="GenderFemale" value="true" @(Model.GenderFemale ? "checked=\"checked\"" : "")>
+                <input type="checkbox" name="GenderFemale" checked="checked" value="@Model.GenderFemale">
                 <span class="checkmark"></span>
             </label>
         </div>
 
-       @*  @Html.CheckBoxFor(x => x.GenderMale)
-        @Html.CheckBoxFor(x => x.GenderFemale) *@
     </div>
 }
