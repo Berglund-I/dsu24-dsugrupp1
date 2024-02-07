@@ -50,19 +50,23 @@
         @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj Batch-nummer")
         @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj vaccintyp")
         @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj vaccinationscentral")
+
         <p>Åldersintervall (Slider)</p>
-    
-        <div class="gender-man">
+
+        <div class="genderbox">
             <label>Man
-                <input type="checkbox">
+                <input type="checkbox" name="GenderMale" value="true" @(Model.GenderMale ? "checked=\"checked\"" : "")>
                 <span class ="checkmark"></span>
             </label>
         </div>
-        <div class="gender-girl">
+        <div class="genderbox">
             <label>Kvinna
-                <input type="checkbox">
+                <input type="checkbox" name="GenderFemale" value="true" @(Model.GenderFemale ? "checked=\"checked\"" : "")>
                 <span class="checkmark"></span>
             </label>
         </div>
+
+       @*  @Html.CheckBoxFor(x => x.GenderMale)
+        @Html.CheckBoxFor(x => x.GenderFemale) *@
     </div>
 }

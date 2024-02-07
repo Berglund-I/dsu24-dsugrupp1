@@ -167,6 +167,12 @@ footer {
     width: 98% !important;
 }
 
+.filters{
+    display: flex;
+    flex-direction: column;
+    width: 12%;
+    gap: 10px;
+}
 
 @media (min-width: 768px) {
     html {
