@@ -39,7 +39,7 @@ namespace DSUGrupp1.Controllers
             //else
             //{
 
-                // ONLY HERE TO GET DATA FOR FUTURE USE
+                // Code exists here for future use when working with batches/filters
                 DoseTypeViewModel batches = new DoseTypeViewModel();
                 var batchTest = await batches.GetBatches();
 
