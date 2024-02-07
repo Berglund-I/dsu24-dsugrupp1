@@ -25,7 +25,7 @@ namespace DSUGrupp1.Controllers
         {
             string requestUrl = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/BE/BE0101/BE0101A/BefolkningNy";
 
-			var apiQuery = new ApiQueryDto
+            var apiQuery = new ApiQueryDto
             {
                 Query = new List<QueryItem>
                 {
@@ -58,17 +58,17 @@ namespace DSUGrupp1.Controllers
             var content = new StringContent(jsonRequest, Encoding.UTF8, "text/json");
 
             var apiResponse = await ApiEngine.Fetch<PopulationDto>(requestUrl, HttpMethod.Post, content);
-            
-            if(apiResponse.IsSuccessful) 
+
+            if (apiResponse.IsSuccessful)
             {
                 return apiResponse.Data;
             }
             else
             {
-				throw new Exception(apiResponse.ErrorMessage);
-			}
+                throw new Exception(apiResponse.ErrorMessage);
+            }
 
-		}
+        }
         /// <summary>
         /// Gets data for vaccinations in all Deso's. These are sorted after Deso thereafter after dose.
         /// </summary>
@@ -78,7 +78,7 @@ namespace DSUGrupp1.Controllers
         {
             string requestUrl = "https://grupp1.dsvkurs.miun.se/api/vaccinations/count";
 
-			var apiResponse = await ApiEngine.Fetch<VaccineCountDto>(requestUrl, HttpMethod.Get);
+            var apiResponse = await ApiEngine.Fetch<VaccineCountDto>(requestUrl, HttpMethod.Get);
 
             if (apiResponse.IsSuccessful)
             {
@@ -113,20 +113,26 @@ namespace DSUGrupp1.Controllers
                 throw new Exception(apiResponse.ErrorMessage);
             }
         }
-
-        public async Task<List<VaccinationDataFromSpecificDeSoDto>> GetVaccinationDataFromAllDeSos(VaccineCountDto vaccineCountDto)
+        /// <summary>
+        /// Gets vaccinationdata from all DeSos 
+        /// </summary>
+        /// <param name="vaccineCount"></param>
+        /// <returns></returns>
+        public async Task<List<VaccinationDataFromSpecificDeSoDto>> GetVaccinationDataFromAllDeSos(VaccineCountDto vaccineCount)
         {
-            List<VaccinationDataFromSpecificDeSoDto> allVaccinationData = new List<VaccinationDataFromSpecificDeSoDto>();
+            List<Task<VaccinationDataFromSpecificDeSoDto>> tasks = new List<Task<VaccinationDataFromSpecificDeSoDto>>();
 
-            foreach (VaccineData vaccindata in vaccineCountDto.Data)
+            foreach (VaccineData vaccindata in vaccineCount.Data)
             {
-                var apiResponse = await GetVaccinationDataFromDeSo(vaccindata.Deso);
-                allVaccinationData.Add(apiResponse);
-
+                tasks.Add(GetVaccinationDataFromDeSo(vaccindata.Deso));
             }
-                return allVaccinationData;
-        }
 
+            var response = await Task.WhenAll(tasks);
+
+            List<VaccinationDataFromSpecificDeSoDto> allVaccinationData = response.ToList();
+
+            return allVaccinationData;
+        }
 
 
         [HttpPost]
@@ -197,7 +203,6 @@ namespace DSUGrupp1.Controllers
             {
                 throw new Exception(apiResponse.ErrorMessage);
             }
-
         }
 
         /// <summary>
@@ -220,8 +225,8 @@ namespace DSUGrupp1.Controllers
                 throw new Exception(apiResponse.ErrorMessage);
             }
         }
+       
     }
-
 
 }
 

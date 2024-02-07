@@ -2,10 +2,14 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Drawing;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Reflection.Emit;
+using System;
 namespace DSUGrupp1.Models.ViewModels
 {
     public class ChartViewModel
     {
+        public static readonly Random random = new Random();
         public ChartViewModel() 
         {
             Chart = new Chart();
@@ -49,6 +53,7 @@ namespace DSUGrupp1.Models.ViewModels
                             Data = data,
                             BackgroundColor = bgcolor,
                             BorderWidth = bWidth,
+                            Fill = false 
                            
                         },
                     },
@@ -72,7 +77,48 @@ namespace DSUGrupp1.Models.ViewModels
 
             return template;
         }
+        public Chart CreateMultiSetChart(string text, string type, List<string> labels, List<DatasetsDto> datasets)
+        {
+            Chart template = new Chart
+            {
+                Type = type,
+                Data = new ChartDataDto
+                {
+                    Labels = labels,
+                    Datasets = datasets,
+                },
+                Options = new OptionsDto
+                {
+                    Responsive = true,
+                    MaintainAspectRatio = true,
 
+                    Plugins = new PluginsDto
+                    {
+
+                        Title = new TitleDto
+                        {
+                            Display = true,
+                            Text = text,
+                        }
+                    }
+                }
+            };
+
+            return template;
+        }
+        public DatasetsDto GenerateDataSet(string DatasetLabel, List<double> data, List<string> bgcolor,string bColor, int bWidth = 5)
+        {
+            DatasetsDto dataSet = new DatasetsDto
+            {
+                Label = DatasetLabel,
+                Data = data,
+                BackgroundColor = bgcolor,
+                BorderColor = bColor,
+                BorderWidth = bWidth,
+                Fill = false,
+            };
+            return dataSet;
+        }
 
         public Chart CreateAgeChart(string type, List<string> labels, Dictionary<string, AgeGroupDoseCounts> data, List<string> doseColors, int bWidth = 5)
         {
@@ -142,7 +188,14 @@ namespace DSUGrupp1.Models.ViewModels
 
             return template;
         }
+        public static string GenerateRandomColor()
+        {
+            int r = random.Next(256);
+            int g = random.Next(256);
+            int b = random.Next(256);
 
+            return $"rgb({r},{g},{b})";
+        }
 
     }
 

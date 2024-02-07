@@ -27,6 +27,7 @@ namespace DSUGrupp1.Controllers
 
         public async Task<ActionResult> Index()
         {
+
             //var jsonModel = TempData["Model"] as string;
             //if (jsonModel != null)
             //{
@@ -39,13 +40,16 @@ namespace DSUGrupp1.Controllers
             //else
             //{
 
-                // Code exists here for future use when working with batches/filters
-                DoseTypeViewModel batches = new DoseTypeViewModel();
-                var batchTest = await batches.GetBatches();
 
+            if(HomeModelStorage.ViewModel == null)
+            {
                 VaccinationViewModel vaccinations = new VaccinationViewModel();
                 ChartViewModel municipalityChart = await vaccinations.GenerateChart();
 
+
+                 // Code exists here for future use when working with batches/filters
+                DoseTypeViewModel batches = new DoseTypeViewModel();
+                var batchTest = await batches.GetBatches();
 
                 //HomeViewModel model = new HomeViewModel();
                 //model.Population = await _apiController.GetPopulationInSpecificDeSo("2380A0010", "2022");   
@@ -56,6 +60,8 @@ namespace DSUGrupp1.Controllers
 
                 HomeViewModel model = new HomeViewModel();
                 DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
+                VaccinationOverTimeViewModel vaccinationOverTimeStatistics = new VaccinationOverTimeViewModel(apiResult1, vaccineDataAllDeso);
+                ChartViewModel chartLineOverTime = vaccinationOverTimeStatistics.GenerateLineChart();
 
                 ChartViewModel ageChart = await ageStatistics.GenerateChart();
 
@@ -64,40 +70,23 @@ namespace DSUGrupp1.Controllers
                 ChartViewModel chartGenderMales = genderStatistics.GenerateChartMales();
                 ChartViewModel chartGenderBoth = genderStatistics.GenerateChartBothGenders();
                 model.Charts.Add(municipalityChart);
+                model.Charts.Add(chartLineOverTime);
                 model.Charts.Add(ageChart);
                 model.Charts.Add(chartGenderFemales);
                 model.Charts.Add(chartGenderMales);
                 model.Charts.Add(chartGenderBoth);
 
-                var jsonModel = JsonConvert.SerializeObject(model);
-                TempData["Model"] = jsonModel;
-                //ChartViewModel model = new ChartViewModel("3");
+                HomeModelStorage.ViewModel = model;
 
                 return View(model);
-
-            //}
+            }
+            return View(HomeModelStorage.ViewModel);
         }
 
-            public ActionResult Detail()
+        public ActionResult Detail()
         {
-                var jsonModel = TempData["Model"] as string;
-                if (jsonModel != null)
-                {
-                    HomeViewModel existingModel = JsonConvert.DeserializeObject<HomeViewModel>(jsonModel);
 
-                    jsonModel = JsonConvert.SerializeObject(existingModel);
-                    TempData["Model"] = jsonModel;
-
-                    return View(existingModel);
-                }
-
-                //HomeViewModel model = JsonConvert.DeserializeObject<HomeViewModel>(jsonModel);
-
-                //jsonModel = JsonConvert.SerializeObject(model);
-                //TempData["Model"] = jsonModel;
-
-
-                return View(/*model*/);
+            return View(HomeModelStorage.ViewModel);
         }
 
         [HttpPost]
