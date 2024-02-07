@@ -24,20 +24,35 @@ namespace DSUGrupp1.Models.ViewModels
         public double VaccinatedFemalesPercent { get; set; }
         public double NotVaccinatedMalesPercent { get; set; }
         public double NotVaccinatedFemalesPercent { get; set; }
-
+        public int VaccinatedMales { get; set; }
+        public int VaccinatedFemales { get; set; }
 
 
         public DeSoChartViewModel(string deSoCode)
         {
-            var chartValues = GetSetValuesForChart(deSoCode);
-            var chart = GetChartDose(chartValues);
 
-            JsonChartDose = _chartViewModel.SerializeJson(chart);
+            //var chartValues = GetSetValuesForChart(deSoCode);
+
+            //JsonChartDose = _chartViewModel.SerializeJson(chartValues.Result);
+
+            if (GetSetValuesForChart(deSoCode).Result)
+            {
+                var chart = GetChartDose(/*chartValues.Result*/);
+                var chartTwo = GetChartGender(/*chartValues.Result*/);
+
+                JsonChartDose = _chartViewModel.SerializeJson(chart);
+                JsonChartGender = _chartViewModel.SerializeJson(chartTwo);
+            };
+
+            //var chart = GetChartDose(/*chartValues.Result*/);
+
+            //JsonChartDose = _chartViewModel.SerializeJson(chart);
 
 
         }
 
-        private Chart GetChartDose(Task<Chart> chartValues)
+
+        private Chart GetChartDose(/*Chart chartValues*/)
         {
            
             List<string> labels = new List<string>()
@@ -58,7 +73,26 @@ namespace DSUGrupp1.Models.ViewModels
 
         }
 
-        private async Task<Chart> GetSetValuesForChart(string deSoCode)
+        private Chart GetChartGender(/*Chart chartValues*/)
+        {
+
+            List<string> labels = new List<string>()
+                {
+                    "Vaccinerade män", 
+                    "Vaccinerade kvinnor",  
+                };
+
+            List<string> colors = new List<string>()
+                {
+                    "#3e95cd",
+                    "#8e5ea2",
+                };
+            Chart chart = _chartViewModel.CreateChart("Vaccinationer i området fördelat över könen: ", "pie", labels, "Vaccinationer", [VaccinatedMales, VaccinatedFemales], colors, 5);
+            return chart;
+
+        }
+
+        private async Task<bool> GetSetValuesForChart(string deSoCode)
         {
             var vaccinationDataResponse = await _apiController.GetVaccinationDataFromDeSo(deSoCode);
             var populationMales = await _apiController.GetPopulationInSpecificDeSo(deSoCode, "2022", "1");
@@ -69,6 +103,9 @@ namespace DSUGrupp1.Models.ViewModels
 
             List<int> vaccinatedGender = _displayGenderStatistics.CountVaccinatedGender(vaccinationDataResponse);
             List<double> vaccinatedGenderPercent = _displayGenderStatistics.CountVaccinatedGenderPercent(int.Parse(populationMales.Data[0].Values[0]), int.Parse(populationFemales.Data[0].Values[0]), vaccinatedGender[0], vaccinatedGender[1]);
+
+            VaccinatedMales = vaccinatedGender[0];
+            VaccinatedFemales = vaccinatedGender[1];
 
             VaccinatedMalesPercent = vaccinatedGenderPercent[0];
             VaccinatedFemalesPercent = vaccinatedGenderPercent[1];
@@ -90,21 +127,21 @@ namespace DSUGrupp1.Models.ViewModels
             }
             TotalPopulationVaccinationPercentage = vaccinationPercentage;
 
-            List<string> labels = new List<string>()
-                {
-                    "1 Dos",
-                    "2 Doser",
-                    "3 eller fler Doser"
-                };
+            //List<string> labels = new List<string>()
+            //    {
+            //        "1 Dos",
+            //        "2 Doser",
+            //        "3 eller fler Doser"
+            //    };
 
-                List<string> colors = new List<string>()
-                {
-                    "#3e95cd",
-                    "#8e5ea2",
-                    "#3cba9f"
-                };
-                Chart chart = _chartViewModel.CreateChart("Vaccinationsgrad i området: ", "bar", labels, "Procentuell vaccinationsgrad", vaccinationPercentage, colors, 5);
-                return chart;
+            //List<string> colors = new List<string>()
+            //    {
+            //        "#3e95cd",
+            //        "#8e5ea2",
+            //        "#3cba9f"
+            //    };
+            //Chart chart = _chartViewModel.CreateChart("Vaccinationsgrad i området: ", "bar", labels, "Procentuell vaccinationsgrad", vaccinationPercentage, colors, 5);
+            return true;
         }    
 
         private List<int> CalculateDoseCounts(VaccinationDataFromSpecificDeSoDto data)

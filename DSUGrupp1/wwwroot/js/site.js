@@ -5,6 +5,8 @@
 
 let leftChart;
 let rightChart;
+let leftGenderChart;
+let rightGenderChart;
 
 document.addEventListener('DOMContentLoaded', function () {
     const deSoDropdown = document.getElementById('left-deSo-dropdown');
@@ -53,10 +55,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 totalInjections.innerText = 'Totala antalet injektioner i området: ' + data.totalInjections;
                 deSoStatisticContainer.appendChild(totalInjections)
 
-
-
-                console.log('Success:', data);
-
                 const ctx = document.getElementById('left-deSo-chart').getContext('2d');
                 const chart = JSON.parse(data.jsonChartDose);
 
@@ -65,6 +63,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 leftChart = new Chart(ctx, chart);
+
+                if (leftGenderChart) {
+                    leftGenderChart.destroy();
+                }
+
+                const context = document.getElementById('left-gender-chart').getContext('2d');
+                const genderChart = JSON.parse(data.jsonChartGender);
+
+                leftGenderChart = new Chart(context, genderChart);
 
             })
             .catch((error) => {
@@ -125,13 +132,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('Success:', data);
 
                 const ctx = document.getElementById('right-deSo-chart').getContext('2d');
-                const chart = JSON.parse(data.jsonChart);
+                const chart = JSON.parse(data.jsonChartDose);
 
                 if (rightChart) {
                     rightChart.destroy();
                 }
 
                 rightChart = new Chart(ctx, chart);
+
+                if (rightGenderChart) {
+                    rightGenderChart.destroy();
+                }
+
+                const context = document.getElementById('right-gender-chart').getContext('2d');
+                const genderChart = JSON.parse(data.jsonChartGender);
+
+                rightGenderChart = new Chart(context, genderChart);
 
             })
             .catch((error) => {
