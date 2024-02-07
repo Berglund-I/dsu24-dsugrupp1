@@ -3,6 +3,7 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using System.Globalization;
 using System;
+using System.Diagnostics;
 
 namespace DSUGrupp1.Models.ViewModels
 {
@@ -30,7 +31,8 @@ namespace DSUGrupp1.Models.ViewModels
             var weekLabel = Enumerable.Range(1, 52).Select(i => i.ToString()).ToList();
 
             for (int year=2020;year <= 2023;year++)
-            {
+            {              
+                //1500 ms for all loops combined
                 VaccinationsperWeek = CountVaccinationsWeekByWeek(year);
 
                 string color = ChartViewModel.GenerateRandomColor();
@@ -50,7 +52,8 @@ namespace DSUGrupp1.Models.ViewModels
                     datasets:datasets);
             
             chart.JsonChart = chart.SerializeJson(chart.Chart);
-            
+
+        
             return chart;
         }
 
@@ -63,28 +66,43 @@ namespace DSUGrupp1.Models.ViewModels
 
             // Preprocess to get vaccination dates for the given year
             var vaccinationsInYear = StoreVaccinationsByYear(year.ToString());
-
             var vaccinationsPerWeek = new List<double>();
+
+            var parsedVaccinationDates = vaccinationsInYear
+            .Select(dateString => DateTime.TryParse(dateString, out DateTime date) ? (DateTime?)date : null)
+            .Select(date => date.Value)
+            .ToList();
+
+            List<double> vaccinationCounts = new List<double>();
 
             for (int week = 1; week <= weeksInYear; week++)
             {
                 var weekStart = FirstDateOfWeek(year, week, ci);
-                var weekEnd = weekStart.AddDays(6); // Assuming the week starts on Monday
+                var weekEnd = weekStart.AddDays(6);
 
-                // Count vaccinations for the week
-                var vaccinationCountThisWeek = vaccinationsInYear.Count(dateString =>
-                {
-                    if (DateTime.TryParse(dateString, out DateTime vaccinationDate))
-                    {
-                        return vaccinationDate >= weekStart && vaccinationDate <= weekEnd;
-                    }
-                    return false;
-                });
-
-                vaccinationsPerWeek.Add(vaccinationCountThisWeek);
+                var vaccinationCountThisWeek = parsedVaccinationDates.Count(date => date >= weekStart && date <= weekEnd);
+                vaccinationCounts.Add(vaccinationCountThisWeek);
             }
+            //for (int week = 1; week <= weeksInYear; week++)
+            //{
+            //    var weekStart = FirstDateOfWeek(year, week, ci);
+            //    var weekEnd = weekStart.AddDays(6); // Assuming the week starts on Monday
 
-            return vaccinationsPerWeek;
+
+            //    // Count vaccinations for the week
+            //    //total execution time for all loops: 1340 ms
+            //    var vaccinationCountThisWeek = vaccinationsInYear.Count(dateString =>
+            //    {
+            //        if (DateTime.TryParse(dateString, out DateTime vaccinationDate))
+            //        {
+            //            return vaccinationDate >= weekStart && vaccinationDate <= weekEnd;
+            //        }
+            //        return false;
+            //    });
+
+            //    vaccinationsPerWeek.Add(vaccinationCountThisWeek);
+            //}
+            return vaccinationCounts;
         }
 
         /// <summary>

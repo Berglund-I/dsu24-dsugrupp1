@@ -6,6 +6,7 @@ using System.Net;
 using DSUGrupp1.Infastructure;
 using System.ComponentModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 
 
 namespace DSUGrupp1.Controllers
@@ -107,12 +108,14 @@ namespace DSUGrupp1.Controllers
             if (apiResponse.IsSuccessful)
             {
                 return apiResponse.Data;
+
             }
             else
             {
                 throw new Exception(apiResponse.ErrorMessage);
             }
         }
+
         /// <summary>
         /// Gets vaccinationdata from all DeSos 
         /// </summary>
@@ -120,16 +123,13 @@ namespace DSUGrupp1.Controllers
         /// <returns></returns>
         public async Task<List<VaccinationDataFromSpecificDeSoDto>> GetVaccinationDataFromAllDeSos(VaccineCountDto vaccineCount)
         {
-            List<Task<VaccinationDataFromSpecificDeSoDto>> tasks = new List<Task<VaccinationDataFromSpecificDeSoDto>>();
+            var tasks = vaccineCount.Data.Select(vaccineData =>
+                GetVaccinationDataFromDeSo(vaccineData.Deso)).ToList();
 
-            foreach (VaccineData vaccindata in vaccineCount.Data)
-            {
-                tasks.Add(GetVaccinationDataFromDeSo(vaccindata.Deso));
-            }
+            var responses = await Task.WhenAll(tasks);
 
-            var response = await Task.WhenAll(tasks);
-
-            List<VaccinationDataFromSpecificDeSoDto> allVaccinationData = response.ToList();
+            
+            var allVaccinationData = responses.ToList();
 
             return allVaccinationData;
         }
