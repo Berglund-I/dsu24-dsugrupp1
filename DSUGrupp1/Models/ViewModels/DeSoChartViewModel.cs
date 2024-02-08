@@ -20,12 +20,14 @@ namespace DSUGrupp1.Models.ViewModels
         public int DoseThree { get; set; }
         public int TotalInjections { get; set; }
         public List<double> TotalPopulationVaccinationPercentage { get; set; }
-        public double VaccinatedMalesPercent { get; set; }
-        public double VaccinatedFemalesPercent { get; set; }
-        public double NotVaccinatedMalesPercent { get; set; }
-        public double NotVaccinatedFemalesPercent { get; set; }
+        public double VaccinatedMalesPercentage { get; set; }
+        public double VaccinatedFemalesPercentage { get; set; }
+        public double NotVaccinatedMalesPercentage { get; set; }
+        public double NotVaccinatedFemalesPercentage { get; set; }
         public int VaccinatedMales { get; set; }
         public int VaccinatedFemales { get; set; }
+        public List<Batch> Batches { get; set; }
+
 
 
         public DeSoChartViewModel(string deSoCode)
@@ -51,7 +53,10 @@ namespace DSUGrupp1.Models.ViewModels
 
         }
 
-
+        /// <summary>
+        /// Sets data for the chart that displays doses in a DeSo
+        /// </summary>
+        /// <returns></returns>
         private Chart GetChartDose(/*Chart chartValues*/)
         {
            
@@ -72,7 +77,10 @@ namespace DSUGrupp1.Models.ViewModels
             return chart;
 
         }
-
+        /// <summary>
+        /// Sets data for the chart that displays gender allocation in a DeSo
+        /// </summary>
+        /// <returns></returns>
         private Chart GetChartGender(/*Chart chartValues*/)
         {
 
@@ -91,7 +99,11 @@ namespace DSUGrupp1.Models.ViewModels
             return chart;
 
         }
-
+        /// <summary>
+        /// Gets and sets values for the class properties
+        /// </summary>
+        /// <param name="deSoCode"></param>
+        /// <returns></returns>
         private async Task<bool> GetSetValuesForChart(string deSoCode)
         {
             var vaccinationDataResponse = await _apiController.GetVaccinationDataFromDeSo(deSoCode);
@@ -107,10 +119,10 @@ namespace DSUGrupp1.Models.ViewModels
             VaccinatedMales = vaccinatedGender[0];
             VaccinatedFemales = vaccinatedGender[1];
 
-            VaccinatedMalesPercent = vaccinatedGenderPercent[0];
-            VaccinatedFemalesPercent = vaccinatedGenderPercent[1];
-            NotVaccinatedMalesPercent = vaccinatedGenderPercent[2];
-            NotVaccinatedFemalesPercent = vaccinatedGenderPercent[3];
+            VaccinatedMalesPercentage = vaccinatedGenderPercent[0];
+            VaccinatedFemalesPercentage = vaccinatedGenderPercent[1];
+            NotVaccinatedMalesPercentage = vaccinatedGenderPercent[2];
+            NotVaccinatedFemalesPercentage = vaccinatedGenderPercent[3];
 
             var doseCount = CalculateDoseCounts(vaccinationDataResponse);
             DoseOne = doseCount[0];
@@ -127,23 +139,15 @@ namespace DSUGrupp1.Models.ViewModels
             }
             TotalPopulationVaccinationPercentage = vaccinationPercentage;
 
-            //List<string> labels = new List<string>()
-            //    {
-            //        "1 Dos",
-            //        "2 Doser",
-            //        "3 eller fler Doser"
-            //    };
-
-            //List<string> colors = new List<string>()
-            //    {
-            //        "#3e95cd",
-            //        "#8e5ea2",
-            //        "#3cba9f"
-            //    };
-            //Chart chart = _chartViewModel.CreateChart("Vaccinationsgrad i området: ", "bar", labels, "Procentuell vaccinationsgrad", vaccinationPercentage, colors, 5);
+            GetBatches(vaccinationDataResponse);
+           
             return true;
         }    
-
+        /// <summary>
+        /// Sets values for dose 1, 2, 3 and booster
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         private List<int> CalculateDoseCounts(VaccinationDataFromSpecificDeSoDto data)
         {
             List<int> doseCount = new List<int>();
@@ -180,6 +184,55 @@ namespace DSUGrupp1.Models.ViewModels
             doseCount.Add(booster);
 
             return doseCount;
+        }
+
+        /// <summary>
+        /// Gets all used batches in deSo and gender allocation
+        /// </summary>
+        /// <param name="data"></param>
+        public void GetBatches(VaccinationDataFromSpecificDeSoDto data)
+        {
+            Dictionary<string, Batch> batches = new Dictionary<string, Batch>();
+            
+            foreach(var patients in data.Patients)
+            {
+                
+                for(int i = 0; i < patients.Vaccinations.Count(); i++)
+                {
+                    string batchNumber = patients.Vaccinations[i].BatchNumber;
+
+                    if (!batches.ContainsKey(batchNumber))
+                    {
+                        Batch batch = new Batch()
+                        {
+                            BatchNumber = batchNumber                           
+                        };
+                        if (patients.Gender == "Male")
+                        {
+                            batch.Male++;
+                        }
+                        else
+                        {
+                            batch.Female++;
+                        }
+                        batches.Add(batchNumber, batch);
+                    }
+                    else
+                    {
+                        Batch existingBatch = batches[batchNumber];
+
+                        if (patients.Gender == "Male")
+                        {
+                            existingBatch.Male++;
+                        }
+                        else
+                        {
+                            existingBatch.Female++;
+                        }
+                    }
+                }                                      
+            }
+            Batches = batches.Values.ToList();
         }
     }
 }
