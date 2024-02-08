@@ -73,6 +73,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 leftGenderChart = new Chart(context, genderChart);
 
+
+                if (leftOverTimeChart) {
+                    leftOverTimeChart.destroy();
+                }
+
+                const context = document.getElementById('left-over-time-chart').getContext('2d');
+                const overTimeChart = JSON.parse(data.jsonChartOverTime);
+
+                leftOverTimeChart = new Chart(context, overTimeChart);
+
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -148,6 +158,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 const genderChart = JSON.parse(data.jsonChartGender);
 
                 rightGenderChart = new Chart(context, genderChart);
+
+                if (rightOverTimeChart) {
+                    rightOverTimeChart.destroy();
+                }
+
+                const context = document.getElementById('right-over-time-chart').getContext('2d');
+                const overTimeChart = JSON.parse(data.jsonChartOverTime);
+
+                rightOverTimeChart = new Chart(context, overTimeChart);
 
             })
             .catch((error) => {

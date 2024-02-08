@@ -1,6 +1,9 @@
 ﻿using DSUGrupp1.Controllers;
 using DSUGrupp1.Models.DTO;
 using Newtonsoft.Json;
+using System.Data;
+using System.Globalization;
+using System.Reflection.Emit;
 
 namespace DSUGrupp1.Models.ViewModels
 {
@@ -10,6 +13,8 @@ namespace DSUGrupp1.Models.ViewModels
         private readonly ApiController _apiController = new ApiController();
         private readonly VaccinationViewModel _vaccinationViewModel = new VaccinationViewModel();
         private readonly DisplayGenderStatisticsViewModel _displayGenderStatistics = new DisplayGenderStatisticsViewModel();
+        private readonly VaccinationOverTimeViewModel _vaccinationOverTimeViewModel = new VaccinationOverTimeViewModel();
+       
 
         public string JsonChartDose { get; set; }
         public string JsonChartGender { get; set; }
@@ -27,12 +32,16 @@ namespace DSUGrupp1.Models.ViewModels
         public int VaccinatedMales { get; set; }
         public int VaccinatedFemales { get; set; }
         public List<Batch> Batches { get; set; }
+        public List<double> VaccinationsperWeek { get; set; }
+        private List<VaccinationDataFromSpecificDeSoDto> _vaccinationDataFromSpecificDeSoDto = null;
+        public string SelectedDeSo {  get; set; }
+        public string JsonChartVaccinationOverTime { get; set; }
 
 
 
         public DeSoChartViewModel(string deSoCode)
         {
-
+            SelectedDeSo = deSoCode;
             //var chartValues = GetSetValuesForChart(deSoCode);
 
             //JsonChartDose = _chartViewModel.SerializeJson(chartValues.Result);
@@ -41,6 +50,7 @@ namespace DSUGrupp1.Models.ViewModels
             {
                 var chart = GetChartDose(/*chartValues.Result*/);
                 var chartTwo = GetChartGender(/*chartValues.Result*/);
+                var chartThree = GetChartVaccinationOverTime();
 
                 JsonChartDose = _chartViewModel.SerializeJson(chart);
                 JsonChartGender = _chartViewModel.SerializeJson(chartTwo);
@@ -99,6 +109,37 @@ namespace DSUGrupp1.Models.ViewModels
             return chart;
 
         }
+        private ChartViewModel GetChartVaccinationOverTime(/*Chart chartValues*/)
+        {
+            ChartViewModel chart = new ChartViewModel();
+            List<DatasetsDto>? datasets = new List<DatasetsDto>();
+            var weekLabel = Enumerable.Range(1, 52).Select(i => i.ToString()).ToList();
+            for (int year = 2020; year <= 2023; year++)
+            {
+                //1500 ms for all loops combined
+                VaccinationsperWeek = CountVaccinationsWeekByWeek(year);
+
+                string color = ChartViewModel.GenerateRandomColor();
+                DatasetsDto dataset = chart.GenerateDataSet(
+                    DatasetLabel: $"{year}",
+                    data: VaccinationsperWeek,
+                    bgcolor: [color],
+                    bColor: color, 3
+                );
+
+                datasets.Add(dataset);
+            }
+
+            chart.Chart = chart.CreateMultiSetChart(
+                text: "Antal vaccinationer per vecka",
+                type: "line",
+                labels: weekLabel,
+                datasets: datasets);
+            chart.JsonChart = chart.SerializeJson(chart.Chart);
+            
+            return chart;
+
+        }
         /// <summary>
         /// Gets and sets values for the class properties
         /// </summary>
@@ -142,7 +183,82 @@ namespace DSUGrupp1.Models.ViewModels
             GetBatches(vaccinationDataResponse);
            
             return true;
-        }    
+        }
+
+        private List<double> CountVaccinationsWeekByWeek(int year)
+        {
+            var ci = new CultureInfo("sv-SE");
+            var cal = ci.Calendar;
+            var lastDayOfYear = new DateTime(year, 12, 31);
+            int weeksInYear = cal.GetWeekOfYear(lastDayOfYear, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+
+            // Preprocess to get vaccination dates for the given year
+            var vaccinationsInYear = StoreVaccinationsByYear(year.ToString());
+            var vaccinationsPerWeek = new List<double>();
+
+            var parsedVaccinationDates = vaccinationsInYear
+            .Select(dateString => DateTime.TryParse(dateString, out DateTime date) ? (DateTime?)date : null)
+            .Select(date => date.Value)
+            .ToList();
+
+            List<double> vaccinationCounts = new List<double>();
+
+            for (int week = 1; week <= weeksInYear; week++)
+            {
+                var weekStart = FirstDateOfWeek(year, week, ci);
+                var weekEnd = weekStart.AddDays(6);
+
+                var vaccinationCountThisWeek = parsedVaccinationDates.Count(date => date >= weekStart && date <= weekEnd);
+                vaccinationCounts.Add(vaccinationCountThisWeek);
+            }
+            return vaccinationCounts;
+        }
+        public static DateTime FirstDateOfWeek(int year, int weekOfYear, CultureInfo ci)
+        {
+            DateTime jan1 = new DateTime(year, 1, 1);
+            int daysOffset = (int)DayOfWeek.Monday - (int)jan1.DayOfWeek;
+            DateTime firstWeekDay = jan1.AddDays(daysOffset);
+            var calendar = ci.Calendar;
+            var firstWeek = calendar.GetWeekOfYear(jan1, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+
+            int weekOfYearMultiplier = weekOfYear - 1;
+
+            if (firstWeek >= 52)
+            {
+                firstWeekDay = jan1.AddDays(daysOffset + 7);
+            }
+
+
+            return firstWeekDay.AddDays(weekOfYearMultiplier * 7);
+        }
+        private List<string> StoreVaccinationsByYear(string year)
+        {
+            List<string> vaccinationsInGivenYear = new List<string>();
+
+            foreach (var list in _vaccinationDataFromSpecificDeSoDto)
+            {
+                if(list.Meta.DeSoCode == SelectedDeSo)
+                foreach (var patient in list.Patients)
+                {
+                    foreach (var vaccination in patient.Vaccinations)
+                    {
+                        if (DateTime.TryParse(vaccination.DateOfVaccination, out DateTime vaccinationDate))
+                        {
+                            if (vaccinationDate.Year.ToString() == year)
+                            {
+                                vaccinationsInGivenYear.Add(vaccination.DateOfVaccination);
+                            }
+
+                        }
+
+                    }
+                }
+            }
+
+            return vaccinationsInGivenYear;
+
+        }
+
         /// <summary>
         /// Sets values for dose 1, 2, 3 and booster
         /// </summary>
@@ -234,5 +350,7 @@ namespace DSUGrupp1.Models.ViewModels
             }
             Batches = batches.Values.ToList();
         }
+
+
     }
 }
