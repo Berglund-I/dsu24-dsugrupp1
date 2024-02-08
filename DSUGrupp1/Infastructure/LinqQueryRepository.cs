@@ -4,52 +4,58 @@ using System.Xml.Linq;
 
 namespace DSUGrupp1.Infastructure
 {
-    public class LinqQueryRepository
+    public static class LinqQueryRepository
     {
-        public List<PatientInformationDto> Sorted { get; set; }
-        public LinqQueryRepository(List<PatientInformationDto> patients) 
+        /// <summary>
+        /// Gets a list of all patients of a specific gender
+        /// </summary>
+        /// <param name="patients"></param>
+        /// <returns></returns>
+        public static List<PatientInformationDto> GetPatientsByGender(List<PatientInformationDto> patients, string gender)
         {
-            Sorted = GetPatientsByAge(patients);
-                //GetPatientsByDoseNumber(patients);
-                //GetPatientsByGenderAndBatchNumber(patients);
-                //GetPatientsByGender(patients);
-        }
-        public List<PatientInformationDto> GetPatientsByGender(List<PatientInformationDto> patients)
-        {
-            //IQueryable<PatientInformationDto> query = 
-            //    from patient in patients
-            //    where patient.Gender == "Male"
-            //    select patient;
-
-            //return query.ToList();
-
             List<PatientInformationDto> result = patients
-            .Where(patient => patient.Gender == "Male")
+            .Where(patient => patient.Gender == gender)
             .ToList();
 
             return result;
         }
-
-        public List<PatientInformationDto> GetPatientsByGenderAndBatchNumber(List<PatientInformationDto> patients)
+        /// <summary>
+        /// Gets a list of all patients that has gotten vaccinated with a specifik batch
+        /// </summary>
+        /// <param name="patients"></param>
+        /// <param name="batchNumber"></param>
+        /// <returns></returns>
+        public static List<PatientInformationDto> GetPatientsByBatchNumber(List<PatientInformationDto> patients, string batchNumber)
         {    
             List<PatientInformationDto> result = patients
-            .Where(patient => patient.Gender == "Male" && patient.Vaccinations.Any(v => v.BatchNumber == "ER1741"))
+            .Where(patient => patient.Vaccinations.Any(b => b.BatchNumber == batchNumber))
             .ToList();
+
             return result;
         }
-
-        public List<PatientInformationDto> GetPatientsByDoseNumber(List<PatientInformationDto> patients)
+        /// <summary>
+        /// Gets a list of all patients that has gotten the corresponding number of doses
+        /// </summary>
+        /// <param name="patients"></param>
+        /// <param name="doseNumber"></param>
+        /// <returns></returns>
+        public static List<PatientInformationDto> GetPatientsByDoseNumber(List<PatientInformationDto> patients, int doseNumber)
         {
             List<PatientInformationDto> result = patients
-            .Where(patient => patient.Vaccinations.Any(d => d.DoseNumber == 2))
+            .Where(patient => patient.Vaccinations.Any(d => d.DoseNumber == doseNumber))
             .ToList();
+
             return result;
         }
-
-        public List<PatientInformationDto> GetPatientsByAge(List<PatientInformationDto> patients)
+        /// <summary>
+        /// Gets a list of all patients within the age span
+        /// </summary>
+        /// <param name="patients"></param>
+        /// <param name="lowestAge"></param>
+        /// <param name="highestAge"></param>
+        /// <returns></returns>
+        public static List<PatientInformationDto> GetPatientsByAge(List<PatientInformationDto> patients, int lowestAge, int highestAge)
         {
-            int lowestAge = 30;
-            int highestAge = 50;
             DateTime dateTime = DateTime.Now;
             int currentYear = dateTime.Year;
 
@@ -57,6 +63,21 @@ namespace DSUGrupp1.Infastructure
             .Where(patient => currentYear - int.Parse(patient.YearOfBirth) >= 30 && 
             currentYear - int.Parse(patient.YearOfBirth) <= 50)
             .ToList();
+
+            return result;
+        }
+        /// <summary>
+        /// Gets a list of all patients that has been vaccinated at a specific vaccination site
+        /// </summary>
+        /// <param name="patients"></param>
+        /// <param name="siteId"></param>
+        /// <returns></returns>
+        public static List<PatientInformationDto> GetPatientsByVaccinationCentral(List<PatientInformationDto> patients, int siteId)
+        {
+            List<PatientInformationDto> result = patients
+            .Where(patient => patient.Vaccinations.Any(d => d.VaccinationCentral.SiteId== siteId))
+            .ToList();
+
             return result;
         }
     }

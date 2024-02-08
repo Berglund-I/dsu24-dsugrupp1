@@ -2,6 +2,7 @@
 using DSUGrupp1.Infastructure;
 using DSUGrupp1.Models.DTO;
 using Newtonsoft.Json;
+using System.Globalization;
 
 namespace DSUGrupp1.Models.ViewModels
 {
@@ -110,9 +111,6 @@ namespace DSUGrupp1.Models.ViewModels
             var vaccinationDataResponse = await _apiController.GetVaccinationDataFromDeSo(deSoCode);
             var populationMales = await _apiController.GetPopulationInSpecificDeSo(deSoCode, "2022", "1");
             var populationFemales = await _apiController.GetPopulationInSpecificDeSo(deSoCode, "2022", "2");
-
-            var result = new LinqQueryRepository(vaccinationDataResponse.Patients);
-
 
 
             Population = int.Parse(populationMales.Data[0].Values[0]) + int.Parse(populationFemales.Data[0].Values[0]);
