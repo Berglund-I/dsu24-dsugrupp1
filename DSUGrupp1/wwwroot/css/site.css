@@ -57,11 +57,10 @@ header {
     flex-wrap: wrap;
     justify-content: center;
 }
-
 .flex-item {
-    background-color:#cee1ea;
-    padding: 20px;
+    background-color: #cee1ea;
     margin: 10px;
+    padding: 20px;
     border: 1px solid #b7d1de;
 }
 .left {
@@ -75,6 +74,10 @@ header {
 }
 .center {
     width: 98%;
+}
+.chart-entire-municipality {
+    width:stretch;
+
 }
 
 .age-chart-text {

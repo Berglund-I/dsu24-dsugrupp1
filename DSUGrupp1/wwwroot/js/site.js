@@ -163,6 +163,14 @@ function clearDeSoInformation(id) {
     }
 }
 
+var mymap = L.map('mapid').setView([63.1792, 14.6357], 8); 
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 18,
+}).addTo(mymap);
+
+
 
 
 
