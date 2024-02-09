@@ -5,6 +5,8 @@
 
 let leftChart;
 let rightChart;
+let leftGenderChart;
+let rightGenderChart;
 
 
 let rightFilterChart;
@@ -56,18 +58,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 totalInjections.innerText = 'Totala antalet injektioner i området: ' + data.totalInjections;
                 deSoStatisticContainer.appendChild(totalInjections)
 
-
-
-                console.log('Success:', data);
-
                 const ctx = document.getElementById('left-deSo-chart').getContext('2d');
-                const chart = JSON.parse(data.jsonChart);
+                const chart = JSON.parse(data.jsonChartDose);
 
                 if (leftChart) {
                     leftChart.destroy();
                 }
 
                 leftChart = new Chart(ctx, chart);
+
+                if (leftGenderChart) {
+                    leftGenderChart.destroy();
+                }
+
+                const context = document.getElementById('left-gender-chart').getContext('2d');
+                const genderChart = JSON.parse(data.jsonChartGender);
+
+                leftGenderChart = new Chart(context, genderChart);
 
             })
             .catch((error) => {
@@ -128,13 +135,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('Success:', data);
 
                 const ctx = document.getElementById('right-deSo-chart').getContext('2d');
-                const chart = JSON.parse(data.jsonChart);
+                const chart = JSON.parse(data.jsonChartDose);
 
                 if (rightChart) {
                     rightChart.destroy();
                 }
 
                 rightChart = new Chart(ctx, chart);
+
+                if (rightGenderChart) {
+                    rightGenderChart.destroy();
+                }
+
+                const context = document.getElementById('right-gender-chart').getContext('2d');
+                const genderChart = JSON.parse(data.jsonChartGender);
+
+                rightGenderChart = new Chart(context, genderChart);
 
             })
             .catch((error) => {
@@ -190,9 +206,14 @@ function drawLeftFilterChart(desoCode, filterOptions) {
             const ctx = document.getElementById('left-filter-chart').getContext('2d');
             const chart = JSON.parse(data.jsonChart);
 
-            if (leftFilterChart) {
-                leftFilterChart.destroy();
-            }
+var mymap = L.map('mapid').setView([63.1792, 14.6357], 8); 
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 18,
+}).addTo(mymap);
+
+
 
             leftFilterChart = new Chart(ctx, chart);
 

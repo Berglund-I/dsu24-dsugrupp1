@@ -43,7 +43,9 @@ namespace DSUGrupp1.Controllers
 
             if(HomeModelStorage.ViewModel == null)
             {
+                
                 VaccinationViewModel vaccinations = new VaccinationViewModel();
+
                 ChartViewModel municipalityChart = await vaccinations.GenerateChart();
 
 
@@ -54,25 +56,28 @@ namespace DSUGrupp1.Controllers
                 //HomeViewModel model = new HomeViewModel();
                 //model.Population = await _apiController.GetPopulationInSpecificDeSo("2380A0010", "2022");   
                 //model.DataFromSpecificDeSo = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
+                
                 var apiResult1 = await _apiController.GetPopulationCount("2380", "2022");
                 var apiResult2 = await _apiController.GetVaccinationsCount();
-                var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
+                var vaccineDataAllDeso =  await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);               
 
                 Stopwatch stopwatch = Stopwatch.StartNew();
                 var testList = PopulateFiltersViewModel.GetVaccinationSites(vaccineDataAllDeso);
                 stopwatch.Stop();
                 System.Diagnostics.Debug.WriteLine($"duration: {stopwatch.ElapsedMilliseconds} ms");
                 HomeViewModel model = new HomeViewModel();
-                DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
+                
+                DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);               
                 VaccinationOverTimeViewModel vaccinationOverTimeStatistics = new VaccinationOverTimeViewModel(apiResult1, vaccineDataAllDeso);
+
                 ChartViewModel chartLineOverTime = vaccinationOverTimeStatistics.GenerateLineChart();
-
                 ChartViewModel ageChart = await ageStatistics.GenerateChart();
-
+                
                 DisplayGenderStatisticsViewModel genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, vaccineDataAllDeso);
                 ChartViewModel chartGenderFemales = genderStatistics.GenerateChartFemales();
                 ChartViewModel chartGenderMales = genderStatistics.GenerateChartMales();
-                ChartViewModel chartGenderBoth = genderStatistics.GenerateChartBothGenders();
+                ChartViewModel chartGenderBoth = genderStatistics.GenerateChartBothGenders();        
+                
                 model.Charts.Add(municipalityChart);
                 model.Charts.Add(chartLineOverTime);
                 model.Charts.Add(ageChart);
@@ -89,8 +94,11 @@ namespace DSUGrupp1.Controllers
 
         public ActionResult Detail()
         {
-
             return View(HomeModelStorage.ViewModel);
+        }
+        public ActionResult Map()
+        {
+            return View();
         }
 
         [HttpPost]
