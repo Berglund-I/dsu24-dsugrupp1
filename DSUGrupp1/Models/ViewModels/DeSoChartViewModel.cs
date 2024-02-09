@@ -104,15 +104,15 @@ namespace DSUGrupp1.Models.ViewModels
 
         }
 
-        public void GetPatient(VaccinationDataFromSpecificDeSoDto patientData, DoseTypeDto doseData)
-        {
-            Patients = new List<Patient>();
-            foreach (var p in patientData.Patients)
-            {
-                Patient patient = new Patient(p, doseData);
-                Patients.Add(patient);
-            }          
-        }
+        //public void GetPatient(VaccinationDataFromSpecificDeSoDto patientData, DoseTypeDto doseData)
+        //{
+        //    Patients = new List<Patient>();
+        //    foreach (var p in patientData.Patients)
+        //    {
+        //        Patient patient = new Patient(p, doseData);
+        //        Patients.Add(patient);
+        //    }          
+        //}
         /// <summary>
         /// Gets and sets values for the class properties
         /// </summary>
@@ -125,7 +125,7 @@ namespace DSUGrupp1.Models.ViewModels
             var populationFemales = await _apiController.GetPopulationInSpecificDeSo(deSoCode, "2022", "2");
             var getBatches = await _apiController.GetDoseTypes();
 
-            GetPatient(vaccinationDataResponse, getBatches);
+            //GetPatient(vaccinationDataResponse, getBatches);
 
             Population = int.Parse(populationMales.Data[0].Values[0]) + int.Parse(populationFemales.Data[0].Values[0]);
             TotalPatients = vaccinationDataResponse.Meta.TotalRecordsPatients;

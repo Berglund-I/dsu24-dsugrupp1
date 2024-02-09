@@ -10,8 +10,11 @@ namespace DSUGrupp1.Models
         public int YearOfBirth { get; set; }
         public List<Vaccination> Vaccinations { get; set; }
 
-        public Patient(PatientInformationDto patientData, DoseTypeDto doseData) 
+        public Patient(PatientInformationDto patientData, DoseTypeDto doseData, string deSo, DesoInfoDTO desoInfo) 
         { 
+            DeSoCode = deSo;
+            var area = desoInfo.Areas.FirstOrDefault(a => a.Deso == deSo);
+            DeSoName = area.DesoName;
             Gender = patientData.Gender;
             YearOfBirth = int.Parse(patientData.YearOfBirth);
             Vaccinations = new List<Vaccination>();
