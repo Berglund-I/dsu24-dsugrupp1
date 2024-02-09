@@ -158,6 +158,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     });
 });
+
 function clearDeSoInformation(id) {
     const deSoStatisticContainer = document.getElementById(id);
 
