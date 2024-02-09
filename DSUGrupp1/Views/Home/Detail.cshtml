@@ -49,7 +49,7 @@
     <div class="filters">
         @Html.DropDownListFor(d => d.FilterDropDown.SelectedBatch, Model.FilterDropDown.Batches, "Välj Batch-nummer", new { @class = "dropdown-filter"})
         @Html.DropDownListFor(d => d.FilterDropDown.SelectedBatch, Model.FilterDropDown.VaccineName, "Välj vaccintyp", new { @class = "dropdown-filter" })
-        @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj vaccinationscentral", new { @class = "dropdown-filter" })
+       @*  @Html.DropDownListFor(d => d.FilterDropDown.SelectedBatch, Model.FilterDropDown.VaccineCentral, "Välj vaccinationscentral", new { @class = "dropdown-filter" }) *@
 
         <p>Åldersintervall (Slider)</p>
 
@@ -67,4 +67,11 @@
         </div>
 
     </div>
+    <div class="charts">
+        <canvas id ="left-filter-chart"></canvas>
+    </div>
+    <div class="charts">
+        <canvas id="right-filter-chart"></canvas>
+    </div>
+
 }

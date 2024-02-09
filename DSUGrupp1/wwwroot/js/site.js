@@ -6,6 +6,9 @@
 let leftChart;
 let rightChart;
 
+
+let rightFilterChart;
+let leftFilterChart;
 document.addEventListener('DOMContentLoaded', function () {
     const deSoDropdown = document.getElementById('left-deSo-dropdown');
 
@@ -147,7 +150,95 @@ function clearDeSoInformation(id) {
     }
 }
 
+//document.addEventListener('DOMContentLoaded', function () {
+//    const filterChart = document.getElementById('INSERT-ID-HERE');
 
+//    let filters = await filterChart.json();
+
+//    fetch('/Home/INSERT-PATH-HERE', {
+//        method: 'POST',
+//        headers: {
+//            'Content-type': 'application/json',
+
+//        },
+//        body: JSON.stringify({ filters }),
+//    })
+//});
+
+function drawLeftFilterChart(desoCode, filterOptions) {
+    document.getElementById('INSERT-ID-HERE');
+
+    let selectedFilters = this.value;
+
+    fetch('/Home/INSERT-PATH-HERE', {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json',
+
+        },
+        body: JSON.stringify({ selectedFilters }),
+    })
+
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Inte bra');
+            }
+            return response.json();
+        })
+        .then(data => {
+
+            const ctx = document.getElementById('left-filter-chart').getContext('2d');
+            const chart = JSON.parse(data.jsonChart);
+
+            if (leftFilterChart) {
+                leftFilterChart.destroy();
+            }
+
+            leftFilterChart = new Chart(ctx, chart);
+
+        })
+
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+}
+
+function drawRightFilter0Chart(desoCode, filterOptions) {
+    document.getElementById('INSERT-ID-HERE');
+    let selectedFilters = this.value;
+
+    fetch('/Home/INSERT-PATH-HERE', {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json',
+
+        },
+        body: JSON.stringify({ selectedFilters }),
+    })
+
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Inte bra');
+            }
+            return response.json();
+        })
+        .then(data => {
+
+            const ctx = document.getElementById('right-filter-chart').getContext('2d');
+            const chart = JSON.parse(data.jsonChart);
+
+            if (rightFilterChart) {
+                rightFilterChart.destroy();
+            }
+
+            rightFilterChart = new Chart(ctx, chart);
+
+        })
+
+        .catch ((error) => {
+            console.error('Error:', error);
+        });
+}
 
 
 

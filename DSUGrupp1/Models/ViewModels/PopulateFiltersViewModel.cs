@@ -50,19 +50,19 @@ namespace DSUGrupp1.Models.ViewModels
             return sortedBatchData;
         }
 
-        public async Task<List<SelectListItem>> SortVaccineCentral()
-        {
-            var response = await _apiController.GetVaccinationsCount();
-            List<SelectListItem> sortedCentralData = new List<SelectListItem>();
+        //public async Task<List<SelectListItem>> SortVaccineCentral()
+        //{
+        //    var vaccineCentrals = await GetVaccinationSites();
+        //    List<SelectListItem> sortedCentralData = new List<SelectListItem>();
 
-            for (int i = 0; i < response.Data.Count(); i++)
-            {
-                //SelectListItem centralData = new SelectListItem { Value = response. }
-            }
+        //    for (int i = 0; i < response.Data.Count(); i++)
+        //    {
+        //        //SelectListItem centralData = new SelectListItem { Value = response. }
+        //    }
 
-            return sortedCentralData;
+        //    return sortedCentralData;
 
-        }
+        //}
         /// <summary>
         /// Gets all vaccination centrals from bulk vaccinationdata. Note there is designated apicall for this but sorting through the data already collected is faster.
         /// </summary>
