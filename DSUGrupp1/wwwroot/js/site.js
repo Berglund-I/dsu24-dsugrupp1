@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 leftChart = new Chart(ctx, chart);
-
+                console.log(data.jsonVaccinationChartOverTime);
                 if (leftGenderChart) {
                     leftGenderChart.destroy();
                 }
@@ -81,7 +81,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 const ctext = document.getElementById('left-over-time-chart').getContext('2d');
-                const overTimeChart = JSON.parse(data.jsonChartOverTime);
+                const overTimeChart = JSON.parse(data.jsonChartVaccinationOverTime);
+
+                
 
                 leftOverTimeChart = new Chart(ctext, overTimeChart);
 
@@ -166,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 const ctext = document.getElementById('right-over-time-chart').getContext('2d');
-                const overTimeChart = JSON.parse(data.jsonChartOverTime);
+                const overTimeChart = JSON.parse(data.jsonChartVaccinationOverTime);
 
                 rightOverTimeChart = new Chart(ctext, overTimeChart);
 
