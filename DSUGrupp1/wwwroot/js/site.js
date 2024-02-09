@@ -7,6 +7,8 @@ let leftChart;
 let rightChart;
 let leftGenderChart;
 let rightGenderChart;
+let leftOverTimeChart; 
+let rightOverTimeChart;
 
 document.addEventListener('DOMContentLoaded', function () {
     const deSoDropdown = document.getElementById('left-deSo-dropdown');
@@ -78,10 +80,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     leftOverTimeChart.destroy();
                 }
 
-                const context = document.getElementById('left-over-time-chart').getContext('2d');
+                const ctext = document.getElementById('left-over-time-chart').getContext('2d');
                 const overTimeChart = JSON.parse(data.jsonChartOverTime);
 
-                leftOverTimeChart = new Chart(context, overTimeChart);
+                leftOverTimeChart = new Chart(ctext, overTimeChart);
 
             })
             .catch((error) => {
@@ -163,10 +165,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     rightOverTimeChart.destroy();
                 }
 
-                const context = document.getElementById('right-over-time-chart').getContext('2d');
+                const ctext = document.getElementById('right-over-time-chart').getContext('2d');
                 const overTimeChart = JSON.parse(data.jsonChartOverTime);
 
-                rightOverTimeChart = new Chart(context, overTimeChart);
+                rightOverTimeChart = new Chart(ctext, overTimeChart);
 
             })
             .catch((error) => {
