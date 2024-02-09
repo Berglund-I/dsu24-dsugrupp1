@@ -75,7 +75,21 @@ namespace DSUGrupp1.Infastructure
         public static List<PatientInformationDto> GetPatientsByVaccinationCentral(List<PatientInformationDto> patients, int siteId)
         {
             List<PatientInformationDto> result = patients
-            .Where(patient => patient.Vaccinations.Any(d => d.VaccinationCentral.SiteId== siteId))
+            .Where(patient => patient.Vaccinations.Any(s => s.VaccinationCentral.SiteId== siteId))
+            .ToList();
+
+            return result;
+        }
+
+        public static List<PatientInformationDto> GetPatientsByDates(List<PatientInformationDto> patients)
+        {
+            //patient.Vaccinations.dateOfVaccination bör vara DateTime, inte string
+            DateTime dateOne = DateTime.Parse("2020-09-14");
+            DateTime dateTwo = DateTime.Parse("2021-09-14");
+
+            List<PatientInformationDto> result = patients
+            .Where(patient => patient.Vaccinations.Any(d => DateTime.Parse(d.DateOfVaccination) >= dateOne && 
+            DateTime.Parse(d.DateOfVaccination) <= dateTwo))
             .ToList();
 
             return result;
