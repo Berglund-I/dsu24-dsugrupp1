@@ -90,8 +90,11 @@ namespace DSUGrupp1.Controllers
 
         public ActionResult Detail()
         {
-
             return View(HomeModelStorage.ViewModel);
+        }
+        public ActionResult Map()
+        {
+            return View();
         }
 
         [HttpPost]
