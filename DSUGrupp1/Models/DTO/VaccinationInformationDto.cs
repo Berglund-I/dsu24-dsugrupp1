@@ -14,7 +14,7 @@ namespace DSUGrupp1.Models.DTO
             [JsonProperty("place-of-injection")]
             public string PlaceOfInjection { get; set; }
             [JsonProperty("vaccination-site")]
-            public VaccinationCentralDto? VaccinationSite { get; set; }
+            public VaccinationCentralDto? VaccinationCentral { get; set; }
             
         }
 

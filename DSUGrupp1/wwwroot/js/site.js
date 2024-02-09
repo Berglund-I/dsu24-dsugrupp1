@@ -7,10 +7,9 @@ let leftChart;
 let rightChart;
 let leftGenderChart;
 let rightGenderChart;
-
-
-let rightFilterChart;
 let leftFilterChart;
+let rightFilterChart;
+
 document.addEventListener('DOMContentLoaded', function () {
     const deSoDropdown = document.getElementById('left-deSo-dropdown');
 
@@ -75,6 +74,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 const genderChart = JSON.parse(data.jsonChartGender);
 
                 leftGenderChart = new Chart(context, genderChart);
+
+                if (leftFilterChart) {
+                    leftFilterChart.destroy();
+                }
+
+                const contextTest = document.getElementById('left-filter-chart').getContext('2d');
+                const filterChart = JSON.parse(data.jsonChartFilter);
+
+                leftFilterChart = new Chart(contextTest, filterChart);
 
             })
             .catch((error) => {
@@ -152,6 +160,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 rightGenderChart = new Chart(context, genderChart);
 
+                if (rightFilterChart) {
+                    rightFilterChart.destroy();
+                }
+
+                const contextTest = document.getElementById('right-filter-chart').getContext('2d');
+                const filterChart = JSON.parse(data.jsonChartFilter);
+
+                rightFilterChart = new Chart(contextTest, filterChart);
+
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -167,46 +184,6 @@ function clearDeSoInformation(id) {
     }
 }
 
-//document.addEventListener('DOMContentLoaded', function () {
-//    const filterChart = document.getElementById('INSERT-ID-HERE');
-
-//    let filters = await filterChart.json();
-
-//    fetch('/Home/INSERT-PATH-HERE', {
-//        method: 'POST',
-//        headers: {
-//            'Content-type': 'application/json',
-
-//        },
-//        body: JSON.stringify({ filters }),
-//    })
-//});
-
-function drawLeftFilterChart(desoCode, filterOptions) {
-    document.getElementById('INSERT-ID-HERE');
-
-    let selectedFilters = this.value;
-
-    fetch('/Home/INSERT-PATH-HERE', {
-        method: 'POST',
-        headers: {
-            'Content-type': 'application/json',
-
-        },
-        body: JSON.stringify({ selectedFilters }),
-    })
-
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Inte bra');
-            }
-            return response.json();
-        })
-        .then(data => {
-
-            const ctx = document.getElementById('left-filter-chart').getContext('2d');
-            const chart = JSON.parse(data.jsonChart);
-
 var mymap = L.map('mapid').setView([63.1792, 14.6357], 8); 
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -214,53 +191,81 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18,
 }).addTo(mymap);
 
+//function drawLeftFilterChart(desoCode, filterOptions) {
+//    document.getElementById('left-filter-chart');
+
+//    let selectedFilters = this.value;
+
+//    fetch('/Home/INSERT-PATH-HERE', {
+//        method: 'POST',
+//        headers: {
+//            'Content-type': 'application/json',
+
+//        },
+//        body: JSON.stringify({ selectedFilters }),
+//    })
+
+//        .then(response => {
+//            if (!response.ok) {
+//                throw new Error('Inte bra');
+//            }
+//            return response.json();
+//        })
+//        .then(data => {
+
+//            const ctx = document.getElementById('left-filter-chart').getContext('2d');
+//            const chart = JSON.parse(data.jsonChart);
+
+//            if (leftFilterChart) {
+//                leftFilterChart.destroy();
+//            }
 
 
-            leftFilterChart = new Chart(ctx, chart);
+//            leftFilterChart = new Chart(ctx, chart);
 
-        })
+//        })
 
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-}
+//        .catch((error) => {
+//            console.error('Error:', error);
+//        });
+//}
 
-function drawRightFilter0Chart(desoCode, filterOptions) {
-    document.getElementById('INSERT-ID-HERE');
-    let selectedFilters = this.value;
+//function drawRightFilter0Chart(desoCode, filterOptions) {
+//    document.getElementById('right-filter-chart');
+//    let selectedFilters = this.value;
 
-    fetch('/Home/INSERT-PATH-HERE', {
-        method: 'POST',
-        headers: {
-            'Content-type': 'application/json',
+//    fetch('/Home/INSERT-PATH-HERE', {
+//        method: 'POST',
+//        headers: {
+//            'Content-type': 'application/json',
 
-        },
-        body: JSON.stringify({ selectedFilters }),
-    })
+//        },
+//        body: JSON.stringify({ selectedFilters }),
+//    })
 
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Inte bra');
-            }
-            return response.json();
-        })
-        .then(data => {
+//        .then(response => {
+//            if (!response.ok) {
+//                throw new Error('Inte bra');
+//            }
+//            return response.json();
+//        })
+//        .then(data => {
 
-            const ctx = document.getElementById('right-filter-chart').getContext('2d');
-            const chart = JSON.parse(data.jsonChart);
+//            const ctx = document.getElementById('right-filter-chart').getContext('2d');
+//            const chart = JSON.parse(data.jsonChart);
 
-            if (rightFilterChart) {
-                rightFilterChart.destroy();
-            }
+//            if (rightFilterChart) {
+//                rightFilterChart.destroy();
+//            }
 
-            rightFilterChart = new Chart(ctx, chart);
+//            rightFilterChart = new Chart(ctx, chart);
 
-        })
+//        })
 
-        .catch ((error) => {
-            console.error('Error:', error);
-        });
-}
+//        .catch ((error) => {
+//            console.error('Error:', error);
+//        });
+//}
 
 
 

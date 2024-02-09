@@ -3,15 +3,6 @@
 @{
     ViewData["Title"] = "Detaljsida";
 }
-
-@section LeftContent {
-
-}
-
-@section RightContent{
-
-}
-
 @section CenterContentOne {
     <h2>Statistik från DeSo områden i kommunen</h2>
   <div class="deSo-container">      
@@ -81,11 +72,19 @@
         </div>
 
     </div>
-    <div class="charts">
-        <canvas id ="left-filter-chart"></canvas>
-    </div>
-    <div class="charts">
-        <canvas id="right-filter-chart"></canvas>
+    
+    
+    <div class="deSo-container">
+        <div class="left-div">
+        <div charts="charts">
+            <canvas id ="left-filter-chart"></canvas>
+        </div>
+        </div>
+        <div class="right-div">
+        <div class="charts">
+            <canvas id="right-filter-chart"></canvas>
+        </div>
+        </div>
     </div>
 
 }

@@ -40,14 +40,20 @@ namespace DSUGrupp1.Models.ViewModels
         {
             var response = await _apiController.GetDoseTypes();
             List<SelectListItem> sortedBatchData = new List<SelectListItem>();
+            HashSet<string> uniqueNames = new HashSet<string>();
 
-            for (int i = 0; i < response.Batches.Count(); i++)
+            foreach (var batch in response.Batches)
             {
-                SelectListItem batchData = new SelectListItem { Value = response.Batches[i].VaccineName, Text = response.Batches[i].VaccineName };
-                sortedBatchData.Add(batchData);
+                if (!uniqueNames.Contains(batch.VaccineName))
+                {
+                    SelectListItem batchData = new SelectListItem { Value = batch.VaccineName, Text = batch.VaccineName };
+                    sortedBatchData.Add(batchData);
+                    uniqueNames.Add(batch.VaccineName); 
+                }
             }
 
-            return sortedBatchData;
+            return sortedBatchData;           
+
         }
 
         //public async Task<List<SelectListItem>> SortVaccineCentral()
@@ -78,7 +84,7 @@ namespace DSUGrupp1.Models.ViewModels
                 {
                     foreach (var vaccination in patient.Vaccinations)
                     {
-                        var vaccinationCentral = vaccination.VaccinationSite;
+                        var vaccinationCentral = vaccination.VaccinationCentral;
                         
                         if (newList.Any(v => v.SiteId == vaccinationCentral.SiteId) == false)
                         {
