@@ -28,19 +28,6 @@ namespace DSUGrupp1.Controllers
         public async Task<ActionResult> Index()
         {
 
-            //var jsonModel = TempData["Model"] as string;
-            //if (jsonModel != null)
-            //{
-            //    HomeViewModel existingModel = JsonConvert.DeserializeObject<HomeViewModel>(jsonModel);
-            //    jsonModel = JsonConvert.SerializeObject(existingModel);
-            //    TempData["Model"] = jsonModel;
-
-            //    return View(existingModel);
-            //}
-            //else
-            //{
-
-
             if(HomeModelStorage.ViewModel == null)
             {
                 
@@ -90,11 +77,8 @@ namespace DSUGrupp1.Controllers
 
         public ActionResult Detail()
         {
+
             return View(HomeModelStorage.ViewModel);
-        }
-        public ActionResult Map()
-        {
-            return View();
         }
 
         [HttpPost]
