@@ -63,7 +63,7 @@ namespace DSUGrupp1.Controllers
                 VaccinationOverTimeViewModel vaccinationOverTimeStatistics = new VaccinationOverTimeViewModel(apiResult1, vaccineDataAllDeso);
                 ChartViewModel chartLineOverTime = vaccinationOverTimeStatistics.GenerateLineChart();
 
-                ChartViewModel ageChart = ageStatistics.GenerateChart();
+                ChartViewModel ageChart = ageStatistics.GenerateAgeChartForVaccinated();
                 HomeModelStorage.AgeStatistics = ageStatistics;
 
 
@@ -121,7 +121,7 @@ namespace DSUGrupp1.Controllers
 
             var ageStatistics = HomeModelStorage.AgeStatistics;
 
-            ChartViewModel chart = ageStatistics.GenerateChart();
+            ChartViewModel chart = ageStatistics.GenerateAgeChartForVaccinated();
 
             return Ok(chart);
         }

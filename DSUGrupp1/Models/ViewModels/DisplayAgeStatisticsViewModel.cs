@@ -16,13 +16,15 @@ namespace DSUGrupp1.Models.ViewModels
 
         public DisplayAgeStatisticsViewModel(List<VaccinationDataFromSpecificDeSoDto> vaccinationDataFromSpecificDeSos)
         {
+
+            AgeGroupDoseCounts = new List<AgeGroupDoseCounts>();
             VaccinationDataFromSpecificDeso = vaccinationDataFromSpecificDeSos;
             CalculateAgeAndDoseCounts();
         }
 
 
 
-        public ChartViewModel GenerateChart()
+        public ChartViewModel GenerateAgeChartForVaccinated()
         {
             ChartViewModel chart = new ChartViewModel();
             chart.Chart = chart.CreateAgeChart("bar", Labels, AgeGroupDoseCounts, DoseColors, 5);
@@ -32,7 +34,7 @@ namespace DSUGrupp1.Models.ViewModels
 
         public ChartViewModel GenerateChartForSelectedAgeRange(int leftValue, int rightValue)
         {
-            List<AgeGroupDoseCounts> ageGroupDoseCountsForRange = CalculateAgeAndDoseCountsForAgeRange(leftValue, rightValue);
+            List<AgeGroupDoseCounts> ageGroupDoseCountsForRange = CalculateAgeAndDoseCountsForSelectedAgeRange(leftValue, rightValue);
             List<string> labelsForRange = ageGroupDoseCountsForRange.Select(a => a.AgeGroup).ToList();
 
             ChartViewModel chart = new ChartViewModel();
@@ -88,7 +90,7 @@ namespace DSUGrupp1.Models.ViewModels
         }
 
 
-        public List<AgeGroupDoseCounts> CalculateAgeAndDoseCountsForAgeRange(int minAge, int maxAge)
+        public List<AgeGroupDoseCounts> CalculateAgeAndDoseCountsForSelectedAgeRange(int minAge, int maxAge)
         {
             List<AgeGroupDoseCounts> ageGroupDoseCountsForRange = new List<AgeGroupDoseCounts>();
 
@@ -156,21 +158,6 @@ namespace DSUGrupp1.Models.ViewModels
                 return "Ålder existerar ej";
             }
         }
-
-
-
-     
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -50,9 +50,10 @@ header {
     width: 98%;
 }
 
-#age-chart-text {
+#age-chart-text{
     text-align:center;
 }
+
 #chart7{
     height: 500px;
     width: 100%;
