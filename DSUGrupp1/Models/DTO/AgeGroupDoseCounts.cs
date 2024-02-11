@@ -9,13 +9,7 @@
 
         public string AgeGroup { get; set; }
 
-        //skriv om denna 
-        //public void Aggregate(AgeGroupDoseCounts other)
-        //{
-        //    this.FirstDoseCount += other.FirstDoseCount;
-        //    this.SecondDoseCount += other.SecondDoseCount;
-        //    this.BoosterDoseCount += other.BoosterDoseCount;
-        //}
+       
 
     }
 
