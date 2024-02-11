@@ -100,7 +100,7 @@ namespace DSUGrupp1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateChartBasedOnSelectedMinAgeAndMaxAge([FromBody] SliderValues sliderValues)
+        public IActionResult CreateChartBasedOnSelectedMinAgeAndMaxAge([FromBody] SliderValues sliderValues)
         {
             var homeViewModel = HomeModelStorage.ViewModel;
             List<String> deso = new List<string>();
@@ -108,13 +108,12 @@ namespace DSUGrupp1.Controllers
             var ageStatistics = HomeModelStorage.AgeStatistics;
 
 
-            // Use the AgeStatistics data to generate the chart
             ChartViewModel chart = ageStatistics.GenerateChartForSelectedAgeRange(sliderValues.LeftValue, sliderValues.RightValue);
 
             return Ok(chart);
         }
 
-        public async Task<IActionResult> ResetChartToShowTheWholePopulation()
+        public  IActionResult ResetChartToShowTheWholePopulation()
         {
             var homeViewModel = HomeModelStorage.ViewModel;
             List<String> deso = new List<string>();
