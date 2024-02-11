@@ -63,7 +63,9 @@ namespace DSUGrupp1.Controllers
                 VaccinationOverTimeViewModel vaccinationOverTimeStatistics = new VaccinationOverTimeViewModel(apiResult1, vaccineDataAllDeso);
                 ChartViewModel chartLineOverTime = vaccinationOverTimeStatistics.GenerateLineChart();
 
-                ChartViewModel ageChart = await ageStatistics.GenerateChart();
+                ChartViewModel ageChart = ageStatistics.GenerateChart();
+                HomeModelStorage.AgeStatistics = ageStatistics;
+
 
                 DisplayGenderStatisticsViewModel genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, vaccineDataAllDeso);
                 ChartViewModel chartGenderFemales = genderStatistics.GenerateChartFemales();
@@ -96,7 +98,35 @@ namespace DSUGrupp1.Controllers
             
             return Ok(response);          
         }
- 
+
+        [HttpPost]
+        public async Task<IActionResult> CreateChartBasedOnSelectedMinAgeAndMaxAge([FromBody] SliderValues sliderValues)
+        {
+            var homeViewModel = HomeModelStorage.ViewModel;
+            List<String> deso = new List<string>();
+
+            var ageStatistics = HomeModelStorage.AgeStatistics;
+
+
+            // Use the AgeStatistics data to generate the chart
+            ChartViewModel chart = ageStatistics.GenerateChartForSelectedAgeRange(sliderValues.LeftValue, sliderValues.RightValue);
+
+            return Ok(chart);
+        }
+
+        public async Task<IActionResult> ResetChartToShowTheWholePopulation()
+        {
+            var homeViewModel = HomeModelStorage.ViewModel;
+            List<String> deso = new List<string>();
+
+            var ageStatistics = HomeModelStorage.AgeStatistics;
+
+            ChartViewModel chart = ageStatistics.GenerateChart();
+
+            return Ok(chart);
+        }
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -104,4 +134,6 @@ namespace DSUGrupp1.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
+
+    
 }
