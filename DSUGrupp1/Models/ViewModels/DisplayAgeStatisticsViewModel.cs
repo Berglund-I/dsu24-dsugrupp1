@@ -5,7 +5,7 @@ namespace DSUGrupp1.Models.ViewModels
 {
     public class DisplayAgeStatisticsViewModel
     {
-        public static List<VaccinationDataFromSpecificDeSoDto> VaccinationDataFromSpecificDeso { get; set; }
+        public List<VaccinationDataFromSpecificDeSoDto> VaccinationDataFromSpecificDeso { get; set; }
 
 
         public List<AgeGroupDoseCounts> AgeGroupDoseCounts { get; set; }
