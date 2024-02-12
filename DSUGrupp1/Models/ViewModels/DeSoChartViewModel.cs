@@ -2,6 +2,7 @@
 using DSUGrupp1.Infastructure;
 using DSUGrupp1.Models.DTO;
 using Newtonsoft.Json;
+using System.Drawing;
 using System.Globalization;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -183,15 +184,23 @@ namespace DSUGrupp1.Models.ViewModels
        
           
             List<DatasetsDto> datasets = new List<DatasetsDto>();
-            // Lägg till logik för att fylla diagrammet med data över tid
+            List<string> colors = new List<string>()
+            {
+                "#70e000",
+                "#006466",
+                "#8900f2",
+                "#f20089",
+            };
+
+
             for (int year = 2020; year <= 2023; year++)
             {
                 List<double> vaccinationsPerWeek = CountVaccinationsWeekByWeek(vaccinationDataResponse, year);
-                string color = ChartViewModel.GenerateRandomColor();
+                string color = colors[year - 2020];
                 DatasetsDto dataset = _chartViewModel.GenerateDataSet(
                     DatasetLabel: $"{year}",
                     data: vaccinationsPerWeek,
-                    bgcolor: new List<string> { color },
+                    bgcolor: new List<string> {color},
                     bColor: color,
                     bWidth: 3
                 );
