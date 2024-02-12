@@ -225,7 +225,6 @@ namespace DSUGrupp1.Controllers
                 throw new Exception(apiResponse.ErrorMessage);
             }
         }
-
        
     }
 

@@ -69,8 +69,8 @@ namespace DSUGrupp1.Models.ViewModels
             //}
 
             return sortedCentralData;
-
         }
+
         /// <summary>
         /// Gets all vaccination centrals from bulk vaccinationdata. Note there is designated apicall for this but sorting through the data already collected is faster.
         /// </summary>

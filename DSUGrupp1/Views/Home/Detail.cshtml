@@ -55,21 +55,14 @@
         @Html.DropDownListFor(d => d.FilterDropDown.SelectedBatch, Model.FilterDropDown.Batches, "Välj Batch-nummer", new { @id = "batch-number-dropdown", @class = "dropdown-filter" })
         @Html.DropDownListFor(d => d.FilterDropDown.SelectedBatch, Model.FilterDropDown.VaccineName, "Välj vaccintyp", new { @id = "vaccine-type-dropdown", @class = "dropdown-filter"})
         @Html.DropDownListFor(d => d.FilterDropDown.SelectedBatch, Model.FilterDropDown.VaccineCentral, "Välj vaccinationscentral", new { @id = "vaccine-central-dropdown", @class = "dropdown-filter" })
+        <select name="Kön" id="gender-drop-down" class="dropdown-filter">
+            <option value="">Båda</option>
+            <option value="Male">Män</option>
+            <option value="Female">Kvinnor</option>
+        </select>
 
         <p>Åldersintervall (Slider)</p>
 
-        <div class="genderbox">
-            <label>Man
-                <input type="checkbox" id="male-check-box"/>
-                <span class ="checkmark"></span>
-            </label>
-        </div>
-        <div class="genderbox">
-            <label>Kvinna
-                <input type="checkbox" id="female-check-box"/>
-                <span class="checkmark"></span>
-            </label>
-        </div>
         <button id="confirm-filters">Filterknapp</button>
     </div>
     

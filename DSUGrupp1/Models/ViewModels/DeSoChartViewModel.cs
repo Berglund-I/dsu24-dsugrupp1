@@ -114,7 +114,7 @@ namespace DSUGrupp1.Models.ViewModels
         //    {
         //        Patient patient = new Patient(p, doseData);
         //        Patients.Add(patient);
-        //    }          
+        //    }
         //}
 
         /// <summary>

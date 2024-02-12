@@ -95,7 +95,15 @@ namespace DSUGrupp1.Controllers
             
             return Ok(response);          
         }
- 
+
+        [HttpPost]
+        public IActionResult GetChartFromFilteredOptions([FromBody] FilterDto data)
+        {
+            var response = data;
+
+            return Ok();
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

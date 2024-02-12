@@ -11,41 +11,42 @@ let leftFilterChart;
 let rightFilterChart;
 
 document.addEventListener('DOMContentLoaded', function () {
-    const selectedVaccineCentral = document.getElementById('vaccine-central-dropdown');
-    selectedVaccineCentral.addEventListener('change', function () {
-        let selectedVaccineCentralFilter = selectedVaccineCentral.value;
-        console.log(selectedVaccineCentralFilter);
-    });
 
-    const selectedVaccineType = document.getElementById('vaccine-type-dropdown');
-    selectedVaccineType.addEventListener('change', function () {
-        let selectedVaccineTypeFilter = selectedVaccineType.value;
-        console.log(selectedVaccineTypeFilter);
-    });
+    
 
-    const selectedBatch = document.getElementById('batch-number-dropdown');
-    selectedBatch.addEventListener('change', function () {
-        let selectedBatchFilter = selectedBatch.value;
-        console.log(selectedBatchFilter);
-    });
+    filterButton = document.getElementById('confirm-filters');
+    filterButton.addEventListener('click', function () {
 
-    const maleCheckbox = document.getElementById('male-check-box');
-    maleCheckbox.addEventListener('change', function () {
-        if (maleCheckbox.checked) {
-            console.log("Male checked!");
-        }
-        else {
-            console.log("Male not checked!");
-        }
-    });
-    femaleCheckbox = document.getElementById('female-check-box');
-    femaleCheckbox.addEventListener('change', function () {
-        if (femaleCheckbox.checked) {
-            console.log("Female checked!");
-        }
-        else {
-            console.log("Female not checked!");
-        }
+        const gender = document.getElementById('gender-drop-down').value;
+        //const maleGender = document.getElementById('male-check-box').value;
+        //const femaleGender = document.getElementById('female-check-box').value;
+        const batchNumber = document.getElementById('batch-number-dropdown').value;
+        const vaccineType = document.getElementById('vaccine-type-dropdown').value;
+        const vaccineCentral = document.getElementById('vaccine-central-dropdown').value;
+
+        console.log(vaccineType);
+
+        const data = {
+            batchNumber: batchNumber,
+            gender: gender,
+            minAge: 20,
+            maxAge: 40,
+            siteId: 4,
+            numberOfDoses: 2,
+            typeOfVaccine: vaccineType,
+            //startDate: 2,
+            //endDate: 3,
+        };
+        console.log(data);
+
+        fetch('/Home/GetChartFromFilteredOptions', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+
+            },
+            body: JSON.stringify(data),
+        })
     });
 });
 
