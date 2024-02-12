@@ -127,7 +127,7 @@ namespace DSUGrupp1.Controllers
         public IActionResult CreateChartBasedOnSelectedMinAgeAndMaxAge([FromBody] SliderValues sliderValues)
         {
             var homeViewModel = HomeModelStorage.ViewModel;
-            List<String> deso = new List<string>();
+            List<string> deso = new List<string>();
 
             var ageStatistics = HomeModelStorage.AgeStatistics;
 
@@ -140,7 +140,7 @@ namespace DSUGrupp1.Controllers
         public  IActionResult ResetChartToShowTheWholePopulation()
         {
             var homeViewModel = HomeModelStorage.ViewModel;
-            List<String> deso = new List<string>();
+            List<string> deso = new List<string>();
 
             var ageStatistics = HomeModelStorage.AgeStatistics;
 
