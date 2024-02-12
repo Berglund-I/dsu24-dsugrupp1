@@ -63,9 +63,13 @@ namespace DSUGrupp1.Models.ViewModels
             //var chart = GetChartDose(/*chartValues.Result*/);
 
             //JsonChartDose = _chartViewModel.SerializeJson(chart);
-
-
         }
+
+        public DeSoChartViewModel()
+        {
+            
+        }
+
 
         /// <summary>
         /// Sets data for the chart that displays doses in a DeSo

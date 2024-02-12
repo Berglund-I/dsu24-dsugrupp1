@@ -8,6 +8,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Text.Json.Nodes;
+using Microsoft.VisualBasic;
 
 
 namespace DSUGrupp1.Controllers
@@ -21,6 +22,7 @@ namespace DSUGrupp1.Controllers
 
         //Shouldn't be possible to change when the initial values is set
         public List<Patient> Patients { get; set; } = new List<Patient>();
+        
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -84,10 +86,17 @@ namespace DSUGrupp1.Controllers
             return View(HomeModelStorage.ViewModel);
         }
 
-        public ActionResult Map()
+        public async Task<ActionResult> Map()
         {
-            return View();
+            var apiResult2 = await _apiController.GetVaccinationsCount();
+            var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
+            var mapVaccinationPercentViewModel = new MapVaccinationPercentViewModel();
+            await mapVaccinationPercentViewModel.InitializeAsync(vaccineDataAllDeso);
+            return View(mapVaccinationPercentViewModel);
+       
         }
+
+
 
         [HttpPost]
         public IActionResult GetChartFromDeSoCode([FromBody] TestFetch data)
