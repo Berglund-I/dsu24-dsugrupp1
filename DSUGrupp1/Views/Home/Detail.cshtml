@@ -61,9 +61,25 @@
             <option value="Female">Kvinnor</option>
         </select>
 
-        <p>Åldersintervall (Slider)</p>
+        <div class="age-slider-filter">
+            <div class="multi-range-slider">
+                <div id="left-value" class="slider-value"></div>
+                <input type="range" id="input-left" min="16" max="100" value="16">
+                <div id="right-value" class="slider-value"></div>
+                <input type="range" id="input-right" min="0" max="85" value="85">
+
+                <div class="slider">
+                    <div class="track"></div>
+                    <div class="range"></div>
+                    <div class="thumb left"></div>
+                    <div class="thumb right"></div>
+                </div>
+
+            </div>
+        </div>
 
         <button id="confirm-filters">Filterknapp</button>
+
     </div>
     
     

@@ -18,8 +18,7 @@ namespace DSUGrupp1.Controllers
     public class HomeController : Controller
     {
         private readonly ApiController _apiController;
-       
-
+        private readonly ListOfPatients _patientList;
         private readonly ILogger<HomeController> _logger;
 
         //Shouldn't be possible to change when the initial values is set
@@ -27,7 +26,7 @@ namespace DSUGrupp1.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _apiController = new ApiController();     
+            _apiController = new ApiController();
         }
 
         public async Task<ActionResult> Index()
@@ -116,7 +115,7 @@ namespace DSUGrupp1.Controllers
         public IActionResult GetChartFromFilteredOptions([FromBody] FilterDto data)
         {
             
-            var response1 = LinqQueryRepository.GetSortedPatients(data, Patients);
+            var response1 = LinqQueryRepository.GetSortedPatients(data, ListOfPatients.PatientList);
 
             var response = data;
 
@@ -127,7 +126,7 @@ namespace DSUGrupp1.Controllers
         public IActionResult CreateChartBasedOnSelectedMinAgeAndMaxAge([FromBody] SliderValues sliderValues)
         {
             var homeViewModel = HomeModelStorage.ViewModel;
-            List<String> deso = new List<string>();
+            List<string> deso = new List<string>();
 
             var ageStatistics = HomeModelStorage.AgeStatistics;
 
@@ -140,7 +139,7 @@ namespace DSUGrupp1.Controllers
         public  IActionResult ResetChartToShowTheWholePopulation()
         {
             var homeViewModel = HomeModelStorage.ViewModel;
-            List<String> deso = new List<string>();
+            List<string> deso = new List<string>();
 
             var ageStatistics = HomeModelStorage.AgeStatistics;
 
@@ -148,9 +147,6 @@ namespace DSUGrupp1.Controllers
 
             return Ok(chart);
         }
-
-
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -177,7 +173,7 @@ namespace DSUGrupp1.Controllers
 
             });
 
-            var secondtime = time.Elapsed.TotalMilliseconds;
+            ListOfPatients.PatientList = Patients;
         }
     }
 

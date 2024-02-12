@@ -13,15 +13,12 @@ let leftOverTimeChart;
 let rightOverTimeChart;
 
 document.addEventListener('DOMContentLoaded', function () {
-
-    
-
     filterButton = document.getElementById('confirm-filters');
     filterButton.addEventListener('click', function () {
 
         const gender = document.getElementById('gender-drop-down').value;
-        //const maleGender = document.getElementById('male-check-box').value;
-        //const femaleGender = document.getElementById('female-check-box').value;
+        const minAge = document.getElementById('input-left').value;
+        const maxAge = document.getElementById('input-right').value;
         const batchNumber = document.getElementById('batch-number-dropdown').value;
         const vaccineType = document.getElementById('vaccine-type-dropdown').value;
         const vaccineCentral = document.getElementById('vaccine-central-dropdown').value;
@@ -31,15 +28,14 @@ document.addEventListener('DOMContentLoaded', function () {
         const data = {
             batchNumber: batchNumber,
             gender: gender,
-            minAge: 20,
-            maxAge: 40,
+            minAge: minAge,
+            maxAge: maxAge,
             siteId: 4,
             numberOfDoses: 2,
             typeOfVaccine: vaccineType,
             //startDate: 2,
             //endDate: 3,
         };
-        console.log(data);
 
         fetch('/Home/GetChartFromFilteredOptions', {
             method: 'POST',
@@ -108,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 leftChart = new Chart(ctx, chart);
-                console.log(data.jsonVaccinationChartOverTime);
+                
                 if (leftGenderChart) {
                     leftGenderChart.destroy();
                 }
@@ -445,6 +441,7 @@ resetButton.addEventListener("click", function () {
     resetSliders();
 
     resetButton.style.display = "none";
+});
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',

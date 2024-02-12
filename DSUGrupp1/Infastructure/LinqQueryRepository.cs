@@ -109,5 +109,15 @@ namespace DSUGrupp1.Infastructure
                 .Where(p => filter.EndDate == DateTime.MinValue || p.Vaccinations.Any(v => v.VaccinationDate <= filter.EndDate)).ToList();
             return filteredPatients;
         }
+
+        public static List<Patient> GetPatientsByDeSo(List<Patient> patients, string deSo)
+        {
+            List<Patient> result = patients
+            .Where(patient => patient.DeSoCode == deSo)
+            .ToList();
+
+            return result;
+        }
+
     }
 }
