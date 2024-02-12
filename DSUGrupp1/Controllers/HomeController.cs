@@ -84,6 +84,11 @@ namespace DSUGrupp1.Controllers
             return View(HomeModelStorage.ViewModel);
         }
 
+        public ActionResult Map()
+        {
+            return View();
+        }
+
         [HttpPost]
         public IActionResult GetChartFromDeSoCode([FromBody] TestFetch data)
         {
