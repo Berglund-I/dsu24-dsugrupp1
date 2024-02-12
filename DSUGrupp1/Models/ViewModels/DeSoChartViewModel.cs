@@ -1,10 +1,10 @@
 ﻿using DSUGrupp1.Controllers;
+using DSUGrupp1.Infastructure;
 using DSUGrupp1.Models.DTO;
 using Newtonsoft.Json;
-using System.Data;
-using System.Drawing;
 using System.Globalization;
-using System.Reflection.Emit;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace DSUGrupp1.Models.ViewModels
 {
@@ -36,7 +36,8 @@ namespace DSUGrupp1.Models.ViewModels
         public string JsonChartVaccinationOverTime { get; set; }
         public List<DatasetsDto> Datasets { get; set; }
         public List<Batch> Batches { get; set; }
-        
+        public List<Patient> Patients { get; set; }
+
 
 
 
@@ -112,6 +113,8 @@ namespace DSUGrupp1.Models.ViewModels
             return chart;
 
         }
+      
+
         private Chart GetChartOverTime()
         {
             List<string> weekLabels = Enumerable.Range(1, 52).Select(i => i.ToString()).ToList();
@@ -120,6 +123,19 @@ namespace DSUGrupp1.Models.ViewModels
             Chart chart = _chartViewModel.CreateMultiSetChart("Antal vaccinationer per vecka", "line", weekLabels, Datasets);
             return chart;
         }
+
+
+        //public void GetPatient(VaccinationDataFromSpecificDeSoDto patientData, DoseTypeDto doseData)
+        //{
+        //    Patients = new List<Patient>();
+        //    foreach (var p in patientData.Patients)
+        //    {
+        //        Patient patient = new Patient(p, doseData);
+        //        Patients.Add(patient);
+        //    }          
+        //}
+
+      
         /// <summary>
         /// Gets and sets values for the class properties
         /// </summary>
@@ -130,6 +146,9 @@ namespace DSUGrupp1.Models.ViewModels
             var vaccinationDataResponse = await _apiController.GetVaccinationDataFromDeSo(deSoCode);
             var populationMales = await _apiController.GetPopulationInSpecificDeSo(deSoCode, "2022", "1");
             var populationFemales = await _apiController.GetPopulationInSpecificDeSo(deSoCode, "2022", "2");
+            var getBatches = await _apiController.GetDoseTypes();
+
+            //GetPatient(vaccinationDataResponse, getBatches);
 
             Population = int.Parse(populationMales.Data[0].Values[0]) + int.Parse(populationFemales.Data[0].Values[0]);
             TotalPatients = vaccinationDataResponse.Meta.TotalRecordsPatients;
@@ -161,10 +180,9 @@ namespace DSUGrupp1.Models.ViewModels
             TotalPopulationVaccinationPercentage = vaccinationPercentage;
 
             GetBatches(vaccinationDataResponse);
-            //-------------------------------------------------------------------------------------------------------
-            //-------------------------------------------------------------------------------------------------------
+       
+          
             List<DatasetsDto> datasets = new List<DatasetsDto>();
-
             // Lägg till logik för att fylla diagrammet med data över tid
             for (int year = 2020; year <= 2023; year++)
             {
