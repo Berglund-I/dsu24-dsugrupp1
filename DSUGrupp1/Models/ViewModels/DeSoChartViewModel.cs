@@ -3,6 +3,7 @@ using DSUGrupp1.Infastructure;
 using DSUGrupp1.Models.DTO;
 using Newtonsoft.Json;
 using System.Globalization;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DSUGrupp1.Models.ViewModels
 {
@@ -30,6 +31,7 @@ namespace DSUGrupp1.Models.ViewModels
         public int VaccinatedMales { get; set; }
         public int VaccinatedFemales { get; set; }
         public List<Batch> Batches { get; set; }
+        public List<Patient> Patients { get; set; }
 
 
 
@@ -105,6 +107,16 @@ namespace DSUGrupp1.Models.ViewModels
 
         }
 
+        //public void GetPatient(VaccinationDataFromSpecificDeSoDto patientData, DoseTypeDto doseData)
+        //{
+        //    Patients = new List<Patient>();
+        //    foreach (var p in patientData.Patients)
+        //    {
+        //        Patient patient = new Patient(p, doseData);
+        //        Patients.Add(patient);
+        //    }          
+        //}
+
         /// <summary>
         /// Sets data for the chart that displays the first filter charts on the detail site
         /// </summary>
@@ -135,7 +147,9 @@ namespace DSUGrupp1.Models.ViewModels
             var vaccinationDataResponse = await _apiController.GetVaccinationDataFromDeSo(deSoCode);
             var populationMales = await _apiController.GetPopulationInSpecificDeSo(deSoCode, "2022", "1");
             var populationFemales = await _apiController.GetPopulationInSpecificDeSo(deSoCode, "2022", "2");
+            var getBatches = await _apiController.GetDoseTypes();
 
+            //GetPatient(vaccinationDataResponse, getBatches);
 
             Population = int.Parse(populationMales.Data[0].Values[0]) + int.Parse(populationFemales.Data[0].Values[0]);
             TotalPatients = vaccinationDataResponse.Meta.TotalRecordsPatients;

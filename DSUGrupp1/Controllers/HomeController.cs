@@ -19,6 +19,8 @@ namespace DSUGrupp1.Controllers
 
         private readonly ILogger<HomeController> _logger;
 
+        //Shouldn't be possible to change when the initial values is set
+        public List<Patient> Patients { get; set; } = new List<Patient>();
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -28,56 +30,45 @@ namespace DSUGrupp1.Controllers
         public async Task<ActionResult> Index()
         {
 
-            //var jsonModel = TempData["Model"] as string;
-            //if (jsonModel != null)
-            //{
-            //    HomeViewModel existingModel = JsonConvert.DeserializeObject<HomeViewModel>(jsonModel);
-            //    jsonModel = JsonConvert.SerializeObject(existingModel);
-            //    TempData["Model"] = jsonModel;
-
-            //    return View(existingModel);
-            //}
-            //else
-            //{
-
-
-            if(HomeModelStorage.ViewModel == null)
+            if (HomeModelStorage.ViewModel == null)
             {
-                
+
                 VaccinationViewModel vaccinations = new VaccinationViewModel();
 
                 ChartViewModel municipalityChart = await vaccinations.GenerateChart();
 
 
-                 // Code exists here for future use when working with batches/filters
+                // Code exists here for future use when working with batches/filters
                 DoseTypeViewModel batches = new DoseTypeViewModel();
                 var batchTest = await batches.GetBatches();
 
                 //HomeViewModel model = new HomeViewModel();
                 //model.Population = await _apiController.GetPopulationInSpecificDeSo("2380A0010", "2022");   
                 //model.DataFromSpecificDeSo = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
-                
+
                 var apiResult1 = await _apiController.GetPopulationCount("2380", "2022");
                 var apiResult2 = await _apiController.GetVaccinationsCount();
-                var vaccineDataAllDeso =  await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);               
+                var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
+
+                GetPatient(vaccineDataAllDeso, batchTest);
 
                 Stopwatch stopwatch = Stopwatch.StartNew();
                 var testList = PopulateFiltersViewModel.GetVaccinationSites(vaccineDataAllDeso);
                 stopwatch.Stop();
                 System.Diagnostics.Debug.WriteLine($"duration: {stopwatch.ElapsedMilliseconds} ms");
                 HomeViewModel model = new HomeViewModel();
-                
-                DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);               
+
+                DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
                 VaccinationOverTimeViewModel vaccinationOverTimeStatistics = new VaccinationOverTimeViewModel(apiResult1, vaccineDataAllDeso);
 
                 ChartViewModel chartLineOverTime = vaccinationOverTimeStatistics.GenerateLineChart();
                 ChartViewModel ageChart = await ageStatistics.GenerateChart();
-                
+
                 DisplayGenderStatisticsViewModel genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, vaccineDataAllDeso);
                 ChartViewModel chartGenderFemales = genderStatistics.GenerateChartFemales();
                 ChartViewModel chartGenderMales = genderStatistics.GenerateChartMales();
-                ChartViewModel chartGenderBoth = genderStatistics.GenerateChartBothGenders();        
-                
+                ChartViewModel chartGenderBoth = genderStatistics.GenerateChartBothGenders();
+
                 model.Charts.Add(municipalityChart);
                 model.Charts.Add(chartLineOverTime);
                 model.Charts.Add(ageChart);
@@ -91,14 +82,10 @@ namespace DSUGrupp1.Controllers
             }
             return View(HomeModelStorage.ViewModel);
         }
-
         public ActionResult Detail()
         {
+
             return View(HomeModelStorage.ViewModel);
-        }
-        public ActionResult Map()
-        {
-            return View();
         }
 
         [HttpPost]
@@ -114,6 +101,28 @@ namespace DSUGrupp1.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        
+        public async void GetPatient(List<VaccinationDataFromSpecificDeSoDto> vaccinationData, DoseTypeDto doseData)
+        {     
+
+            var response = await _apiController.GetDeSoNames();   
+            var time = Stopwatch.StartNew();
+            Parallel.ForEach(vaccinationData, v =>
+            {
+                Parallel.ForEach(v.Patients, p =>
+                {
+                    Patient patient = new Patient(p, doseData, v.Meta.DeSoCode, response);
+                    lock (Patients)
+                    {
+                        Patients.Add(patient);
+                    }
+                });
+
+            });
+
+            var secondtime = time.Elapsed.TotalMilliseconds;
         }
     }
 }
