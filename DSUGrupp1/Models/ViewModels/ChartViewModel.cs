@@ -120,7 +120,7 @@ namespace DSUGrupp1.Models.ViewModels
             return dataSet;
         }
 
-        public Chart CreateAgeChart(string type, List<string> labels, Dictionary<string, AgeGroupDoseCounts> data, List<string> doseColors, int bWidth = 5)
+        public Chart CreateAgeChart(string type, List<string> labels, List<AgeGroupDoseCounts> data, List<string> doseColors, int bWidth = 5)
         {
             Chart template = new Chart
             {
@@ -129,47 +129,29 @@ namespace DSUGrupp1.Models.ViewModels
                 {
                     Labels = labels,
                     Datasets = new List<DatasetsDto>
-                    {
-                        new DatasetsDto
-                        {
-                            Label = "Dos 1",
-                            Data = new List<double>
-                            {
-                                data["16-30"].FirstDoseCount,
-                                data["31-45"].FirstDoseCount,
-                                data["46-60"].FirstDoseCount,
-                                data["61+"].FirstDoseCount
-                            },
-                            BackgroundColor = new List<string> { doseColors[0] },
-                            BorderWidth = bWidth
-                        },
-                        new DatasetsDto
-                        {
-                            Label = "Dos 2",
-                            Data = new List<double>
-                            {
-                                data["16-30"].SecondDoseCount,
-                                data["31-45"].SecondDoseCount,
-                                data["46-60"].SecondDoseCount,
-                                data["61+"].SecondDoseCount
-                            },
-                            BackgroundColor = new List<string> { doseColors[1] },
-                            BorderWidth = bWidth
-                        },
-                        new DatasetsDto
-                        {
-                            Label = "Påfyllnadsdos",
-                            Data = new List<double>
-                            {
-                                data["16-30"].BoosterDoseCount,
-                                data["31-45"].BoosterDoseCount,
-                                data["46-60"].BoosterDoseCount,
-                                data["61+"].BoosterDoseCount
-                            },
-                            BackgroundColor = new List<string> { doseColors[2] },
-                            BorderWidth = bWidth
-                        }
-                    }
+            {
+                new DatasetsDto
+                {
+                    Label = "Dos 1",
+                    Data = data.Select(d => (double)d.FirstDoseCount).ToList(),
+                    BackgroundColor = new List<string> { doseColors[0] },
+                    BorderWidth = bWidth
+                },
+                new DatasetsDto
+                {
+                    Label = "Dos 2",
+                    Data = data.Select(d => (double)d.SecondDoseCount).ToList(),
+                    BackgroundColor = new List<string> { doseColors[1] },
+                    BorderWidth = bWidth
+                },
+                new DatasetsDto
+                {
+                    Label = "Påfyllnadsdos",
+                    Data = data.Select(d => (double)d.BoosterDoseCount).ToList(),
+                    BackgroundColor = new List<string> { doseColors[2] },
+                    BorderWidth = bWidth
+                }
+            }
                 },
                 Options = new OptionsDto
                 {
@@ -188,6 +170,64 @@ namespace DSUGrupp1.Models.ViewModels
 
             return template;
         }
+
+
+
+
+        public Chart CreateChartForSelectedAgeRange(string type, List<string> labels, Dictionary<string, AgeGroupDoseCounts> data, List<string> doseColors, int minAge, int maxAge, int bWidth = 5)
+        {
+            Chart template = new Chart
+            {
+                Type = type,
+                Data = new ChartDataDto
+                {
+                    Labels = labels,
+                    Datasets = new List<DatasetsDto>
+            {
+                new DatasetsDto
+                {
+                    Label = "Dos 1",
+                    Data = new List<double> { data[$"{minAge}-{maxAge}"].FirstDoseCount },
+                    BackgroundColor = new List<string> { doseColors[0] },
+                    BorderWidth = bWidth
+                },
+                new DatasetsDto
+                {
+                    Label = "Dos 2",
+                    Data = new List<double> { data[$"{minAge}-{maxAge}"].SecondDoseCount },
+                    BackgroundColor = new List<string> { doseColors[1] },
+                    BorderWidth = bWidth
+                },
+                new DatasetsDto
+                {
+                    Label = "Påfyllnadsdos",
+                    Data = new List<double> { data[$"{minAge}-{maxAge}"].BoosterDoseCount },
+                    BackgroundColor = new List<string> { doseColors[2] },
+                    BorderWidth = bWidth
+                }
+            }
+                },
+                Options = new OptionsDto
+                {
+                    Responsive = true,
+                    MaintainAspectRatio = false,
+                    Plugins = new PluginsDto
+                    {
+                        Title = new TitleDto
+                        {
+                            Display = true,
+                            Text = "Åldersgrupp"
+                        }
+                    }
+                }
+            };
+
+            return template;
+        }
+
+
+
+
         public static string GenerateRandomColor()
         {
             int r = random.Next(256);
@@ -198,7 +238,12 @@ namespace DSUGrupp1.Models.ViewModels
         }
 
     }
+    }
 
 
-}
+
+
+
+
+
 
