@@ -16,6 +16,11 @@ namespace DSUGrupp1.Models.ViewModels
 
         public List<double>? DataPoints { get; set; }
 
+        public VaccinationOverTimeViewModel() 
+        { 
+
+        }
+
         public VaccinationOverTimeViewModel(PopulationDto population, List<VaccinationDataFromSpecificDeSoDto> vaccinationDataFromSpecificDeSoDtos)
         {
             _vaccinationDataFromSpecificDeSoDto = vaccinationDataFromSpecificDeSoDtos;
@@ -57,7 +62,7 @@ namespace DSUGrupp1.Models.ViewModels
             return chart;
         }
 
-        private List<double> CountVaccinationsWeekByWeek(int year)
+        public List<double> CountVaccinationsWeekByWeek(int year)
         {
             var ci = new CultureInfo("sv-SE");
             var cal = ci.Calendar;

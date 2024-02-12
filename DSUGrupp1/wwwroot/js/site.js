@@ -7,6 +7,8 @@ let leftChart;
 let rightChart;
 let leftGenderChart;
 let rightGenderChart;
+let leftOverTimeChart; 
+let rightOverTimeChart;
 
 document.addEventListener('DOMContentLoaded', function () {
     const deSoDropdown = document.getElementById('left-deSo-dropdown');
@@ -63,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 leftChart = new Chart(ctx, chart);
-
+                console.log(data.jsonVaccinationChartOverTime);
                 if (leftGenderChart) {
                     leftGenderChart.destroy();
                 }
@@ -72,6 +74,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 const genderChart = JSON.parse(data.jsonChartGender);
 
                 leftGenderChart = new Chart(context, genderChart);
+
+
+                if (leftOverTimeChart) {
+                    leftOverTimeChart.destroy();
+                }
+
+                const ctext = document.getElementById('left-over-time-chart').getContext('2d');
+                const overTimeChart = JSON.parse(data.jsonChartVaccinationOverTime);
+
+                
+
+                leftOverTimeChart = new Chart(ctext, overTimeChart);
 
             })
             .catch((error) => {
@@ -148,6 +162,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 const genderChart = JSON.parse(data.jsonChartGender);
 
                 rightGenderChart = new Chart(context, genderChart);
+
+                if (rightOverTimeChart) {
+                    rightOverTimeChart.destroy();
+                }
+
+                const ctext = document.getElementById('right-over-time-chart').getContext('2d');
+                const overTimeChart = JSON.parse(data.jsonChartVaccinationOverTime);
+
+                rightOverTimeChart = new Chart(ctext, overTimeChart);
 
             })
             .catch((error) => {
