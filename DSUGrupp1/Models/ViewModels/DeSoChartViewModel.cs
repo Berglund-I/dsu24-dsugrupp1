@@ -105,6 +105,10 @@ namespace DSUGrupp1.Models.ViewModels
 
         }
 
+        /// <summary>
+        /// Sets data for the chart that displays the first filter charts on the detail site
+        /// </summary>
+        /// <returns></returns>
         private Chart GetChartFilter(/*Chart chartValues*/)
         {
             List<string> labels = new List<string>()

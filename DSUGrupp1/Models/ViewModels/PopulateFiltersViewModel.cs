@@ -18,8 +18,10 @@ namespace DSUGrupp1.Models.ViewModels
             _apiController = new ApiController();
             var sortedBatchData = SortBatchNumber();
             var sortedVaccineName = SortVaccineName();
+            var sortedVaccineCentral = SortVaccineCentral();
             Batches = sortedBatchData.Result;
             VaccineName = sortedVaccineName.Result;
+            VaccineCentral = sortedVaccineCentral.Result;
         }
 
         public async Task<List<SelectListItem>> SortBatchNumber()
@@ -56,19 +58,19 @@ namespace DSUGrupp1.Models.ViewModels
 
         }
 
-        //public async Task<List<SelectListItem>> SortVaccineCentral()
-        //{
-        //    var vaccineCentrals = await GetVaccinationSites();
-        //    List<SelectListItem> sortedCentralData = new List<SelectListItem>();
+        public async Task<List<SelectListItem>> SortVaccineCentral()
+        {
+            List<VaccinationDataFromSpecificDeSoDto> vaccinationData = new List<VaccinationDataFromSpecificDeSoDto>();
+            var vaccineCentrals = GetVaccinationSites(vaccinationData);
+            List<SelectListItem> sortedCentralData = new List<SelectListItem>();
+            //for (int i = 0; i < vaccineCentrals.Data.Count(); i++)
+            //{
+            //    //SelectListItem centralData = new SelectListItem { Value = response. }
+            //}
 
-        //    for (int i = 0; i < response.Data.Count(); i++)
-        //    {
-        //        //SelectListItem centralData = new SelectListItem { Value = response. }
-        //    }
+            return sortedCentralData;
 
-        //    return sortedCentralData;
-
-        //}
+        }
         /// <summary>
         /// Gets all vaccination centrals from bulk vaccinationdata. Note there is designated apicall for this but sorting through the data already collected is faster.
         /// </summary>

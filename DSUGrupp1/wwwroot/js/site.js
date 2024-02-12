@@ -11,6 +11,46 @@ let leftFilterChart;
 let rightFilterChart;
 
 document.addEventListener('DOMContentLoaded', function () {
+    const selectedVaccineCentral = document.getElementById('vaccine-central-dropdown');
+    selectedVaccineCentral.addEventListener('change', function () {
+        let selectedVaccineCentralFilter = selectedVaccineCentral.value;
+        console.log(selectedVaccineCentralFilter);
+    });
+
+    const selectedVaccineType = document.getElementById('vaccine-type-dropdown');
+    selectedVaccineType.addEventListener('change', function () {
+        let selectedVaccineTypeFilter = selectedVaccineType.value;
+        console.log(selectedVaccineTypeFilter);
+    });
+
+    const selectedBatch = document.getElementById('batch-number-dropdown');
+    selectedBatch.addEventListener('change', function () {
+        let selectedBatchFilter = selectedBatch.value;
+        console.log(selectedBatchFilter);
+    });
+
+    const maleCheckbox = document.getElementById('male-check-box');
+    maleCheckbox.addEventListener('change', function () {
+        if (maleCheckbox.checked) {
+            console.log("Male checked!");
+        }
+        else {
+            console.log("Male not checked!");
+        }
+    });
+    femaleCheckbox = document.getElementById('female-check-box');
+    femaleCheckbox.addEventListener('change', function () {
+        if (femaleCheckbox.checked) {
+            console.log("Female checked!");
+        }
+        else {
+            console.log("Female not checked!");
+        }
+    });
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
     const deSoDropdown = document.getElementById('left-deSo-dropdown');
 
     deSoDropdown.addEventListener('change', function () {
@@ -190,82 +230,3 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     maxZoom: 18,
 }).addTo(mymap);
-
-//function drawLeftFilterChart(desoCode, filterOptions) {
-//    document.getElementById('left-filter-chart');
-
-//    let selectedFilters = this.value;
-
-//    fetch('/Home/INSERT-PATH-HERE', {
-//        method: 'POST',
-//        headers: {
-//            'Content-type': 'application/json',
-
-//        },
-//        body: JSON.stringify({ selectedFilters }),
-//    })
-
-//        .then(response => {
-//            if (!response.ok) {
-//                throw new Error('Inte bra');
-//            }
-//            return response.json();
-//        })
-//        .then(data => {
-
-//            const ctx = document.getElementById('left-filter-chart').getContext('2d');
-//            const chart = JSON.parse(data.jsonChart);
-
-//            if (leftFilterChart) {
-//                leftFilterChart.destroy();
-//            }
-
-
-//            leftFilterChart = new Chart(ctx, chart);
-
-//        })
-
-//        .catch((error) => {
-//            console.error('Error:', error);
-//        });
-//}
-
-//function drawRightFilter0Chart(desoCode, filterOptions) {
-//    document.getElementById('right-filter-chart');
-//    let selectedFilters = this.value;
-
-//    fetch('/Home/INSERT-PATH-HERE', {
-//        method: 'POST',
-//        headers: {
-//            'Content-type': 'application/json',
-
-//        },
-//        body: JSON.stringify({ selectedFilters }),
-//    })
-
-//        .then(response => {
-//            if (!response.ok) {
-//                throw new Error('Inte bra');
-//            }
-//            return response.json();
-//        })
-//        .then(data => {
-
-//            const ctx = document.getElementById('right-filter-chart').getContext('2d');
-//            const chart = JSON.parse(data.jsonChart);
-
-//            if (rightFilterChart) {
-//                rightFilterChart.destroy();
-//            }
-
-//            rightFilterChart = new Chart(ctx, chart);
-
-//        })
-
-//        .catch ((error) => {
-//            console.error('Error:', error);
-//        });
-//}
-
-
-
