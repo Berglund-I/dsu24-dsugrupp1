@@ -8,6 +8,9 @@ using System.Reflection;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Text.Json.Nodes;
+using System.Collections.Generic;
+using DSUGrupp1.Infastructure;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace DSUGrupp1.Controllers
@@ -51,6 +54,7 @@ namespace DSUGrupp1.Controllers
                 var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
 
                 GetPatient(vaccineDataAllDeso, batchTest);
+                
 
                 HomeViewModel model = new HomeViewModel();
 
@@ -73,6 +77,13 @@ namespace DSUGrupp1.Controllers
                 model.Charts.Add(chartGenderBoth);
 
                 HomeModelStorage.ViewModel = model;
+                //var data = new FilterDto();
+                //data.Gender = "Male";
+                //data.BatchNumber = "AZ002";
+                //data.SiteId = 4;
+                //data.MinAge = 20;
+                //data.MaxAge = 30;
+                //var result = GetChartFromFilteredOptions(data);
 
                 return View(model);
             }
@@ -91,7 +102,18 @@ namespace DSUGrupp1.Controllers
             
             return Ok(response);          
         }
- 
+
+        [HttpPost]
+        public IActionResult GetChartFromFilteredOptions([FromBody] FilterDto data)
+        {
+            
+            var response1 = LinqQueryRepository.GetSortedPatients(data, Patients);
+
+            var response = data;
+
+            return Ok();
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -4,11 +4,11 @@ namespace DSUGrupp1.Models
 {
     public class Vaccination
     {
-        public Vaccination() { }
-        public Vaccination(PatientInformationDto data) 
+        public Vaccination() 
         {
-            //VaccinationDate = data.Vaccinations.DateOfVaccination;
+
         }
+
         public DateTime VaccinationDate { get; set; }
         public string BatchNumber { get; set; }
         public string VaccineName { get; set; }

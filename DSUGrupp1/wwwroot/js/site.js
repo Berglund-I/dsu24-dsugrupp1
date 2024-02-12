@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             },
             body: JSON.stringify({ selectedDeSo }),
+            
         })
 
             .then(response => {
