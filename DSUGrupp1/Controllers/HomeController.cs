@@ -58,7 +58,10 @@ namespace DSUGrupp1.Controllers
                 VaccinationOverTimeViewModel vaccinationOverTimeStatistics = new VaccinationOverTimeViewModel(apiResult1, vaccineDataAllDeso);
 
                 ChartViewModel chartLineOverTime = vaccinationOverTimeStatistics.GenerateLineChart();
-                ChartViewModel ageChart = await ageStatistics.GenerateChart();
+
+                ChartViewModel ageChart = ageStatistics.GenerateAgeChartForVaccinated();
+                HomeModelStorage.AgeStatistics = ageStatistics;
+
 
                 DisplayGenderStatisticsViewModel genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, vaccineDataAllDeso);
                 ChartViewModel chartGenderFemales = genderStatistics.GenerateChartFemales();
@@ -96,7 +99,34 @@ namespace DSUGrupp1.Controllers
             
             return Ok(response);          
         }
- 
+
+        [HttpPost]
+        public IActionResult CreateChartBasedOnSelectedMinAgeAndMaxAge([FromBody] SliderValues sliderValues)
+        {
+            var homeViewModel = HomeModelStorage.ViewModel;
+            List<String> deso = new List<string>();
+
+            var ageStatistics = HomeModelStorage.AgeStatistics;
+
+
+            ChartViewModel chart = ageStatistics.GenerateChartForSelectedAgeRange(sliderValues.LeftValue, sliderValues.RightValue);
+
+            return Ok(chart);
+        }
+
+        public  IActionResult ResetChartToShowTheWholePopulation()
+        {
+            var homeViewModel = HomeModelStorage.ViewModel;
+            List<String> deso = new List<string>();
+
+            var ageStatistics = HomeModelStorage.AgeStatistics;
+
+            ChartViewModel chart = ageStatistics.GenerateAgeChartForVaccinated();
+
+            return Ok(chart);
+        }
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -126,4 +156,6 @@ namespace DSUGrupp1.Controllers
             var secondtime = time.Elapsed.TotalMilliseconds;
         }
     }
+
+    
 }
