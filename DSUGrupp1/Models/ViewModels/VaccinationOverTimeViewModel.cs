@@ -16,6 +16,11 @@ namespace DSUGrupp1.Models.ViewModels
 
         public List<double>? DataPoints { get; set; }
 
+        public VaccinationOverTimeViewModel() 
+        { 
+
+        }
+
         public VaccinationOverTimeViewModel(PopulationDto population, List<VaccinationDataFromSpecificDeSoDto> vaccinationDataFromSpecificDeSoDtos)
         {
             _vaccinationDataFromSpecificDeSoDto = vaccinationDataFromSpecificDeSoDtos;
@@ -30,16 +35,25 @@ namespace DSUGrupp1.Models.ViewModels
 
             var weekLabel = Enumerable.Range(1, 52).Select(i => i.ToString()).ToList();
 
+            List<string> colors = new List<string>()
+            {
+                "#70e000",
+                "#006466",
+                "#8900f2",
+                "#f20089",
+
+            };
+
             for (int year=2020;year <= 2023;year++)
             {              
                 //1500 ms for all loops combined
                 VaccinationsperWeek = CountVaccinationsWeekByWeek(year);
 
-                string color = ChartViewModel.GenerateRandomColor();
+                string color = colors[year - 2020];
                 DatasetsDto dataset = chart.GenerateDataSet(
                     DatasetLabel: $"{year}",
                     data: VaccinationsperWeek,
-                    bgcolor: [color],
+                    bgcolor: new List<string> {color},
                     bColor: color, 3
                     );
                 
@@ -57,7 +71,7 @@ namespace DSUGrupp1.Models.ViewModels
             return chart;
         }
 
-        private List<double> CountVaccinationsWeekByWeek(int year)
+        public List<double> CountVaccinationsWeekByWeek(int year)
         {
             var ci = new CultureInfo("sv-SE");
             var cal = ci.Calendar;

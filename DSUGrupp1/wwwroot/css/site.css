@@ -25,33 +25,6 @@ header {
     font-size: 68px;
 }
 
-/*Navigation bar with buttons*/
-.navbar {
-    display: flex;
-    justify-content: left;
-    background-color: #1D3461;
-    border-bottom: 2px solid black;
-    padding: 0;
-}
-.nav-button {
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    height: 50px;
-    width: 10%;
-    background-color: #1D3461;
-    border: none;
-    transition-duration: 0.4s;
-}
-    .nav-button a{
-        text-decoration: none;
-        color: white;
-    }
-    .nav-button:hover {
-        cursor: pointer;
-        background-color: #376996;
-    }
-
 .flex-container {
     display: flex;
     flex-wrap: wrap;
@@ -76,12 +49,164 @@ header {
     width: 98%;
 }
 
-.age-chart-text {
-    text-align: center;
+#age-chart-text{
+    text-align:center;
 }
-#canvas2{
+
+#chart7 {
     height: 500px;
     width: 100%;
+}
+
+.middle {
+    position: relative;
+    width: 50%;
+    max-width: 500px;
+}
+
+.slider {
+    position:relative;
+    z-index: 1;
+    height: 10px;
+    margin: 0 15px;
+}
+
+.slider > .track {
+	position: absolute;
+	z-index: 1;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	border-radius: 5px;
+	background-color: #f7f7f7;
+}
+
+.slider > .range {
+	position: absolute;
+	z-index: 2;
+	left: 25%;
+	right: 25%;
+	top: 0;
+	bottom: 0;
+	border-radius: 5px;
+	background-color: #376996;
+}
+
+.multi-range-slider {
+    margin-top: 50px; 
+}
+
+.slider > .thumb {
+	position: absolute;
+	z-index: 3;
+	width: 30px;
+	height: 30px;
+	background-color: #ffffff;
+	border-radius: 50%;
+	box-shadow: 0 0 0 0 rgba(98,0,238,.1);
+	transition: box-shadow .3s ease-in-out;
+}
+
+.slider > .thumb.left {
+	left: 25%;
+	transform: translate(-15px, -10px);
+}
+
+.slider > .thumb.right {
+	right: 25%;
+	transform: translate(15px, -10px);
+}
+
+.slider > .thumb.hover {
+	box-shadow: 0 0 0 5px rgba(98,0,238,.1);
+}
+
+.slider > .thumb.active {
+	box-shadow: 0 0 0 5px rgba(98,0,238,.2);
+}
+
+input[type=range] {
+    position: absolute;
+    pointer-events: none;
+    -webkit-appearance: none;
+    z-index: 2;
+    height: 10px;
+    width: 100%;
+    opacity: 0;
+}
+
+input[type=range]::-webkit-slider-thumb {
+	pointer-events: all;
+	width: 30px;
+	height: 30px;
+	border-radius: 0;
+	border: 0 none;
+	background-color: red;
+	-webkit-appearance: none;
+}
+
+h4 {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+}
+
+a {
+    color: #3AA655;
+    text-decoration: none;
+}
+
+.slider-value {
+    position: absolute;
+    bottom:120px; 
+    transform: translateX(10%);
+}
+
+#confirm-button{
+    background-color: #376996;
+    color: #ffffff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 40px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    width: 30%;
+    margin-left: 30%;
+    border-radius: 12px;
+}
+
+#confirm-button:hover {
+    background-color: #3AA655;
+}
+
+
+#reset-button {
+    background-color: #376996;
+    color: #ffffff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+    width: 30%;
+    margin-left: 10px;
+    border-radius: 12px;
+}
+
+#reset-button:hover {
+    background-color: #FF0000;
+}
+
+
+
+.female-chart {
+    width: 30%;
+    height: 30%;
 }
 .female-chart {
     width: 30%;
@@ -118,52 +243,6 @@ footer {
     background-color: #376996;
     text-align:center;
     color: #ffffff;
-}
-
-/**Css for Detail*/
-.center h2{
-    text-align: center;
-    margin-bottom: 25px;
-}
-
-.deSo-container{
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-}
-
-.left-div{
-    margin: 1%;
-    width: 49%;
-}
-
-.left-div div {
-   width: 100%;
-   display: flex;
-   flex-direction: row;
-}
-
-#left-deSo-statistics {
-    padding: 5px;
-}
-
-.right-div {
-    margin: 1%;
-    width: 49%;
-}
-
-.right-div div{
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-}
-
-#right-deSo-statistics {
-    padding: 5px;
-}
-
-.charts{
-    width: 98% !important;
 }
 
 
