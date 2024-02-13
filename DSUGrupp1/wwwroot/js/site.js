@@ -7,8 +7,50 @@ let leftChart;
 let rightChart;
 let leftGenderChart;
 let rightGenderChart;
+let leftFilterChart;
+let rightFilterChart;
 let leftOverTimeChart; 
 let rightOverTimeChart;
+
+document.addEventListener('DOMContentLoaded', function () {
+    filterButton = document.getElementById('confirm-filters');
+    filterButton.addEventListener('click', function () {
+
+        const gender = document.getElementById('gender-drop-down').value;
+        const minAge = document.getElementById('input-left').value;
+        const maxAge = document.getElementById('input-right').value;
+        const batchNumber = document.getElementById('batch-number-dropdown').value;
+        const vaccineType = document.getElementById('vaccine-type-dropdown').value;
+        const vaccineCentral = document.getElementById('vaccine-central-dropdown').value;
+        const doseCount = document.getElementById('dose-dropdown').value;
+
+        console.log(vaccineType);
+
+        const data = {
+            batchNumber: batchNumber,
+            gender: gender,
+            minAge: minAge,
+            maxAge: maxAge,
+            siteId: vaccineCentral,
+            numberOfDoses: doseCount,
+            typeOfVaccine: vaccineType,
+            //startDate: 2,
+            //endDate: 3,
+        };
+
+        fetch('/Home/GetChartFromFilteredOptions', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+
+            },
+            body: JSON.stringify(data),
+        })
+
+        resetSliders();
+    });
+});
+
 
 document.addEventListener('DOMContentLoaded', function () {
     const deSoDropdown = document.getElementById('left-deSo-dropdown');
@@ -64,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 leftChart = new Chart(ctx, chart);
-               
+
                 if (leftGenderChart) {
                     leftGenderChart.destroy();
                 }
@@ -89,6 +131,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 leftOverTimeChartParagraph.textContent = "Ett linjegram som visar antal vaccinerade per vecka under åren 2020-2023.";
 
                 
+
+                if (leftFilterChart) {
+                    leftFilterChart.destroy();
+                }
+
+                const contextTest = document.getElementById('left-filter-chart').getContext('2d');
+                const filterChart = JSON.parse(data.jsonChartFilter);
+
+                leftFilterChart = new Chart(contextTest, filterChart);
 
             })
             .catch((error) => {
@@ -170,6 +221,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 rightGenderChartParagraph.textContent = "Cirkeldiagram som presenterar vaccinationsgraden i procent mellan kvinnor och män.";
                 
 
+                if (rightFilterChart) {
+                    rightFilterChart.destroy();
+                }
+
+                const contextTest = document.getElementById('right-filter-chart').getContext('2d');
+                const filterChart = JSON.parse(data.jsonChartFilter);
+
+                rightFilterChart = new Chart(contextTest, filterChart);
+
                 if (rightOverTimeChart) {
                     rightOverTimeChart.destroy();
                 }
@@ -187,6 +247,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     });
 });
+
 function clearDeSoInformation(id) {
     const deSoStatisticContainer = document.getElementById(id);
 
@@ -391,11 +452,9 @@ resetButton.addEventListener("click", function () {
     resetSliders();
 
     resetButton.style.display = "none";
-
 });
 
-
-
-
-
-
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 18,
+}).addTo(mymap);

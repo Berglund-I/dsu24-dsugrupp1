@@ -95,6 +95,13 @@ namespace DSUGrupp1.Infastructure
 
             return result;
         }
+
+        /// <summary>
+        /// Sorts patients from parameters sent from javascript with linqquery, returns a list of filtered patients
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="patients"></param>
+        /// <returns></returns>
         public static List<Patient> GetSortedPatients(FilterDto filter, List<Patient> patients)
         {
             var filteredPatients = patients
@@ -109,5 +116,15 @@ namespace DSUGrupp1.Infastructure
                 .Where(p => filter.EndDate == DateTime.MinValue || p.Vaccinations.Any(v => v.VaccinationDate <= filter.EndDate)).ToList();
             return filteredPatients;
         }
+
+        public static List<Patient> GetPatientsByDeSo(List<Patient> patients, string deSo)
+        {
+            List<Patient> result = patients
+            .Where(patient => patient.DeSoCode == deSo)
+            .ToList();
+
+            return result;
+        }
+
     }
 }
