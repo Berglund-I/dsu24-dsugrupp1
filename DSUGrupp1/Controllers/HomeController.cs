@@ -116,10 +116,15 @@ namespace DSUGrupp1.Controllers
         public IActionResult GetChartFromFilteredOptions([FromBody] FilterDto data)
         {
             var response = LinqQueryRepository.GetSortedPatients(data, ListOfPatients.PatientList);
+            var patients = response.Count();
             var chart = new ChartViewModel();
 
-            var newChart = chart.CreateChart("Tjena", "bar", ["test"], "Data", [response.Count()], ["#0000FF"], 5);
+            if (patients <= 5){
+                var notEnoughPatients = chart.CreateChart("INTE TILLRÄCKLIGT MED PATIENTER", "bar", ["Error"], "Ingen data tillgänglig", [0], ["#ffffff"], 0);
+                return Ok(notEnoughPatients);
+            }
 
+            var newChart = chart.CreateChart("Antal patienter utifrån filtrering", "bar", ["Antal patienter"], "Patienter", [patients], ["#0000FF"], 5);
             return Ok(newChart);
         }
 

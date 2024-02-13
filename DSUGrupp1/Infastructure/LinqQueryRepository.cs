@@ -105,6 +105,7 @@ namespace DSUGrupp1.Infastructure
         public static List<Patient> GetSortedPatients(FilterDto filter, List<Patient> patients)
         {
             var filteredPatients = patients
+                .Where(p => string.IsNullOrEmpty(filter.DeSoCode) || p.DeSoCode == filter.DeSoCode)
                 .Where(p => string.IsNullOrEmpty(filter.BatchNumber) || p.Vaccinations.Any(v => v.BatchNumber == filter.BatchNumber))
                 .Where(p => string.IsNullOrEmpty(filter.Gender) || p.Gender == filter.Gender)
                 .Where(p => filter.MinAge == 0 || p.AgeAtFirstVaccination >= filter.MinAge)

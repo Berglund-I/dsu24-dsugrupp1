@@ -50,10 +50,32 @@
         </div>
     </div>
 }
+
 @section CenterContentThree {
-    <h4>Filtrering</h4>
+    <div class="deSo-container">
+        <div class="left-div">
+            <div charts="charts">
+                <canvas id="left-over-time-chart"></canvas>
+
+            </div>
+        </div>
+
+        <div class="right-div">
+            <div charts="charts">
+                <canvas id="right-over-time-chart"></canvas>
+
+            </div>
+        </div>
+    </div>
+}
+
+@section CenterContentFour {
+    <h2>Filtrering</h2>
+
+    <div class="deSo-container">
 
     <div class="filters">
+        @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj ett område", new { @id = "filter-deSo-dropdown", @class = "dropdown-filter" })
         @Html.DropDownListFor(d => d.FilterDropDown.SelectedBatch, Model.FilterDropDown.Batches, "Välj Batch-nummer", new { @id = "batch-number-dropdown", @class = "dropdown-filter" })
         @Html.DropDownListFor(d => d.FilterDropDown.SelectedBatch, Model.FilterDropDown.VaccineName, "Välj vaccintyp", new { @id = "vaccine-type-dropdown", @class = "dropdown-filter"})
         @Html.DropDownListFor(d => d.FilterDropDown.SelectedBatch, Model.FilterDropDown.VaccineCentral, "Välj vaccinationscentral", new { @id = "vaccine-central-dropdown", @class = "dropdown-filter" })
@@ -75,12 +97,12 @@
         <div class="calender">
             <label>
                 Välj start datum för vaccination:
-                <input type="date" name="firstVDay" required pattern="\d{4}-\d{2}-\d{2}" />
+                <input type="date" name="firstVDay" id="start-date" value="2020-01-01" required pattern="\d{4}-\d{2}-\d{2}" />
                 <span class="validity"></span>
             </label>
             <label>
                 Välj slut datum för vaccination:
-                <input type="date" name="lastVDay" required pattern="\d{4}-\d{2}-\d{2}" />
+                <input type="date" name="lastVDay" id="end-date" required pattern="\d{4}-\d{2}-\d{2}" />
                 <span class="validity"></span>
             </label>
         </div>
@@ -107,14 +129,11 @@
     </div>
     
     
-    <div class="deSo-container">
-        <div class="left-div">
-        <div charts="charts">
-            <canvas id ="left-filter-chart"></canvas>
-        </div>
-        </div>
+   
+        
+
         <div class="right-div">
-        <div class="charts">
+            <div class="charts">
             <canvas id="right-filter-chart"></canvas>
         </div>
         </div>
@@ -122,20 +141,3 @@
 
 }
 
-@section CenterContentFour {
-    <div class="deSo-container">
-        <div class="left-div">
-            <div charts="charts">
-                <canvas id="left-over-time-chart"></canvas>
-
-            </div>
-        </div>
-
-        <div class="right-div">
-            <div charts="charts">
-                <canvas id="right-over-time-chart"></canvas>
-
-            </div>
-        </div>
-    </div>
-}

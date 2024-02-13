@@ -7,15 +7,27 @@ let leftChart;
 let rightChart;
 let leftGenderChart;
 let rightGenderChart;
-let leftFilterChart;
+/*let leftFilterChart;*/
 let rightFilterChart;
 let leftOverTimeChart; 
 let rightOverTimeChart;
+
+let todaysDate = new Date();
+let dd = todaysDate.getDate();
+let mm = todaysDate.getMonth() + 1;
+if (mm < 10) { mm = '0' + mm; }
+let yyyy = todaysDate.getFullYear();
+let newDate = yyyy + "-" + mm + "-" + dd;
+
+let endDate = document.getElementById('end-date');
+endDate.value = newDate;
+
 
 document.addEventListener('DOMContentLoaded', function () {
     filterButton = document.getElementById('confirm-filters');
     filterButton.addEventListener('click', function () {
 
+        const deSoCode = document.getElementById('filter-deSo-dropdown').value;
         const gender = document.getElementById('gender-drop-down').value;
         const minAge = document.getElementById('input-left').value;
         const maxAge = document.getElementById('input-right').value;
@@ -26,8 +38,11 @@ document.addEventListener('DOMContentLoaded', function () {
             vaccineCentral = 0;
         }
         const doseCount = document.getElementById('dose-dropdown').value;
+        const startDate = document.getElementById('start-date').value;
+        endDate = document.getElementById('end-date').value;
 
         const vaccineData = {
+            deSoCode: deSoCode,
             batchNumber: batchNumber,
             gender: gender,
             minAge: minAge,
@@ -35,8 +50,8 @@ document.addEventListener('DOMContentLoaded', function () {
             siteId: vaccineCentral,
             numberOfDoses: doseCount,
             typeOfVaccine: vaccineType,
-            //startDate: 2,
-            //endDate: 3,
+            startDate: startDate,
+            endDate: endDate,
         };
         console.log(vaccineData);
 
@@ -56,12 +71,12 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(data => {
 
-                if (leftFilterChart) {
-                    leftFilterChart.destroy();
+                if (rightFilterChart) {
+                    rightFilterChart.destroy();
                 }
 
-                const contextTest = document.getElementById('left-filter-chart').getContext('2d');
-                leftFilterChart = new Chart(contextTest, data);
+                const contextTest = document.getElementById('right-filter-chart').getContext('2d');
+                rightFilterChart = new Chart(contextTest, data);
 
             })
             .catch((error) => {
@@ -149,15 +164,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 leftOverTimeChart = new Chart(ctext, overTimeChart);
 
-                if (leftFilterChart) {
-                    leftFilterChart.destroy();
-                }
-
-                const contextTest = document.getElementById('left-filter-chart').getContext('2d');
-                const filterChart = JSON.parse(data.jsonChartFilter);
-
-                leftFilterChart = new Chart(contextTest, filterChart);
-
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -234,15 +240,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 const genderChart = JSON.parse(data.jsonChartGender);
 
                 rightGenderChart = new Chart(context, genderChart);
-
-                if (rightFilterChart) {
-                    rightFilterChart.destroy();
-                }
-
-                const contextTest = document.getElementById('right-filter-chart').getContext('2d');
-                const filterChart = JSON.parse(data.jsonChartFilter);
-
-                rightFilterChart = new Chart(contextTest, filterChart);
 
                 if (rightOverTimeChart) {
                     rightOverTimeChart.destroy();
