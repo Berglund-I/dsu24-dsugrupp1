@@ -19,6 +19,7 @@ namespace DSUGrupp1.Controllers
     {
         private readonly ApiController _apiController;
         private readonly ListOfPatients _patientList;
+        private readonly ListOfPopulation _listOfResidents;
         private readonly ILogger<HomeController> _logger;
 
         //Shouldn't be possible to change when the initial values is set
@@ -53,8 +54,8 @@ namespace DSUGrupp1.Controllers
                 var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
 
                 GetPatient(vaccineDataAllDeso, batchTest);
-                
 
+                GetResident(apiResult2);
 
                 DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
                 VaccinationOverTimeViewModel vaccinationOverTimeStatistics = new VaccinationOverTimeViewModel(apiResult1, vaccineDataAllDeso);
@@ -175,6 +176,34 @@ namespace DSUGrupp1.Controllers
             });
 
             ListOfPatients.PatientList = Patients;
+        }
+
+        public async void GetResident(VaccineCountDto vaccineCount)
+        {
+            List<string> deSos = vaccineCount.Data.Select(d => d.Deso).ToList();
+
+            var responsMale = await _apiController.GetPopulationInSpecificDeSo(deSos, "2022", "1");
+            var responsFemale = await _apiController.GetPopulationInSpecificDeSo(deSos, "2022", "2");
+
+            List<DataItem> population = new List<DataItem>();
+            population.AddRange(responsMale.Data);
+            population.AddRange(responsFemale.Data);
+
+            List<Resident> sortedPopulation = new List<Resident>();
+
+            Parallel.ForEach(population, p =>
+            {
+                for (int i = 0; i < int.Parse(p.Values[0]); i++)
+                {
+                    Resident resident = new Resident(p);
+                    lock (resident)
+                    {
+                        sortedPopulation.Add(resident);
+                    }
+                }
+            });
+
+            ListOfPopulation.ListOfResidents = sortedPopulation;
         }
     }
 
