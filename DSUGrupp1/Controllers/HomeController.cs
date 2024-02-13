@@ -38,7 +38,6 @@ namespace DSUGrupp1.Controllers
 
                 VaccinationViewModel vaccinations = new VaccinationViewModel();
 
-                ChartViewModel municipalityChart = await vaccinations.GenerateChart();
 
 
                 // Code exists here for future use when working with batches/filters
@@ -51,10 +50,12 @@ namespace DSUGrupp1.Controllers
 
                 var apiResult1 = await _apiController.GetPopulationCount("2380", "2022");
                 var apiResult2 = await _apiController.GetVaccinationsCount();
+
                 var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
 
-                GetPatient(vaccineDataAllDeso, batchTest);
+                await GetPatient(vaccineDataAllDeso, batchTest);
                 
+                ChartViewModel municipalityChart = await vaccinations.GenerateChart(Patients);
 
                 HomeViewModel model = new HomeViewModel();
 
@@ -80,6 +81,7 @@ namespace DSUGrupp1.Controllers
                 model.Charts.Add(chartGenderBoth);
 
                 HomeModelStorage.ViewModel = model;
+
                 //var data = new FilterDto();
                 //data.Gender = "Male";
                 //data.BatchNumber = "AZ002";
@@ -127,7 +129,7 @@ namespace DSUGrupp1.Controllers
         public IActionResult CreateChartBasedOnSelectedMinAgeAndMaxAge([FromBody] SliderValues sliderValues)
         {
             var homeViewModel = HomeModelStorage.ViewModel;
-            List<String> deso = new List<string>();
+            List<string> deso = new List<string>();
 
             var ageStatistics = HomeModelStorage.AgeStatistics;
 
@@ -140,7 +142,7 @@ namespace DSUGrupp1.Controllers
         public  IActionResult ResetChartToShowTheWholePopulation()
         {
             var homeViewModel = HomeModelStorage.ViewModel;
-            List<String> deso = new List<string>();
+            List<string> deso = new List<string>();
 
             var ageStatistics = HomeModelStorage.AgeStatistics;
 
@@ -159,7 +161,7 @@ namespace DSUGrupp1.Controllers
         }
 
         
-        public async void GetPatient(List<VaccinationDataFromSpecificDeSoDto> vaccinationData, DoseTypeDto doseData)
+        public async Task GetPatient(List<VaccinationDataFromSpecificDeSoDto> vaccinationData, DoseTypeDto doseData)
         {     
 
             var response = await _apiController.GetDeSoNames();   
