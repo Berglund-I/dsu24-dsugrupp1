@@ -82,15 +82,15 @@ namespace DSUGrupp1.Infastructure
             return result;
         }
 
-        public static List<Patient> GetPatientsByDates(List<Patient> patients)
+        public static List<Patient> GetPatientsByDates(List<Patient> patients, DateTime startDate,DateTime endDate)
         {
             //patient.Vaccinations.dateOfVaccination bör vara DateTime, inte string
-            DateTime dateOne = DateTime.Parse("2020-09-14");
-            DateTime dateTwo = DateTime.Parse("2021-09-14");
+            //DateTime dateOne = DateTime.Parse("2020-09-14");
+            //DateTime dateTwo = DateTime.Parse("2021-09-14");
 
             List<Patient> result = patients
-            .Where(patient => patient.Vaccinations.Any(d => d.VaccinationDate >= dateOne &&
-            d.VaccinationDate <= dateTwo))
+            .Where(patient => patient.Vaccinations.Any(d => d.VaccinationDate >= startDate &&
+            d.VaccinationDate <= endDate))
             .ToList();
 
             return result;

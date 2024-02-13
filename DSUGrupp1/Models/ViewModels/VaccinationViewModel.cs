@@ -1,8 +1,6 @@
 ﻿using DSUGrupp1.Controllers;
-using Newtonsoft.Json;
-using System.Diagnostics;
 using DSUGrupp1.Infastructure;
-using DSUGrupp1.Models;
+
 
 namespace DSUGrupp1.Models.ViewModels
 {
@@ -61,14 +59,14 @@ namespace DSUGrupp1.Models.ViewModels
         /// <returns></returns>
         public async Task<int> GetMunicipalityPopulation()
         {
-            //Maybe move this method?
+            //Maybe move this method? see TODO at top
             var populationData = await _apiController.GetPopulationCount("2380", "2022");
             int totalPopulation = int.Parse(populationData.Data[0].Values[0]) + int.Parse(populationData.Data[1].Values[0]);
             return totalPopulation;
         }
 
         /// <summary>
-        /// Calculates the percentage of vaccinated people in a specified DeSo
+        /// Calculates the percentage of vaccinated people.
         /// </summary>
         /// <param name="totalPopulation"></param>
         /// <param name="vaccinatedPeople"></param>
@@ -83,7 +81,7 @@ namespace DSUGrupp1.Models.ViewModels
                 throw new Exception("Antalet invånare kan ej vara noll");
             }
 
-            double percentage = (double)vaccinatedPeople / totalPopulation * 100;
+            double percentage = ((double)vaccinatedPeople / totalPopulation) * 100;
             return percentage;
         }
     }

@@ -42,26 +42,27 @@ namespace DSUGrupp1.Controllers
 
                 // Code exists here for future use when working with batches/filters
                 DoseTypeViewModel batches = new DoseTypeViewModel();
+                
                 var batchTest = await batches.GetBatches();
 
                 //HomeViewModel model = new HomeViewModel();
                 //model.Population = await _apiController.GetPopulationInSpecificDeSo("2380A0010", "2022");   
                 //model.DataFromSpecificDeSo = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
-
                 var apiResult1 = await _apiController.GetPopulationCount("2380", "2022");
                 var apiResult2 = await _apiController.GetVaccinationsCount();
 
                 var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
 
                 await GetPatient(vaccineDataAllDeso, batchTest);
+
                 
                 ChartViewModel municipalityChart = await vaccinations.GenerateChart(Patients);
 
                 HomeViewModel model = new HomeViewModel();
 
                 DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
-                VaccinationOverTimeViewModel vaccinationOverTimeStatistics = new VaccinationOverTimeViewModel(apiResult1, vaccineDataAllDeso);
-
+                //REFACTOR
+                VaccinationOverTimeViewModel vaccinationOverTimeStatistics = new VaccinationOverTimeViewModel(Patients);
                 ChartViewModel chartLineOverTime = vaccinationOverTimeStatistics.GenerateLineChart();
 
                 ChartViewModel ageChart = ageStatistics.GenerateAgeChartForVaccinated();
