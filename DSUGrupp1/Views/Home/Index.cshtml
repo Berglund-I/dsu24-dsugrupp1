@@ -25,11 +25,35 @@
 
 
 @section CenterContentOne {
-    <div class="age-chart-text">
-        <h1>Vaccinationsstatistik utifrån åldersgrupper</h1>
+
+    <div class="age-chart">
+    <h1 id="age-chart-text"> Vaccinationsstatistik utifrån åldersgrupper</h1>
+
+        @await Component.InvokeAsync("Chart", new { Id = "chart7", ChartModel = Model.Charts[2] })
+
     </div>
-    @await Component.InvokeAsync("Chart", new { Id = "canvas2", ChartModel = Model.Charts[2]})
+
+    <div class="middle">
+        <div class="multi-range-slider">
+            <div id="left-value" class="slider-value index-slider-value"></div>
+            <input type="range" id="input-left" min="16" max="100" value="16">
+            <div id="right-value" class="slider-value index-slider-value"></div>
+            <input type="range" id="input-right" min="0" max="85" value="85">
+
+            <div class="slider">
+                <div class="track"></div>
+                <div class="range"></div>
+                <div class="thumb left"></div>
+                <div class="thumb right"></div>
+            </div>
+            <button id="confirm-button">Bekräfta</button>
+            <button id="reset-button" onclick="resetChart()">Återställ </button>
+
+
+        </div>
+    </div>
 }
+
 @section CenterContentTwo {
     <h1 id="title-gender">Statistik fördelat efter kön i hela Östersunds kommun</h1>
     <div class="center-two">

@@ -8,6 +8,7 @@ namespace DSUGrupp1.Models
         public string DeSoName { get; set; }
         public string Gender { get; set; }
         public int YearOfBirth { get; set; }
+        public int AgeAtFirstVaccination { get; set; }
         public List<Vaccination> Vaccinations { get; set; }
 
         public Patient(PatientInformationDto patientData, DoseTypeDto doseData, string deSo, DesoInfoDTO desoInfo) 
@@ -34,6 +35,7 @@ namespace DSUGrupp1.Models
                 };
                 Vaccinations.Add(vaccination);
             }
+            AgeAtFirstVaccination = Vaccinations[0].VaccinationDate.Year - YearOfBirth;
         }
     
         public BatchDto GetVaccineName(DoseTypeDto doseData, string batchNumber)

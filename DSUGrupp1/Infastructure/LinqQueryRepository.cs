@@ -1,4 +1,5 @@
-﻿using DSUGrupp1.Models.DTO;
+﻿using DSUGrupp1.Models;
+using DSUGrupp1.Models.DTO;
 using System.Collections.Generic;
 using System.Xml.Linq;
 
@@ -11,9 +12,9 @@ namespace DSUGrupp1.Infastructure
         /// </summary>
         /// <param name="patients"></param>
         /// <returns></returns>
-        public static List<PatientInformationDto> GetPatientsByGender(List<PatientInformationDto> patients, string gender)
+        public static List<Patient> GetPatientsByGender(List<Patient> patients, string gender)
         {
-            List<PatientInformationDto> result = patients
+            List<Patient> result = patients
             .Where(patient => patient.Gender == gender)
             .ToList();
 
@@ -25,9 +26,9 @@ namespace DSUGrupp1.Infastructure
         /// <param name="patients"></param>
         /// <param name="batchNumber"></param>
         /// <returns></returns>
-        public static List<PatientInformationDto> GetPatientsByBatchNumber(List<PatientInformationDto> patients, string batchNumber)
-        {    
-            List<PatientInformationDto> result = patients
+        public static List<Patient> GetPatientsByBatchNumber(List<Patient> patients, string batchNumber)
+        {
+            List<Patient> result = patients
             .Where(patient => patient.Vaccinations.Any(b => b.BatchNumber == batchNumber))
             .ToList();
 
@@ -39,9 +40,9 @@ namespace DSUGrupp1.Infastructure
         /// <param name="patients"></param>
         /// <param name="doseNumber"></param>
         /// <returns></returns>
-        public static List<PatientInformationDto> GetPatientsByDoseNumber(List<PatientInformationDto> patients, int doseNumber)
+        public static List<Patient> GetPatientsByDoseNumber(List<Patient> patients, int doseNumber)
         {
-            List<PatientInformationDto> result = patients
+            List<Patient> result = patients
             .Where(patient => patient.Vaccinations.Any(d => d.DoseNumber == doseNumber))
             .ToList();
 
@@ -54,14 +55,14 @@ namespace DSUGrupp1.Infastructure
         /// <param name="lowestAge"></param>
         /// <param name="highestAge"></param>
         /// <returns></returns>
-        public static List<PatientInformationDto> GetPatientsByAge(List<PatientInformationDto> patients, int lowestAge, int highestAge)
+        public static List<Patient> GetPatientsByAge(List<Patient> patients, int lowestAge, int highestAge)
         {
-            DateTime dateTime = DateTime.Now;
-            int currentYear = dateTime.Year;
+            //DateTime dateTime = DateTime.Now;
+            //int currentYear = dateTime.Year;
 
-            List<PatientInformationDto> result = patients
-            .Where(patient => currentYear - int.Parse(patient.YearOfBirth) >= 30 && 
-            currentYear - int.Parse(patient.YearOfBirth) <= 50)
+            List<Patient> result = patients
+            .Where(patient => patient.AgeAtFirstVaccination >= lowestAge &&
+             patient.AgeAtFirstVaccination <= highestAge)
             .ToList();
 
             return result;
@@ -72,27 +73,58 @@ namespace DSUGrupp1.Infastructure
         /// <param name="patients"></param>
         /// <param name="siteId"></param>
         /// <returns></returns>
-        public static List<PatientInformationDto> GetPatientsByVaccinationCentral(List<PatientInformationDto> patients, int siteId)
+        public static List<Patient> GetPatientsByVaccinationCentral(List<Patient> patients, int siteId)
         {
-            List<PatientInformationDto> result = patients
-            .Where(patient => patient.Vaccinations.Any(s => s.VaccinationCentral.SiteId== siteId))
+            List<Patient> result = patients
+            .Where(patient => patient.Vaccinations.Any(s => s.VaccinationSiteId == siteId))
             .ToList();
 
             return result;
         }
 
-        public static List<PatientInformationDto> GetPatientsByDates(List<PatientInformationDto> patients)
+        public static List<Patient> GetPatientsByDates(List<Patient> patients)
         {
             //patient.Vaccinations.dateOfVaccination bör vara DateTime, inte string
             DateTime dateOne = DateTime.Parse("2020-09-14");
             DateTime dateTwo = DateTime.Parse("2021-09-14");
 
-            List<PatientInformationDto> result = patients
-            .Where(patient => patient.Vaccinations.Any(d => DateTime.Parse(d.DateOfVaccination) >= dateOne && 
-            DateTime.Parse(d.DateOfVaccination) <= dateTwo))
+            List<Patient> result = patients
+            .Where(patient => patient.Vaccinations.Any(d => d.VaccinationDate >= dateOne &&
+            d.VaccinationDate <= dateTwo))
             .ToList();
 
             return result;
         }
+
+        /// <summary>
+        /// Sorts patients from parameters sent from javascript with linqquery, returns a list of filtered patients
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="patients"></param>
+        /// <returns></returns>
+        public static List<Patient> GetSortedPatients(FilterDto filter, List<Patient> patients)
+        {
+            var filteredPatients = patients
+                .Where(p => string.IsNullOrEmpty(filter.BatchNumber) || p.Vaccinations.Any(v => v.BatchNumber == filter.BatchNumber))
+                .Where(p => string.IsNullOrEmpty(filter.Gender) || p.Gender == filter.Gender)
+                .Where(p => filter.MinAge == 0 || p.AgeAtFirstVaccination >= filter.MinAge)
+                .Where(p => filter.MaxAge == 0 || p.AgeAtFirstVaccination <= filter.MaxAge)
+                .Where(p => filter.SiteId == 0 || p.Vaccinations.Any(v => v.VaccinationSiteId == filter.SiteId))
+                .Where(p => filter.NumberOfDoses == 0 || p.Vaccinations.Any(v => v.DoseNumber == filter.NumberOfDoses))
+                .Where(p => string.IsNullOrEmpty(filter.TypeOfVaccine) || p.Vaccinations.Any(v => v.VaccineName == filter.TypeOfVaccine))
+                .Where(p => filter.StartDate == DateTime.MinValue || p.Vaccinations.Any(v => v.VaccinationDate >= filter.StartDate))
+                .Where(p => filter.EndDate == DateTime.MinValue || p.Vaccinations.Any(v => v.VaccinationDate <= filter.EndDate)).ToList();
+            return filteredPatients;
+        }
+
+        public static List<Patient> GetPatientsByDeSo(List<Patient> patients, string deSo)
+        {
+            List<Patient> result = patients
+            .Where(patient => patient.DeSoCode == deSo)
+            .ToList();
+
+            return result;
+        }
+
     }
 }

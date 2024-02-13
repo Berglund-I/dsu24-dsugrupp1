@@ -8,6 +8,9 @@ using System.Reflection;
 using Newtonsoft.Json;
 using System.ComponentModel;
 using System.Text.Json.Nodes;
+using System.Collections.Generic;
+using DSUGrupp1.Infastructure;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.VisualBasic;
 
 
@@ -16,8 +19,7 @@ namespace DSUGrupp1.Controllers
     public class HomeController : Controller
     {
         private readonly ApiController _apiController;
-       
-
+        private readonly ListOfPatients _patientList;
         private readonly ILogger<HomeController> _logger;
 
         //Shouldn't be possible to change when the initial values is set
@@ -26,7 +28,7 @@ namespace DSUGrupp1.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _apiController = new ApiController();     
+            _apiController = new ApiController();
         }
 
         public async Task<ActionResult> Index()
@@ -53,14 +55,19 @@ namespace DSUGrupp1.Controllers
                 var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
 
                 GetPatient(vaccineDataAllDeso, batchTest);
+                
 
-                HomeViewModel model = new HomeViewModel();
 
                 DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
                 VaccinationOverTimeViewModel vaccinationOverTimeStatistics = new VaccinationOverTimeViewModel(apiResult1, vaccineDataAllDeso);
 
+
                 ChartViewModel chartLineOverTime = vaccinationOverTimeStatistics.GenerateLineChart();
-                ChartViewModel ageChart = await ageStatistics.GenerateChart();
+
+                ChartViewModel ageChart = ageStatistics.GenerateAgeChartForVaccinated();
+                HomeModelStorage.AgeStatistics = ageStatistics;
+
+                HomeViewModel model = new HomeViewModel(ListOfPatients.PatientList);
 
                 DisplayGenderStatisticsViewModel genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, vaccineDataAllDeso);
                 ChartViewModel chartGenderFemales = genderStatistics.GenerateChartFemales();
@@ -75,6 +82,13 @@ namespace DSUGrupp1.Controllers
                 model.Charts.Add(chartGenderBoth);
 
                 HomeModelStorage.ViewModel = model;
+                //var data = new FilterDto();
+                //data.Gender = "Male";
+                //data.BatchNumber = "AZ002";
+                //data.SiteId = 4;
+                //data.MinAge = 20;
+                //data.MaxAge = 30;
+                //var result = GetChartFromFilteredOptions(data);
 
                 return View(model);
             }
@@ -105,7 +119,44 @@ namespace DSUGrupp1.Controllers
             
             return Ok(response);          
         }
- 
+
+        [HttpPost]
+
+        public IActionResult GetChartFromFilteredOptions([FromBody] FilterDto data)
+        {
+            
+            var response1 = LinqQueryRepository.GetSortedPatients(data, ListOfPatients.PatientList);
+
+            var response = data;
+
+            return Ok();
+        }
+
+
+        public IActionResult CreateChartBasedOnSelectedMinAgeAndMaxAge([FromBody] SliderValues sliderValues)
+        {
+            var homeViewModel = HomeModelStorage.ViewModel;
+            List<string> deso = new List<string>();
+
+            var ageStatistics = HomeModelStorage.AgeStatistics;
+
+
+            ChartViewModel chart = ageStatistics.GenerateChartForSelectedAgeRange(sliderValues.LeftValue, sliderValues.RightValue);
+
+            return Ok(chart);
+        }
+
+        public  IActionResult ResetChartToShowTheWholePopulation()
+        {
+            var homeViewModel = HomeModelStorage.ViewModel;
+            List<string> deso = new List<string>();
+
+            var ageStatistics = HomeModelStorage.AgeStatistics;
+
+            ChartViewModel chart = ageStatistics.GenerateAgeChartForVaccinated();
+
+            return Ok(chart);
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -132,7 +183,9 @@ namespace DSUGrupp1.Controllers
 
             });
 
-            var secondtime = time.Elapsed.TotalMilliseconds;
+            ListOfPatients.PatientList = Patients;
         }
     }
+
+    
 }

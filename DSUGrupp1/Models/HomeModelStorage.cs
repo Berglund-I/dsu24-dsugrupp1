@@ -5,6 +5,8 @@ namespace DSUGrupp1.Models
     public static class HomeModelStorage
     {
         private static HomeViewModel _viewModel;
+        private static DisplayAgeStatisticsViewModel _ageStatistics;
+
 
         public static HomeViewModel ViewModel 
         {
@@ -16,8 +18,22 @@ namespace DSUGrupp1.Models
             {
                 _viewModel = value;
             }
+
+
         }
-        
-        
+
+        public static DisplayAgeStatisticsViewModel AgeStatistics
+        {
+            get
+            {
+                return _ageStatistics;
+            }
+            set
+            {
+                _ageStatistics = value;
+            }
+        }
+
+
     }
 }
