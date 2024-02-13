@@ -292,11 +292,11 @@ footer {
     width: 49%;
 }
 
-    .left-div div {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-    }
+.left-div div {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
 
 #left-deSo-statistics {
     padding: 5px;
@@ -307,11 +307,11 @@ footer {
     width: 49%;
 }
 
-    .right-div div {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-    }
+.right-div div {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
 
 #right-deSo-statistics {
     padding: 5px;
@@ -320,6 +320,7 @@ footer {
 .charts {
     width: 98% !important;
 }
+
 
 @media (min-width: 768px) {
     html {
