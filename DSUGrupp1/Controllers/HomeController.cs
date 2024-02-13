@@ -55,7 +55,7 @@ namespace DSUGrupp1.Controllers
                 var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
 
                 GetPatient(vaccineDataAllDeso, batchTest);
-                
+                //GetResident(apiResult2);
 
 
                 DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
@@ -185,7 +185,17 @@ namespace DSUGrupp1.Controllers
 
             ListOfPatients.PatientList = Patients;
         }
+
+        public async void GetResident(VaccineCountDto vaccineCountDto)
+        {
+            var tasks = vaccineCountDto.Data.Select(VaccineData => _apiController.GetPopulationInSpecificDeSo(VaccineData.Deso, "2022", "1+2")).ToList();
+            var response = await Task.WhenAll(tasks);
+           
+        }
+
     }
+
+
 
     
 }
