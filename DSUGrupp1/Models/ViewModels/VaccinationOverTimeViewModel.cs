@@ -38,7 +38,7 @@ namespace DSUGrupp1.Models.ViewModels
                 //var filteredPatients = LinqQueryRepository.GetPatientsByDates(_patients, DateTime.Parse(year.ToString());
 
                 //Could possibly break the list up inte smaller pieces before querying.
-                VaccinationsperWeek = CountVaccinationsWeekByWeek(year);
+                VaccinationsperWeek = CountVaccinationsWeekByWeek(year,_patients);
 
                 string color = colors[year - 2020];
                 DatasetsDto dataset = chart.GenerateDataSet(
@@ -88,7 +88,7 @@ namespace DSUGrupp1.Models.ViewModels
             return firstWeekDay.AddDays(weekOfYearMultiplier * 7);
         }
 
-        public List<double> CountVaccinationsWeekByWeek(int year)
+        public static List<double> CountVaccinationsWeekByWeek(int year,List<Patient> patients)
         {
             var ci = new CultureInfo("sv-SE");
             var cal = ci.Calendar;
@@ -102,7 +102,7 @@ namespace DSUGrupp1.Models.ViewModels
                 var weekStart = FirstDateOfWeek(year, week, ci);
                 var weekEnd = weekStart.AddDays(6);
 
-                vaccinationsPerWeek.Add(LinqQueryRepository.GetPatientsByDates(_patients, weekStart, weekEnd).Count());
+                vaccinationsPerWeek.Add(LinqQueryRepository.GetPatientsByDates(patients, weekStart, weekEnd).Count());
 
             }
 

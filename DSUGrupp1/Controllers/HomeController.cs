@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Text.Json.Nodes;
 using System.Collections.Generic;
 using DSUGrupp1.Infastructure;
+using Microsoft.Extensions.Caching.Memory;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
@@ -18,16 +19,18 @@ namespace DSUGrupp1.Controllers
     public class HomeController : Controller
     {
         private readonly ApiController _apiController;
-       
+        private readonly IMemoryCache _memoryCache;
 
         private readonly ILogger<HomeController> _logger;
 
         //Shouldn't be possible to change when the initial values is set
         public List<Patient> Patients { get; set; } = new List<Patient>();
-        public HomeController(ILogger<HomeController> logger)
+        const string PatientsCacheKey = "PatientsData";
+        public HomeController(ILogger<HomeController> logger,IMemoryCache memoryCache)
         {
             _logger = logger;
-            _apiController = new ApiController();     
+            _apiController = new ApiController();
+            _memoryCache = memoryCache;
         }
 
         public async Task<ActionResult> Index()
@@ -37,7 +40,7 @@ namespace DSUGrupp1.Controllers
             {
 
                 VaccinationViewModel vaccinations = new VaccinationViewModel();
-
+                
 
 
                 // Code exists here for future use when working with batches/filters
@@ -69,7 +72,7 @@ namespace DSUGrupp1.Controllers
                 HomeModelStorage.AgeStatistics = ageStatistics;
 
 
-                DisplayGenderStatisticsViewModel genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, vaccineDataAllDeso);
+                DisplayGenderStatisticsViewModel genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, Patients);
                 ChartViewModel chartGenderFemales = genderStatistics.GenerateChartFemales();
                 ChartViewModel chartGenderMales = genderStatistics.GenerateChartMales();
                 ChartViewModel chartGenderBoth = genderStatistics.GenerateChartBothGenders();
@@ -90,7 +93,7 @@ namespace DSUGrupp1.Controllers
                 //data.MinAge = 20;
                 //data.MaxAge = 30;
                 //var result = GetChartFromFilteredOptions(data);
-
+                _memoryCache.Set(PatientsCacheKey, Patients);
                 return View(model);
             }
             return View(HomeModelStorage.ViewModel);
@@ -107,11 +110,19 @@ namespace DSUGrupp1.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetChartFromDeSoCode([FromBody] TestFetch data)
+        public IActionResult GetChartFromDeSoCode([FromBody] DesoChartRequest data)
         {
-            var response = new DeSoChartViewModel(data.SelectedDeSo);
+            _memoryCache.TryGetValue(PatientsCacheKey, out List<Patient> cachedPatients);
+
+            // If found in cache, return it directly
+            if (cachedPatients != null)
+            {
+                var response = new DeSoChartViewModel(data.SelectedDeSo, cachedPatients);
+                return Ok(response);          
+                
+            }
+            return BadRequest();
             
-            return Ok(response);          
         }
 
         [HttpPost]

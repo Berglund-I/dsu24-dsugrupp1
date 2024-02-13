@@ -8,6 +8,10 @@ namespace DSUGrupp1.Infastructure
 {
     public static class LinqQueryRepository
     {
+        public static List<Patient> GetPatientsByDeSo(List<Patient> patients, string deSoCode)
+        {
+            return patients.Where(patient => patient.DeSoCode == deSoCode).ToList();
+        }
         /// <summary>
         /// Gets a list of all patients of a specific gender
         /// </summary>
@@ -48,6 +52,12 @@ namespace DSUGrupp1.Infastructure
             .ToList();
 
             return result;
+        }
+        public static List<Patient> GetPatientsWithBoosterDose(List<Patient> patients)
+        {
+            return patients
+                .Where(patient => patient.Vaccinations.Count > 3)
+                .ToList();
         }
         /// <summary>
         /// Gets a list of all patients within the age span

@@ -2,12 +2,12 @@
 
 namespace DSUGrupp1.Models.DTO
 {
-    public class TestFetch
+    public class DesoChartRequest
     {
         [JsonProperty("selectedDeSo")]
         public string SelectedDeSo { get; set; }
 
-        public TestFetch()
+        public DesoChartRequest()
         {
             
         }
