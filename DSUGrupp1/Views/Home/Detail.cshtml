@@ -72,6 +72,19 @@
             <option value="7">7</option>
         </select>
 
+        <div class="calender">
+            <label>
+                Välj start datum för vaccination:
+                <input type="date" name="firstVDay" required pattern="\d{4}-\d{2}-\d{2}" />
+                <span class="validity"></span>
+            </label>
+            <label>
+                Välj slut datum för vaccination:
+                <input type="date" name="lastVDay" required pattern="\d{4}-\d{2}-\d{2}" />
+                <span class="validity"></span>
+            </label>
+        </div>
+
         <div class="age-slider-filter">
             <div class="multi-range-slider">
                 <div id="left-value" class="slider-value detail-slider-value"></div>

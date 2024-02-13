@@ -118,7 +118,7 @@ namespace DSUGrupp1.Controllers
             var response = LinqQueryRepository.GetSortedPatients(data, ListOfPatients.PatientList);
             var chart = new ChartViewModel();
 
-            var newChart = chart.CreateChart("testchart", "bar", ["test"], "Data", [response.Count()], ["#0000FF"], 5);
+            var newChart = chart.CreateChart("Tjena", "bar", ["test"], "Data", [response.Count()], ["#0000FF"], 5);
 
             return Ok(newChart);
         }
