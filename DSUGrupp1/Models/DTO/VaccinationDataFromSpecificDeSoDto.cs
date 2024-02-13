@@ -9,10 +9,5 @@ namespace DSUGrupp1.Models.DTO
 
         [JsonProperty("patients")]
         public List<PatientInformationDto> Patients { get; set; }
-
-        
-
-
-
     }
 }

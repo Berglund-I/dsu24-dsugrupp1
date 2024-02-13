@@ -95,6 +95,13 @@ namespace DSUGrupp1.Infastructure
 
             return result;
         }
+
+        /// <summary>
+        /// Sorts patients from parameters sent from javascript with linqquery, returns a list of filtered patients
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="patients"></param>
+        /// <returns></returns>
         public static List<Patient> GetSortedPatients(FilterDto filter, List<Patient> patients)
         {
             var filteredPatients = patients

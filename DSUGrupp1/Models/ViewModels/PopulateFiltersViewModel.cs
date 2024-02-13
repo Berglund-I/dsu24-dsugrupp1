@@ -24,6 +24,10 @@ namespace DSUGrupp1.Models.ViewModels
             VaccineCentral = sortedVaccineCentral;
         }
 
+        /// <summary>
+        /// Fetches batchnumbers and returns it as a list of selectlistitem
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<SelectListItem>> SortBatchNumber()
         {
             var response = await _apiController.GetDoseTypes();
@@ -38,6 +42,10 @@ namespace DSUGrupp1.Models.ViewModels
             return sortedBatchData;
         }
 
+        /// <summary>
+        /// Fetches vaccine names/types and returns it as a list of selectlistitem
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<SelectListItem>> SortVaccineName()
         {
             var response = await _apiController.GetDoseTypes();
@@ -59,7 +67,7 @@ namespace DSUGrupp1.Models.ViewModels
         }
 
         /// <summary>
-        /// Gets all vaccination centrals from bulk vaccinationdata. Note there is designated apicall for this but sorting through the data already collected is faster.
+        /// Gets all vaccination centrals from a list of Patients, returns a list of selectlistitem with every vaccinationcentral
         /// </summary>
         /// <param name="vaccinationData"></param>
         /// <returns></returns>
@@ -77,29 +85,6 @@ namespace DSUGrupp1.Models.ViewModels
             }
 
             return sortedVaccinationCentrals;
-
-            //return newList;
-
-            //foreach (var list in vaccinationData)
-            //{
-            //    foreach (var patient in list.Patients)
-            //    {
-            //        foreach (var vaccination in patient.Vaccinations)
-            //        {
-            //            var vaccinationCentral = vaccination.VaccinationCentral;
-                        
-            //            if (newList.Any(v => v.SiteId == vaccinationCentral.SiteId) == false)
-            //            {
-            //                newList.Add(vaccinationCentral);
-            //            }
-            //            if(newList.Count > 20)
-            //            {
-            //                return newList;
-            //            }
-            //        }                   
-            //    }
-            //}
-            //return newList;
         }
     }
             
