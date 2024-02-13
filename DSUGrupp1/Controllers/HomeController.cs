@@ -58,7 +58,7 @@ namespace DSUGrupp1.Controllers
                 
                 ChartViewModel municipalityChart = await vaccinations.GenerateChart(Patients);
 
-                HomeViewModel model = new HomeViewModel();
+                HomeViewModel model = new HomeViewModel(Patients);
 
                 DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
                 //REFACTOR

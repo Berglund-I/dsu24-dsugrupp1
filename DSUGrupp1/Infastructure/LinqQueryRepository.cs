@@ -1,5 +1,6 @@
 ﻿using DSUGrupp1.Models;
 using DSUGrupp1.Models.DTO;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Xml.Linq;
 
@@ -108,6 +109,20 @@ namespace DSUGrupp1.Infastructure
                 .Where(p => filter.StartDate == DateTime.MinValue || p.Vaccinations.Any(v => v.VaccinationDate >= filter.StartDate))
                 .Where(p => filter.EndDate == DateTime.MinValue || p.Vaccinations.Any(v => v.VaccinationDate <= filter.EndDate)).ToList();
             return filteredPatients;
+        }
+
+        public static List<SelectListItem> GetDesoInformation(List<Patient> patients)
+        {
+            List<SelectListItem> uniqueDeSoCodesAndNames = patients
+                .GroupBy(p => p.DeSoCode)
+                .Select(g => new SelectListItem
+                {
+                    Value = g.Key, 
+                    Text = g.First().DeSoName
+                })
+                .OrderBy(item => item.Text)
+                .ToList();
+            return uniqueDeSoCodesAndNames;
         }
     }
 }
