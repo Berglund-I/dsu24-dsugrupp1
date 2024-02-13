@@ -20,6 +20,7 @@ namespace DSUGrupp1.Models.ViewModels
 
         public string JsonChartDose { get; set; }
         public string JsonChartGender { get; set; }
+        public string JsonChartFilter { get; set; }
         public int Population {  get; set; }
         public int TotalPatients { get; set; }
         public int DoseOne { get; set; }
@@ -54,11 +55,13 @@ namespace DSUGrupp1.Models.ViewModels
             {
                 var chart = GetChartDose(/*chartValues.Result*/);
                 var chartTwo = GetChartGender(/*chartValues.Result*/);
-                var chartThree = GetChartOverTime(/*chartValues.Result*/);
+                var chartThree = GetChartFilter(/*chartValues.Result*/);
+                var chartFour = GetChartOverTime(/*chartValues.Result*/);
 
                 JsonChartDose = _chartViewModel.SerializeJson(chart);
                 JsonChartGender = _chartViewModel.SerializeJson(chartTwo);
-                JsonChartVaccinationOverTime = _chartViewModel.SerializeJson(chartThree);
+                JsonChartFilter = _chartViewModel.SerializeJson(chartThree);
+                JsonChartVaccinationOverTime = _chartViewModel.SerializeJson(chartFour);
             };
 
             //var chart = GetChartDose(/*chartValues.Result*/);
@@ -133,10 +136,29 @@ namespace DSUGrupp1.Models.ViewModels
         //    {
         //        Patient patient = new Patient(p, doseData);
         //        Patients.Add(patient);
-        //    }          
+        //    }
         //}
 
-      
+        /// <summary>
+        /// Sets data for the chart that displays the first filter charts on the detail site
+        /// </summary>
+        /// <returns></returns>
+        private Chart GetChartFilter(/*Chart chartValues*/)
+        {
+            List<string> labels = new List<string>()
+            {
+                "Test",
+                "Test",
+            };
+            List<string> colors = new List<string>()
+            {
+                "#ffffff",
+                "#000000",
+            };
+            Chart chart = _chartViewModel.CreateChart("Test test test: ", "bar", labels, "Test", [VaccinatedMales, VaccinatedFemales], colors, 5);
+            return chart;
+        }
+
         /// <summary>
         /// Gets and sets values for the class properties
         /// </summary>

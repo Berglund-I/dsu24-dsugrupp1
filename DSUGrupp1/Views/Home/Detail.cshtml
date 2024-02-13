@@ -50,6 +50,64 @@
         </div>
     </div>
 }
+@section CenterContentThree {
+    <h4>Filtrering</h4>
+
+    <div class="filters">
+        @Html.DropDownListFor(d => d.FilterDropDown.SelectedBatch, Model.FilterDropDown.Batches, "Välj Batch-nummer", new { @id = "batch-number-dropdown", @class = "dropdown-filter" })
+        @Html.DropDownListFor(d => d.FilterDropDown.SelectedBatch, Model.FilterDropDown.VaccineName, "Välj vaccintyp", new { @id = "vaccine-type-dropdown", @class = "dropdown-filter"})
+        @Html.DropDownListFor(d => d.FilterDropDown.SelectedBatch, Model.FilterDropDown.VaccineCentral, "Välj vaccinationscentral", new { @id = "vaccine-central-dropdown", @class = "dropdown-filter" })
+        <select name="Kön" id="gender-drop-down" class="dropdown-filter">
+            <option value="">Båda</option>
+            <option value="Male">Män</option>
+            <option value="Female">Kvinnor</option>
+        </select>
+        <select name="dose-number" id="dose-dropdown" class="dropdown-filter">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+        </select>
+
+        <div class="age-slider-filter">
+            <div class="multi-range-slider">
+                <div id="left-value" class="slider-value detail-slider-value"></div>
+                <input type="range" id="input-left" min="16" max="85" value="16">
+                <div id="right-value" class="slider-value detail-slider-value"></div>
+                <input type="range" id="input-right" min="16" max="85" value="85">
+
+                <div class="slider">
+                    <div class="track"></div>
+                    <div class="range"></div>
+                    <div class="thumb left"></div>
+                    <div class="thumb right"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <button id="confirm-filters">Filterknapp</button>
+
+    </div>
+    
+    
+    <div class="deSo-container">
+        <div class="left-div">
+        <div charts="charts">
+            <canvas id ="left-filter-chart"></canvas>
+        </div>
+        </div>
+        <div class="right-div">
+        <div class="charts">
+            <canvas id="right-filter-chart"></canvas>
+        </div>
+        </div>
+    </div>
+
+}
 
 @section CenterContentFour {
     <div class="deSo-container">
