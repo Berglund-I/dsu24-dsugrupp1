@@ -115,12 +115,12 @@ namespace DSUGrupp1.Controllers
 
         public IActionResult GetChartFromFilteredOptions([FromBody] FilterDto data)
         {
-            
-            var response1 = LinqQueryRepository.GetSortedPatients(data, ListOfPatients.PatientList);
+            var response = LinqQueryRepository.GetSortedPatients(data, ListOfPatients.PatientList);
+            var chart = new ChartViewModel();
 
-            var response = data;
+            var newChart = chart.CreateChart("testchart", "bar", ["test"], "Data", [response.Count()], ["#0000FF"], 5);
 
-            return Ok();
+            return Ok(newChart);
         }
 
 

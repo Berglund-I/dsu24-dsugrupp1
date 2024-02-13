@@ -21,12 +21,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const maxAge = document.getElementById('input-right').value;
         const batchNumber = document.getElementById('batch-number-dropdown').value;
         const vaccineType = document.getElementById('vaccine-type-dropdown').value;
-        const vaccineCentral = document.getElementById('vaccine-central-dropdown').value;
+        let vaccineCentral = document.getElementById('vaccine-central-dropdown').value;
+        if (vaccineCentral == "") {
+            vaccineCentral = 0;
+        }
         const doseCount = document.getElementById('dose-dropdown').value;
 
-        console.log(vaccineType);
-
-        const data = {
+        const vaccineData = {
             batchNumber: batchNumber,
             gender: gender,
             minAge: minAge,
@@ -37,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
             //startDate: 2,
             //endDate: 3,
         };
+        console.log(vaccineData);
 
         fetch('/Home/GetChartFromFilteredOptions', {
             method: 'POST',
@@ -44,9 +46,27 @@ document.addEventListener('DOMContentLoaded', function () {
                 'Content-type': 'application/json',
 
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(vaccineData),
         })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Inte bra');
+                }
+                return response.json();
+            })
+            .then(data => {
 
+                if (leftFilterChart) {
+                    leftFilterChart.destroy();
+                }
+
+                const contextTest = document.getElementById('left-filter-chart').getContext('2d');
+                leftFilterChart = new Chart(contextTest, data);
+
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         resetSliders();
     });
 });
