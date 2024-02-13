@@ -321,6 +321,14 @@ footer {
     width: 98% !important;
 }
 
+#gender-paragraf-left,
+#gender-paragraf-right,
+#vaccination-over-time-paragraf-left,
+#vaccination-over-time-paragraf-right {
+    text-align: center;
+    font-size: 20px;
+}
+
 
 @media (min-width: 768px) {
     html {

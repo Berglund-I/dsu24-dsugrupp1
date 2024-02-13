@@ -12,7 +12,6 @@ let rightOverTimeChart;
 
 document.addEventListener('DOMContentLoaded', function () {
     const deSoDropdown = document.getElementById('left-deSo-dropdown');
-
     deSoDropdown.addEventListener('change', function () {
         let selectedDeSo = this.value;
 
@@ -65,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 leftChart = new Chart(ctx, chart);
-                console.log(data.jsonVaccinationChartOverTime);
+               
                 if (leftGenderChart) {
                     leftGenderChart.destroy();
                 }
@@ -74,6 +73,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const genderChart = JSON.parse(data.jsonChartGender);
 
                 leftGenderChart = new Chart(context, genderChart);
+                const leftGenderChartParagraph = document.getElementById("gender-paragraf-left");
+                leftGenderChartParagraph.textContent = "Cirkeldiagram som presenterar vaccinationsgraden i procent mellan kvinnor och män.";
 
 
                 if (leftOverTimeChart) {
@@ -83,9 +84,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 const ctext = document.getElementById('left-over-time-chart').getContext('2d');
                 const overTimeChart = JSON.parse(data.jsonChartVaccinationOverTime);
 
-                
-
                 leftOverTimeChart = new Chart(ctext, overTimeChart);
+                const leftOverTimeChartParagraph = document.getElementById("vaccination-over-time-paragraf-left");
+                leftOverTimeChartParagraph.textContent = "Ett linjegram som visar antal vaccinerade per vecka under åren 2020-2023.";
+
+                
 
             })
             .catch((error) => {
@@ -163,6 +166,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 const genderChart = JSON.parse(data.jsonChartGender);
 
                 rightGenderChart = new Chart(context, genderChart);
+                const rightGenderChartParagraph = document.getElementById("gender-paragraf-right");
+                rightGenderChartParagraph.textContent = "Cirkeldiagram som presenterar vaccinationsgraden i procent mellan kvinnor och män.";
+                
 
                 if (rightOverTimeChart) {
                     rightOverTimeChart.destroy();
@@ -172,6 +178,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const overTimeChart = JSON.parse(data.jsonChartVaccinationOverTime);
 
                 rightOverTimeChart = new Chart(ctext, overTimeChart);
+                const rightOverTimeChartParagraph = document.getElementById("vaccination-over-time-paragraf-right");
+                rightOverTimeChartParagraph.textContent = "Ett linjegram som visar antal vaccinerade per vecka under åren 2020-2023.";
 
             })
             .catch((error) => {
