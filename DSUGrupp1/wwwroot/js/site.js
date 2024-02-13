@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const batchNumber = document.getElementById('batch-number-dropdown').value;
         const vaccineType = document.getElementById('vaccine-type-dropdown').value;
         const vaccineCentral = document.getElementById('vaccine-central-dropdown').value;
+        const doseCount = document.getElementById('dose-dropdown').value;
 
         console.log(vaccineType);
 
@@ -30,8 +31,8 @@ document.addEventListener('DOMContentLoaded', function () {
             gender: gender,
             minAge: minAge,
             maxAge: maxAge,
-            siteId: 4,
-            numberOfDoses: 2,
+            siteId: vaccineCentral,
+            numberOfDoses: doseCount,
             typeOfVaccine: vaccineType,
             //startDate: 2,
             //endDate: 3,

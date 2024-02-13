@@ -55,16 +55,17 @@ namespace DSUGrupp1.Controllers
                 GetPatient(vaccineDataAllDeso, batchTest);
                 
 
-                HomeViewModel model = new HomeViewModel();
 
                 DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
                 VaccinationOverTimeViewModel vaccinationOverTimeStatistics = new VaccinationOverTimeViewModel(apiResult1, vaccineDataAllDeso);
+
 
                 ChartViewModel chartLineOverTime = vaccinationOverTimeStatistics.GenerateLineChart();
 
                 ChartViewModel ageChart = ageStatistics.GenerateAgeChartForVaccinated();
                 HomeModelStorage.AgeStatistics = ageStatistics;
 
+                HomeViewModel model = new HomeViewModel(ListOfPatients.PatientList);
 
                 DisplayGenderStatisticsViewModel genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, vaccineDataAllDeso);
                 ChartViewModel chartGenderFemales = genderStatistics.GenerateChartFemales();

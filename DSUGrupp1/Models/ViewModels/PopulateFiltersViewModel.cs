@@ -13,15 +13,15 @@ namespace DSUGrupp1.Models.ViewModels
         public List<SelectListItem> VaccineName { get; set; }
         public List<SelectListItem> VaccineCentral {  get; set; }
 
-        public PopulateFiltersViewModel()
+        public PopulateFiltersViewModel(List<Patient> patients)
         {
             _apiController = new ApiController();
             var sortedBatchData = SortBatchNumber();
             var sortedVaccineName = SortVaccineName();
-            var sortedVaccineCentral = SortVaccineCentral();
+            var sortedVaccineCentral = GetVaccinationSites(patients);
             Batches = sortedBatchData.Result;
             VaccineName = sortedVaccineName.Result;
-            VaccineCentral = sortedVaccineCentral.Result;
+            VaccineCentral = sortedVaccineCentral;
         }
 
         public async Task<List<SelectListItem>> SortBatchNumber()
@@ -58,48 +58,48 @@ namespace DSUGrupp1.Models.ViewModels
 
         }
 
-        public async Task<List<SelectListItem>> SortVaccineCentral()
-        {
-            List<VaccinationDataFromSpecificDeSoDto> vaccinationData = new List<VaccinationDataFromSpecificDeSoDto>();
-            var vaccineCentrals = GetVaccinationSites(vaccinationData);
-            List<SelectListItem> sortedCentralData = new List<SelectListItem>();
-            //for (int i = 0; i < vaccineCentrals.Data.Count(); i++)
-            //{
-            //    //SelectListItem centralData = new SelectListItem { Value = response. }
-            //}
-
-            return sortedCentralData;
-        }
-
         /// <summary>
         /// Gets all vaccination centrals from bulk vaccinationdata. Note there is designated apicall for this but sorting through the data already collected is faster.
         /// </summary>
         /// <param name="vaccinationData"></param>
         /// <returns></returns>
-        public static List<VaccinationCentralDto> GetVaccinationSites(List<VaccinationDataFromSpecificDeSoDto> vaccinationData) 
+        public static List<SelectListItem> GetVaccinationSites(List<Patient> patients) 
         {
-            List<VaccinationCentralDto> newList = new List<VaccinationCentralDto>();
+            List<(int siteId, string siteName)> newList = patients
+                .SelectMany(p => p.Vaccinations).Select(s => (s.VaccinationSiteId, s.VaccinationSiteName)).Distinct().ToList();
 
-            foreach (var list in vaccinationData)
+            List<SelectListItem> sortedVaccinationCentrals = new List<SelectListItem>();
+
+            for (int i = 0; i < newList.Count; i++)
             {
-                foreach (var patient in list.Patients)
-                {
-                    foreach (var vaccination in patient.Vaccinations)
-                    {
-                        var vaccinationCentral = vaccination.VaccinationCentral;
-                        
-                        if (newList.Any(v => v.SiteId == vaccinationCentral.SiteId) == false)
-                        {
-                            newList.Add(vaccinationCentral);
-                        }
-                        if(newList.Count > 20)
-                        {
-                            return newList;
-                        }
-                    }                   
-                }
+                SelectListItem vaccineData = new SelectListItem { Value = newList[i].siteId.ToString(), Text = newList[i].siteName };
+                sortedVaccinationCentrals.Add(vaccineData);
             }
-            return newList;
+
+            return sortedVaccinationCentrals;
+
+            //return newList;
+
+            //foreach (var list in vaccinationData)
+            //{
+            //    foreach (var patient in list.Patients)
+            //    {
+            //        foreach (var vaccination in patient.Vaccinations)
+            //        {
+            //            var vaccinationCentral = vaccination.VaccinationCentral;
+                        
+            //            if (newList.Any(v => v.SiteId == vaccinationCentral.SiteId) == false)
+            //            {
+            //                newList.Add(vaccinationCentral);
+            //            }
+            //            if(newList.Count > 20)
+            //            {
+            //                return newList;
+            //            }
+            //        }                   
+            //    }
+            //}
+            //return newList;
         }
     }
             

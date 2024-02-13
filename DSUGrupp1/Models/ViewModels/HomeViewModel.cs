@@ -5,11 +5,11 @@ namespace DSUGrupp1.Models.ViewModels
 {
     public class HomeViewModel
     {
-        public HomeViewModel() 
+        public HomeViewModel(List<Patient> patients) 
         {
             Charts = new List<ChartViewModel>();
             DeSoDropDown = new PopulateDeSoDropDownViewModel();
-            FilterDropDown = new PopulateFiltersViewModel();
+            FilterDropDown = new PopulateFiltersViewModel(patients);
         }
         public List<ChartViewModel> Charts { get; set; }
         public PopulateDeSoDropDownViewModel DeSoDropDown { get; set; }
