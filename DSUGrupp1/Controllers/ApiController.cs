@@ -136,7 +136,7 @@ namespace DSUGrupp1.Controllers
 
 
         [HttpPost]
-        public async Task<PopulationDto> GetPopulationInSpecificDeSo(string desoCode, string year, string gender)
+        public async Task<PopulationDto> GetPopulationInSpecificDeSo(List<string> desoCode, string year, string gender)
         {
             string requestUrl = "https://api.scb.se/OV0104/v1/doris/sv/ssd/START/BE/BE0101/BE0101Y/FolkmDesoAldKonN";
 
@@ -147,7 +147,7 @@ namespace DSUGrupp1.Controllers
                     new QueryItem
                     {
                         Code = "Region",
-                        Selection = new Selection { Filter = "vs:DeSoHE", Values = new List<string> { $"{desoCode}" } }
+                        Selection = new Selection { Filter = "vs:DeSoHE", Values = desoCode }
                     },
                     new QueryItem
                     {
