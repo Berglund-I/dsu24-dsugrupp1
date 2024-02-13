@@ -102,11 +102,11 @@ namespace DSUGrupp1.Controllers
 
         public async Task<ActionResult> Map()
         {
-            var apiResult2 = await _apiController.GetVaccinationsCount();
-            var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
-            var mapVaccinationPercentViewModel = new MapVaccinationPercentViewModel();
-            await mapVaccinationPercentViewModel.InitializeAsync(vaccineDataAllDeso);
-            return View(mapVaccinationPercentViewModel);
+            //var apiResult2 = await _apiController.GetVaccinationsCount();
+            //var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
+            //var mapVaccinationPercentViewModel = new MapVaccinationPercentViewModel();
+            //await mapVaccinationPercentViewModel.InitializeAsync(vaccineDataAllDeso);
+            return View();
        
         }
 
