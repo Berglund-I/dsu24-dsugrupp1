@@ -93,10 +93,6 @@ namespace DSUGrupp1.Infastructure
 
         public static List<Patient> GetPatientsByDates(List<Patient> patients, DateTime startDate,DateTime endDate)
         {
-            //patient.Vaccinations.dateOfVaccination bör vara DateTime, inte string
-            //DateTime dateOne = DateTime.Parse("2020-09-14");
-            //DateTime dateTwo = DateTime.Parse("2021-09-14");
-
             List<Patient> result = patients
             .Where(patient => patient.Vaccinations.Any(d => d.VaccinationDate >= startDate &&
             d.VaccinationDate <= endDate))
@@ -126,7 +122,7 @@ namespace DSUGrupp1.Infastructure
                 .Where(p => filter.EndDate == DateTime.MinValue || p.Vaccinations.Any(v => v.VaccinationDate <= filter.EndDate)).ToList();
             return filteredPatients;
         }
-
+        
         public static List<SelectListItem> GetDesoInformation(List<Patient> patients)
         {
             List<SelectListItem> uniqueDeSoCodesAndNames = patients
@@ -139,6 +135,21 @@ namespace DSUGrupp1.Infastructure
                 .OrderBy(item => item.Text)
                 .ToList();
             return uniqueDeSoCodesAndNames;
+        }
+        /// <summary>
+        /// Sorts resident by specifik deSo and gender
+        /// </summary>
+        /// <param name="residents"></param>
+        /// <param name="deSo"></param>
+        /// <param name="gender"></param>
+        /// <returns></returns>
+        public static List<Resident> GetResidentsByGender(List<Resident> residents, string deSo, string gender)
+        {
+            List<Resident> sortedResidents = residents
+            .Where(resident => resident.DeSoCode == deSo)
+            .Where(resident => resident.Gender == gender)
+            .ToList();
+            return sortedResidents;
         }
       
         /// <summary>

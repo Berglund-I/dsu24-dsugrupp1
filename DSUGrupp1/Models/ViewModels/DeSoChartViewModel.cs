@@ -35,12 +35,15 @@ namespace DSUGrupp1.Models.ViewModels
         public List<DatasetsDto> Datasets { get; set; }
         public List<Patient> Patients { get; set; }
 
-        public DeSoChartViewModel(string deSoCode, List<Patient> patients)
+
+
+
+        public DeSoChartViewModel(string deSoCode, List<Patient> patients, List<Resident> residents)
         {
             SelectedDeSo = deSoCode;
             Patients = patients;
 
-            if (GetSetValuesForChart(deSoCode).Result)
+            if (GetSetValuesForChart(deSoCode, patients, residents).Result)
             {
                 var chart = GetChartDose(/*chartValues.Result*/);
                 var chartTwo = GetChartGender(/*chartValues.Result*/);              
@@ -117,25 +120,23 @@ namespace DSUGrupp1.Models.ViewModels
         /// </summary>
         /// <param name="deSoCode"></param>
         /// <returns></returns>
-        private async Task<bool> GetSetValuesForChart(string deSoCode)
+        private async Task<bool> GetSetValuesForChart(string deSoCode, List<Patient> patients, List<Resident> residents)
         {
-            List<string> deSoList = new List<string>();
-            deSoList.Add(deSoCode);
-            var populationMales = await _apiController.GetPopulationInSpecificDeSo(deSoList, "2022", "1");
-            var populationFemales = await _apiController.GetPopulationInSpecificDeSo(deSoList, "2022", "2");
-
+    
+            var populationMales = LinqQueryRepository.GetResidentsByGender(residents, deSoCode, "Male");
+            var populationFemales = LinqQueryRepository.GetResidentsByGender(residents, deSoCode, "Female");
             var desoPatients = LinqQueryRepository.GetPatientsByDeSo(Patients, deSoCode);
             var getBatches = await _apiController.GetDoseTypes();
 
-            Population = int.Parse(populationMales.Data[0].Values[0]) + int.Parse(populationFemales.Data[0].Values[0]);
+            Population = populationMales.Count() + populationFemales.Count();
             TotalPatients = desoPatients.Count();
 
             VaccinatedMales = LinqQueryRepository.GetPatientsByGender(desoPatients, "Male").Count();
             VaccinatedFemales = LinqQueryRepository.GetPatientsByGender(desoPatients, "Female").Count();
 
             List<double> vaccinatedGenderPercent = _displayGenderStatistics.CountVaccinatedGenderPercent(
-                int.Parse(populationMales.Data[0].Values[0]), 
-                int.Parse(populationFemales.Data[0].Values[0]), 
+                populationMales.Count(),
+                populationFemales.Count(), 
                 VaccinatedMales, 
                 VaccinatedFemales);
 
