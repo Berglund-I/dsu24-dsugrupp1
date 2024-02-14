@@ -1,5 +1,6 @@
 ﻿using DSUGrupp1.Models;
 using DSUGrupp1.Models.DTO;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Xml.Linq;
 
@@ -7,6 +8,10 @@ namespace DSUGrupp1.Infastructure
 {
     public static class LinqQueryRepository
     {
+        public static List<Patient> GetPatientsByDeSo(List<Patient> patients, string deSoCode)
+        {
+            return patients.Where(patient => patient.DeSoCode == deSoCode).ToList();
+        }
         /// <summary>
         /// Gets a list of all patients of a specific gender
         /// </summary>
@@ -48,6 +53,12 @@ namespace DSUGrupp1.Infastructure
 
             return result;
         }
+        public static List<Patient> GetPatientsWithBoosterDose(List<Patient> patients)
+        {
+            return patients
+                .Where(patient => patient.Vaccinations.Count > 3)
+                .ToList();
+        }
         /// <summary>
         /// Gets a list of all patients within the age span
         /// </summary>
@@ -82,15 +93,15 @@ namespace DSUGrupp1.Infastructure
             return result;
         }
 
-        public static List<Patient> GetPatientsByDates(List<Patient> patients)
+        public static List<Patient> GetPatientsByDates(List<Patient> patients, DateTime startDate,DateTime endDate)
         {
             //patient.Vaccinations.dateOfVaccination bör vara DateTime, inte string
-            DateTime dateOne = DateTime.Parse("2020-09-14");
-            DateTime dateTwo = DateTime.Parse("2021-09-14");
+            //DateTime dateOne = DateTime.Parse("2020-09-14");
+            //DateTime dateTwo = DateTime.Parse("2021-09-14");
 
             List<Patient> result = patients
-            .Where(patient => patient.Vaccinations.Any(d => d.VaccinationDate >= dateOne &&
-            d.VaccinationDate <= dateTwo))
+            .Where(patient => patient.Vaccinations.Any(d => d.VaccinationDate >= startDate &&
+            d.VaccinationDate <= endDate))
             .ToList();
 
             return result;
@@ -105,6 +116,7 @@ namespace DSUGrupp1.Infastructure
         public static List<Patient> GetSortedPatients(FilterDto filter, List<Patient> patients)
         {
             var filteredPatients = patients
+                .Where(p => string.IsNullOrEmpty(filter.DeSoCode) || p.DeSoCode == filter.DeSoCode)
                 .Where(p => string.IsNullOrEmpty(filter.BatchNumber) || p.Vaccinations.Any(v => v.BatchNumber == filter.BatchNumber))
                 .Where(p => string.IsNullOrEmpty(filter.Gender) || p.Gender == filter.Gender)
                 .Where(p => filter.MinAge == 0 || p.AgeAtFirstVaccination >= filter.MinAge)
@@ -117,13 +129,18 @@ namespace DSUGrupp1.Infastructure
             return filteredPatients;
         }
 
-        public static List<Patient> GetPatientsByDeSo(List<Patient> patients, string deSo)
+        public static List<SelectListItem> GetDesoInformation(List<Patient> patients)
         {
-            List<Patient> result = patients
-            .Where(patient => patient.DeSoCode == deSo)
-            .ToList();
-
-            return result;
+            List<SelectListItem> uniqueDeSoCodesAndNames = patients
+                .GroupBy(p => p.DeSoCode)
+                .Select(g => new SelectListItem
+                {
+                    Value = g.Key, 
+                    Text = g.First().DeSoName
+                })
+                .OrderBy(item => item.Text)
+                .ToList();
+            return uniqueDeSoCodesAndNames;
         }
 
         /// <summary>
@@ -151,6 +168,7 @@ namespace DSUGrupp1.Infastructure
             List<string> desoList = patients.Select(d => d.DeSoCode).Distinct().ToList();
             return desoList;
         }
+
 
     }
 }

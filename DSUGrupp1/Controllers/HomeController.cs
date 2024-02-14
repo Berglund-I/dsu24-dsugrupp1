@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Text.Json.Nodes;
 using System.Collections.Generic;
 using DSUGrupp1.Infastructure;
+using Microsoft.Extensions.Caching.Memory;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
@@ -18,8 +19,13 @@ namespace DSUGrupp1.Controllers
     public class HomeController : Controller
     {
         private readonly ApiController _apiController;
+
+        private readonly IMemoryCache _memoryCache;
+
+
         private readonly ListOfPatients _patientList;
         private readonly ListOfPopulation _listOfResidents;
+
         private readonly ILogger<HomeController> _logger;
         private readonly object lockObject = new object();
 
@@ -27,10 +33,13 @@ namespace DSUGrupp1.Controllers
 
         //Shouldn't be possible to change when the initial values is set
         public List<Patient> Patients { get; set; } = new List<Patient>();
-        public HomeController(ILogger<HomeController> logger)
+        const string PatientsCacheKey = "PatientsData";
+        public HomeController(ILogger<HomeController> logger,IMemoryCache memoryCache)
         {
             _logger = logger;
             _apiController = new ApiController();
+            _memoryCache = memoryCache;
+
         }
 
         public async Task<ActionResult> Index()
@@ -40,39 +49,44 @@ namespace DSUGrupp1.Controllers
             {
 
                 VaccinationViewModel vaccinations = new VaccinationViewModel();
-
-                ChartViewModel municipalityChart = await vaccinations.GenerateChart();
+                
 
 
                 // Code exists here for future use when working with batches/filters
                 DoseTypeViewModel batches = new DoseTypeViewModel();
+                
                 var batchTest = await batches.GetBatches();
-
-                //HomeViewModel model = new HomeViewModel();
-                //model.Population = await _apiController.GetPopulationInSpecificDeSo("2380A0010", "2022");   
-                //model.DataFromSpecificDeSo = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
 
                 var apiResult1 = await _apiController.GetPopulationCount("2380", "2022");
                 var apiResult2 = await _apiController.GetVaccinationsCount();
+
                 var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
                 
 
-                GetPatient(vaccineDataAllDeso, batchTest);
 
-                GetResident(apiResult2);
+                await GetPatient(vaccineDataAllDeso, batchTest);
+                await GetResident(apiResult2);
+                
+                ChartViewModel municipalityChart = await vaccinations.GenerateChart(Patients);
 
-                DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
-                VaccinationOverTimeViewModel vaccinationOverTimeStatistics = new VaccinationOverTimeViewModel(apiResult1, vaccineDataAllDeso);
+                //HomeViewModel model = new HomeViewModel(Patients);
 
+
+                DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(Patients);
+
+
+                VaccinationOverTimeViewModel vaccinationOverTimeStatistics = new VaccinationOverTimeViewModel(Patients);
 
                 ChartViewModel chartLineOverTime = vaccinationOverTimeStatistics.GenerateLineChart();
 
                 ChartViewModel ageChart = ageStatistics.GenerateAgeChartForVaccinated();
+                
                 HomeModelStorage.AgeStatistics = ageStatistics;
 
                 HomeViewModel model = new HomeViewModel(ListOfPatients.PatientList);
 
-                DisplayGenderStatisticsViewModel genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, vaccineDataAllDeso);
+                DisplayGenderStatisticsViewModel genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, Patients);
+
                 ChartViewModel chartGenderFemales = genderStatistics.GenerateChartFemales();
                 ChartViewModel chartGenderMales = genderStatistics.GenerateChartMales();
                 ChartViewModel chartGenderBoth = genderStatistics.GenerateChartBothGenders();
@@ -85,6 +99,7 @@ namespace DSUGrupp1.Controllers
                 model.Charts.Add(chartGenderBoth);
 
                 HomeModelStorage.ViewModel = model;
+
                 //var data = new FilterDto();
                 //data.Gender = "Male";
                 //data.BatchNumber = "AZ002";
@@ -94,6 +109,7 @@ namespace DSUGrupp1.Controllers
                 //var result = GetChartFromFilteredOptions(data);
                 LinqQueryRepository.GetDesoList(Patients);
 
+                _memoryCache.Set(PatientsCacheKey, Patients);
                 return View(model);
             }
             return View(HomeModelStorage.ViewModel);
@@ -110,23 +126,35 @@ namespace DSUGrupp1.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetChartFromDeSoCode([FromBody] TestFetch data)
+        public IActionResult GetChartFromDeSoCode([FromBody] DesoChartRequest data)
         {
-            var response = new DeSoChartViewModel(data.SelectedDeSo);
+            _memoryCache.TryGetValue(PatientsCacheKey, out List<Patient> cachedPatients);
+
+            if (cachedPatients != null)
+            {
+                var response = new DeSoChartViewModel(data.SelectedDeSo, cachedPatients);
+                return Ok(response);          
+                
+            }
+            return BadRequest();
             
-            return Ok(response);          
         }
 
         [HttpPost]
 
         public IActionResult GetChartFromFilteredOptions([FromBody] FilterDto data)
         {
-            
-            var response1 = LinqQueryRepository.GetSortedPatients(data, ListOfPatients.PatientList);
+            var response = LinqQueryRepository.GetSortedPatients(data, ListOfPatients.PatientList);
+            var patients = response.Count();
+            var chart = new ChartViewModel();
 
-            var response = data;
+            if (patients <= 5){
+                var notEnoughPatients = chart.CreateChart("INTE TILLRÄCKLIGT MED PATIENTER", "bar", ["Error"], "Ingen data tillgänglig", [0], ["#ffffff"], 0);
+                return Ok(notEnoughPatients);
+            }
 
-            return Ok();
+            var newChart = chart.CreateChart("Antal patienter utifrån filtrering", "bar", ["Antal patienter"], "Patienter", [patients], ["#0000FF"], 5);
+            return Ok(newChart);
         }
 
 
@@ -162,11 +190,10 @@ namespace DSUGrupp1.Controllers
         }
 
         
-        public async void GetPatient(List<VaccinationDataFromSpecificDeSoDto> vaccinationData, DoseTypeDto doseData)
+        public async Task GetPatient(List<VaccinationDataFromSpecificDeSoDto> vaccinationData, DoseTypeDto doseData)
         {     
 
             var response = await _apiController.GetDeSoNames();   
-            var time = Stopwatch.StartNew();
             Parallel.ForEach(vaccinationData, v =>
             {
                 Parallel.ForEach(v.Patients, p =>
@@ -183,7 +210,7 @@ namespace DSUGrupp1.Controllers
             ListOfPatients.PatientList = Patients;
         }
 
-        public async void GetResident(VaccineCountDto vaccineCount)
+        public async Task GetResident(VaccineCountDto vaccineCount)
         {
             List<string> deSos = vaccineCount.Data.Select(d => d.Deso).ToList();
 
@@ -195,19 +222,15 @@ namespace DSUGrupp1.Controllers
             population.AddRange(responsFemale.Data);
 
             List<Resident> sortedPopulation = new List<Resident>();
-
-            Parallel.ForEach(population, p =>
+            foreach (var p in population)
             {
                 for (int i = 0; i < int.Parse(p.Values[0]); i++)
                 {
                     Resident resident = new Resident(p);
-                    lock (lockObject)
-                    {
-                        sortedPopulation.Add(resident);
-                    }
-                }
-            });
 
+                    sortedPopulation.Add(resident);
+                }
+            }
             ListOfPopulation.ListOfResidents = sortedPopulation;
         }
     }

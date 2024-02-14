@@ -8,7 +8,7 @@ namespace DSUGrupp1.Models.ViewModels
         public HomeViewModel(List<Patient> patients) 
         {
             Charts = new List<ChartViewModel>();
-            DeSoDropDown = new PopulateDeSoDropDownViewModel();
+            DeSoDropDown = new PopulateDeSoDropDownViewModel(patients);
             FilterDropDown = new PopulateFiltersViewModel(patients);
         }
         public List<ChartViewModel> Charts { get; set; }
@@ -16,6 +16,5 @@ namespace DSUGrupp1.Models.ViewModels
         public bool GenderMale { get; set; }
         public bool GenderFemale { get; set; }
         public PopulateFiltersViewModel FilterDropDown { get; set; }
-
     }
 }

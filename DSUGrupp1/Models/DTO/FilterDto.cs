@@ -5,6 +5,8 @@ namespace DSUGrupp1.Models.DTO
 {
     public class FilterDto
     {
+        [JsonProperty("deSoCode")]
+        public string DeSoCode { get; set; }
         [JsonProperty("batchNumber")]
         public string BatchNumber { get; set; }
         [JsonProperty("gender")]

@@ -7,26 +7,42 @@ let leftChart;
 let rightChart;
 let leftGenderChart;
 let rightGenderChart;
-let leftFilterChart;
+/*let leftFilterChart;*/
 let rightFilterChart;
 let leftOverTimeChart; 
 let rightOverTimeChart;
+
+let todaysDate = new Date();
+let dd = todaysDate.getDate();
+let mm = todaysDate.getMonth() + 1;
+if (mm < 10) { mm = '0' + mm; }
+let yyyy = todaysDate.getFullYear();
+let newDate = yyyy + "-" + mm + "-" + dd;
+
+let endDate = document.getElementById('end-date');
+endDate = newDate;
+
 
 document.addEventListener('DOMContentLoaded', function () {
     filterButton = document.getElementById('confirm-filters');
     filterButton.addEventListener('click', function () {
 
+        const deSoCode = document.getElementById('filter-deSo-dropdown').value;
         const gender = document.getElementById('gender-drop-down').value;
         const minAge = document.getElementById('input-left').value;
         const maxAge = document.getElementById('input-right').value;
         const batchNumber = document.getElementById('batch-number-dropdown').value;
         const vaccineType = document.getElementById('vaccine-type-dropdown').value;
-        const vaccineCentral = document.getElementById('vaccine-central-dropdown').value;
+        let vaccineCentral = document.getElementById('vaccine-central-dropdown').value;
+        if (vaccineCentral == "") {
+            vaccineCentral = 0;
+        }
         const doseCount = document.getElementById('dose-dropdown').value;
+        const startDate = document.getElementById('start-date').value;
+        endDate = document.getElementById('end-date').value;
 
-        console.log(vaccineType);
-
-        const data = {
+        const vaccineData = {
+            deSoCode: deSoCode,
             batchNumber: batchNumber,
             gender: gender,
             minAge: minAge,
@@ -34,9 +50,10 @@ document.addEventListener('DOMContentLoaded', function () {
             siteId: vaccineCentral,
             numberOfDoses: doseCount,
             typeOfVaccine: vaccineType,
-            //startDate: 2,
-            //endDate: 3,
+            startDate: startDate,
+            endDate: endDate,
         };
+        console.log(vaccineData);
 
         fetch('/Home/GetChartFromFilteredOptions', {
             method: 'POST',
@@ -44,9 +61,27 @@ document.addEventListener('DOMContentLoaded', function () {
                 'Content-type': 'application/json',
 
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(vaccineData),
         })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Inte bra');
+                }
+                return response.json();
+            })
+            .then(data => {
 
+                if (rightFilterChart) {
+                    rightFilterChart.destroy();
+                }
+
+                const contextTest = document.getElementById('right-filter-chart').getContext('2d');
+                rightFilterChart = new Chart(contextTest, data);
+
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         resetSliders();
     });
 });
@@ -116,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 leftGenderChart = new Chart(context, genderChart);
                 const leftGenderChartParagraph = document.getElementById("gender-paragraf-left");
-                leftGenderChartParagraph.textContent = "Cirkeldiagram som presenterar vaccinationsgraden i procent mellan kvinnor och män.";
+                leftGenderChartParagraph.textContent = "Cirkeldiagram som presenterar vaccinationsgraden mellan kvinnor och män.";
 
 
                 if (leftOverTimeChart) {
@@ -131,15 +166,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 leftOverTimeChartParagraph.textContent = "Ett linjegram som visar antal vaccinerade per vecka under åren 2020-2023.";
 
                 
-
-                if (leftFilterChart) {
-                    leftFilterChart.destroy();
-                }
-
-                const contextTest = document.getElementById('left-filter-chart').getContext('2d');
-                const filterChart = JSON.parse(data.jsonChartFilter);
-
-                leftFilterChart = new Chart(contextTest, filterChart);
 
             })
             .catch((error) => {
@@ -218,17 +244,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 rightGenderChart = new Chart(context, genderChart);
                 const rightGenderChartParagraph = document.getElementById("gender-paragraf-right");
-                rightGenderChartParagraph.textContent = "Cirkeldiagram som presenterar vaccinationsgraden i procent mellan kvinnor och män.";
+                rightGenderChartParagraph.textContent = "Cirkeldiagram som presenterar vaccinationsgraden mellan kvinnor och män.";
                 
-
-                if (rightFilterChart) {
-                    rightFilterChart.destroy();
-                }
-
-                const contextTest = document.getElementById('right-filter-chart').getContext('2d');
-                const filterChart = JSON.parse(data.jsonChartFilter);
-
-                rightFilterChart = new Chart(contextTest, filterChart);
 
                 if (rightOverTimeChart) {
                     rightOverTimeChart.destroy();
