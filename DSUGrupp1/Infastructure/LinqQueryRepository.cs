@@ -1,8 +1,6 @@
 ﻿using DSUGrupp1.Models;
 using DSUGrupp1.Models.DTO;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
-using System.Xml.Linq;
 
 namespace DSUGrupp1.Infastructure
 {
@@ -142,14 +140,5 @@ namespace DSUGrupp1.Infastructure
                 .ToList();
             return uniqueDeSoCodesAndNames;
         }
-
-        //public static List<Patient> GetPatientsByDeSo(List<Patient> patients, string deSo)
-        //{
-        //    List<Patient> result = patients
-        //    .Where(patient => patient.DeSoCode == deSo)
-        //    .ToList();
-
-        //    return result;
-        //}
     }
 }

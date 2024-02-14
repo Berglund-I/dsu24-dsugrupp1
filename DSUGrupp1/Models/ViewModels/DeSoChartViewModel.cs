@@ -1,10 +1,6 @@
 ﻿using DSUGrupp1.Controllers;
 using DSUGrupp1.Infastructure;
 using DSUGrupp1.Models.DTO;
-using Newtonsoft.Json;
-using System.Drawing;
-using System.Globalization;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace DSUGrupp1.Models.ViewModels
@@ -37,11 +33,7 @@ namespace DSUGrupp1.Models.ViewModels
         public string SelectedDeSo {  get; set; }
         public string JsonChartVaccinationOverTime { get; set; }
         public List<DatasetsDto> Datasets { get; set; }
-        public List<Batch> Batches { get; set; }
         public List<Patient> Patients { get; set; }
-
-
-
 
         public DeSoChartViewModel(string deSoCode, List<Patient> patients)
         {
@@ -51,13 +43,11 @@ namespace DSUGrupp1.Models.ViewModels
             if (GetSetValuesForChart(deSoCode).Result)
             {
                 var chart = GetChartDose(/*chartValues.Result*/);
-                var chartTwo = GetChartGender(/*chartValues.Result*/);
-                var chartThree = GetChartFilter(/*chartValues.Result*/);
+                var chartTwo = GetChartGender(/*chartValues.Result*/);              
                 var chartFour = GetChartOverTime(/*chartValues.Result*/);
 
                 JsonChartDose = _chartViewModel.SerializeJson(chart);
                 JsonChartGender = _chartViewModel.SerializeJson(chartTwo);
-                JsonChartFilter = _chartViewModel.SerializeJson(chartThree);
                 JsonChartVaccinationOverTime = _chartViewModel.SerializeJson(chartFour);
             };
         }
@@ -121,36 +111,6 @@ namespace DSUGrupp1.Models.ViewModels
             Chart chart = _chartViewModel.CreateMultiSetChart("Antal vaccinationer per vecka", "line", weekLabels, Datasets);
             return chart;
         }
-      
-        //public void GetPatient(VaccinationDataFromSpecificDeSoDto patientData, DoseTypeDto doseData)
-        //{
-        //    Patients = new List<Patient>();
-        //    foreach (var p in patientData.Patients)
-        //    {
-        //        Patient patient = new Patient(p, doseData);
-        //        Patients.Add(patient);
-        //    }
-        //}
-
-        /// <summary>
-        /// Sets data for the chart that displays the first filter charts on the detail site
-        /// </summary>
-        /// <returns></returns>
-        private Chart GetChartFilter(/*Chart chartValues*/)
-        {
-            List<string> labels = new List<string>()
-            {
-                "Test",
-                "Test",
-            };
-            List<string> colors = new List<string>()
-            {
-                "#ffffff",
-                "#000000",
-            };
-            Chart chart = _chartViewModel.CreateChart("Hejsan hoppsan ", "bar", labels, "Test", [VaccinatedMales, VaccinatedFemales], colors, 5);
-            return chart;
-        }
 
         /// <summary>
         /// Gets and sets values for the class properties
@@ -202,7 +162,6 @@ namespace DSUGrupp1.Models.ViewModels
             DoseThree = doseCount[2];
             TotalInjections = doseCount[0] + doseCount[1] + doseCount[2] + doseCount[3];
 
-
             List<double> vaccinationPercentage = new List<double>();
 
             for (int i = 0; i < doseCount.Count() - 1; i++)
@@ -210,10 +169,7 @@ namespace DSUGrupp1.Models.ViewModels
                 vaccinationPercentage.Add(_vaccinationViewModel.CalculateVaccinationPercentage(Population, doseCount[i]));
             }
             TotalPopulationVaccinationPercentage = vaccinationPercentage;
-
-            GetBatches(desoPatients);
-       
-          
+               
             List<DatasetsDto> datasets = new List<DatasetsDto>();
             List<string> colors = new List<string>()
             {
@@ -222,7 +178,6 @@ namespace DSUGrupp1.Models.ViewModels
                 "#8900f2",
                 "#f20089",
             };
-
 
             for (int year = 2020; year <= 2023; year++)
             {
@@ -237,29 +192,8 @@ namespace DSUGrupp1.Models.ViewModels
                 );
                 datasets.Add(dataset);
             }
-
             Datasets = datasets;
             return true;
-        }
-
-        /// <summary>
-        /// Gets all used batches in deSo and gender allocation.
-        /// </summary>
-        /// <param name="patients"></param>
-        public void GetBatches(List<Patient> patients)
-        {
-            var batches = patients
-                .SelectMany(patient => patient.Vaccinations.Select(vaccination => new { patient.Gender, vaccination.BatchNumber }))
-                .GroupBy(x => x.BatchNumber)
-                .Select(group => new Batch
-                {
-                    BatchNumber = group.Key,
-                    Male = group.Count(x => x.Gender == "Male"),
-                    Female = group.Count(x => x.Gender == "Female")
-                })
-                .ToList();
-
-            Batches = batches; 
-        }       
+        }      
     }
 }

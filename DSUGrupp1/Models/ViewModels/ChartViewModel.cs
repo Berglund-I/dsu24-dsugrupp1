@@ -1,10 +1,6 @@
 ﻿using DSUGrupp1.Models.DTO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System.Drawing;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Reflection.Emit;
-using System;
 namespace DSUGrupp1.Models.ViewModels
 {
     public class ChartViewModel

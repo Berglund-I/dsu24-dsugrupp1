@@ -1,9 +1,5 @@
 ﻿using DSUGrupp1.Models.DTO;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json;
 using System.Globalization;
-using System;
-using System.Diagnostics;
 using DSUGrupp1.Infastructure;
 
 namespace DSUGrupp1.Models.ViewModels
