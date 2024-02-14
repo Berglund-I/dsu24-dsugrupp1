@@ -330,6 +330,13 @@ footer {
 .charts{
     width: 98% !important;
 }
+.deSo-container div[charts="charts"] {
+    height: 500px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
 
 
 #gender-paragraf-left,
