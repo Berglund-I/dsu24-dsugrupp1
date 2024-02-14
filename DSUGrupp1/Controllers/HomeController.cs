@@ -13,15 +13,9 @@ namespace DSUGrupp1.Controllers
     public class HomeController : Controller
     {
         private readonly ApiController _apiController;
-
-        private readonly IMemoryCache _memoryCache;
-
-
         private readonly ListOfPatients _patientList;
         private readonly ListOfPopulation _listOfResidents;
-
         private readonly ILogger<HomeController> _logger;
-        private readonly object lockObject = new object();
 
 
         public List<Patient> Patients { get; set; } = new List<Patient>();
