@@ -28,14 +28,11 @@ namespace DSUGrupp1.Controllers
 
         private readonly ILogger<HomeController> _logger;
 
-        //Shouldn't be possible to change when the initial values is set
         public List<Patient> Patients { get; set; } = new List<Patient>();
-        const string PatientsCacheKey = "PatientsData";
-        public HomeController(ILogger<HomeController> logger,IMemoryCache memoryCache)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
             _apiController = new ApiController();
-            _memoryCache = memoryCache;
 
         }
 
@@ -65,7 +62,6 @@ namespace DSUGrupp1.Controllers
                 
                 ChartViewModel municipalityChart = await vaccinations.GenerateChart(Patients);
 
-                //HomeViewModel model = new HomeViewModel(Patients);
 
 
                 DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(Patients);
@@ -79,7 +75,7 @@ namespace DSUGrupp1.Controllers
                 
                 HomeModelStorage.AgeStatistics = ageStatistics;
 
-                HomeViewModel model = new HomeViewModel(ListOfPatients.PatientList);
+                HomeViewModel model = new HomeViewModel(Patients);
 
                 DisplayGenderStatisticsViewModel genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, Patients);
 
@@ -96,15 +92,6 @@ namespace DSUGrupp1.Controllers
 
                 HomeModelStorage.ViewModel = model;
 
-                //var data = new FilterDto();
-                //data.Gender = "Male";
-                //data.BatchNumber = "AZ002";
-                //data.SiteId = 4;
-                //data.MinAge = 20;
-                //data.MaxAge = 30;
-                //var result = GetChartFromFilteredOptions(data);
-
-                _memoryCache.Set(PatientsCacheKey, Patients);
                 return View(model);
             }
             return View(HomeModelStorage.ViewModel);
@@ -123,17 +110,12 @@ namespace DSUGrupp1.Controllers
         [HttpPost]
         public IActionResult GetChartFromDeSoCode([FromBody] DesoChartRequest data)
         {
-            _memoryCache.TryGetValue(PatientsCacheKey, out List<Patient> cachedPatients);
-
-            // If found in cache, return it directly
-            if (cachedPatients != null)
+            if(!string.IsNullOrEmpty(data.SelectedDeSo))
             {
-                var response = new DeSoChartViewModel(data.SelectedDeSo, cachedPatients);
-                return Ok(response);          
-                
+                var response = new DeSoChartViewModel(data.SelectedDeSo, ListOfPatients.PatientList, ListOfPopulation.ListOfResidents);
+                return Ok(response);
             }
-            return BadRequest();
-            
+            return Ok();
         }
 
         [HttpPost]
