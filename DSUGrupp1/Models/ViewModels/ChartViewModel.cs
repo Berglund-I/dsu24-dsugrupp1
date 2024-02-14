@@ -224,7 +224,10 @@ namespace DSUGrupp1.Models.ViewModels
 
             return template;
         }
-
+        /// <summary>
+        /// Generates a random color
+        /// </summary>
+        /// <returns></returns>
         public static string GenerateRandomColor()
         {
             int r = random.Next(256);

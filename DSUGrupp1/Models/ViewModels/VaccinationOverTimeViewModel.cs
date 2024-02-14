@@ -16,7 +16,7 @@ namespace DSUGrupp1.Models.ViewModels
         public List<double> VaccinationsperWeek { get; set; }
         
         //not needed?
-        public List<double>? DataPoints { get; set; }
+        //public List<double>? DataPoints { get; set; }
 
         public VaccinationOverTimeViewModel() { }
 
@@ -35,9 +35,6 @@ namespace DSUGrupp1.Models.ViewModels
 
             for (int year = 2020; year <= 2023; year++)
             {                 
-                //var filteredPatients = LinqQueryRepository.GetPatientsByDates(_patients, DateTime.Parse(year.ToString());
-
-                //Could possibly break the list up inte smaller pieces before querying.
                 VaccinationsperWeek = CountVaccinationsWeekByWeek(year,_patients);
 
                 string color = colors[year - 2020];
@@ -87,7 +84,12 @@ namespace DSUGrupp1.Models.ViewModels
 
             return firstWeekDay.AddDays(weekOfYearMultiplier * 7);
         }
-
+        /// <summary>
+        /// Counts the vaccinations week by week for a given year following ISO 8601 standards, returns it as a list of numbers
+        /// </summary>
+        /// <param name="year"></param>
+        /// <param name="patients"></param>
+        /// <returns></returns>
         public static List<double> CountVaccinationsWeekByWeek(int year,List<Patient> patients)
         {
             var ci = new CultureInfo("sv-SE");

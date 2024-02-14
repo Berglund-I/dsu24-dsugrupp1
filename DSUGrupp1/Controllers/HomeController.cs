@@ -48,9 +48,6 @@ namespace DSUGrupp1.Controllers
                 
                 var batchTest = await batches.GetBatches();
 
-                //HomeViewModel model = new HomeViewModel();
-                //model.Population = await _apiController.GetPopulationInSpecificDeSo("2380A0010", "2022");   
-                //model.DataFromSpecificDeSo = await _apiController.GetVaccinationDataFromDeSo("2380A0010");
                 var apiResult1 = await _apiController.GetPopulationCount("2380", "2022");
                 var apiResult2 = await _apiController.GetVaccinationsCount();
 
@@ -94,6 +91,7 @@ namespace DSUGrupp1.Controllers
                 //data.MinAge = 20;
                 //data.MaxAge = 30;
                 //var result = GetChartFromFilteredOptions(data);
+
                 _memoryCache.Set(PatientsCacheKey, Patients);
                 return View(model);
             }

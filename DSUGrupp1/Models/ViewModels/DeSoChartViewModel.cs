@@ -106,7 +106,10 @@ namespace DSUGrupp1.Models.ViewModels
 
         }
       
-
+        /// <summary>
+        /// Generates a chart for vaccinations by week for the selected deso
+        /// </summary>
+        /// <returns></returns>
         private Chart GetChartOverTime()
         {
             List<string> weekLabels = Enumerable.Range(1, 52).Select(i => i.ToString()).ToList();
