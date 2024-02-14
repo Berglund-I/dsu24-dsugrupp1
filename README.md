@@ -8,7 +8,7 @@ Briefly introduce your project here. Explain what the project does, its purpose,
 List the key features of your project. For example:
 
 - Interactive charts displaying vaccination data for different areas
-- Map displaying vaccinations coverage for the whole area
+- Map displaying vaccination coverage for the whole area
 
   
 
