@@ -1,4 +1,5 @@
-﻿using DSUGrupp1.Models.ViewModels;
+﻿using DSUGrupp1.Models.DTO;
+using DSUGrupp1.Models.ViewModels;
 
 namespace DSUGrupp1.Models
 {
@@ -6,6 +7,7 @@ namespace DSUGrupp1.Models
     {
         private static HomeViewModel _viewModel;
         private static DisplayAgeStatisticsViewModel _ageStatistics;
+
 
 
         public static HomeViewModel ViewModel 

@@ -140,5 +140,32 @@ namespace DSUGrupp1.Infastructure
                 .ToList();
             return uniqueDeSoCodesAndNames;
         }
+      
+        /// <summary>
+        /// Method that calculates the total population in all desos and creates a list.
+        /// </summary>
+        /// <param name="residents"></param>
+        /// <param name="deSo"></param>
+        /// <returns></returns>
+        public static List<Resident> GetResidentsByDeSo(List<Resident> residents, string deSo)
+        {
+            List<Resident> result = residents
+            .Where(resident => resident.DeSoCode == deSo)
+            .ToList();
+
+            return result;
+        }
+
+        /// <summary>
+        /// Method that creates a list of all deso codes.
+        /// </summary>
+        /// <param name="patients"></param>
+        /// <returns></returns>
+        public static List<string> GetDesoList(List<Patient> patients)
+        {
+            List<string> desoList = patients.Select(d => d.DeSoCode).Distinct().ToList();
+            return desoList;
+        }
+
     }
 }
