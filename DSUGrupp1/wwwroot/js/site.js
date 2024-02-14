@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 leftGenderChart = new Chart(context, genderChart);
                 const leftGenderChartParagraph = document.getElementById("gender-paragraf-left");
-                leftGenderChartParagraph.textContent = "Cirkeldiagram som presenterar vaccinationsgraden i procent mellan kvinnor och män.";
+                leftGenderChartParagraph.textContent = "Cirkeldiagram som presenterar vaccinationsgraden mellan kvinnor och män.";
 
 
                 if (leftOverTimeChart) {
@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 rightGenderChart = new Chart(context, genderChart);
                 const rightGenderChartParagraph = document.getElementById("gender-paragraf-right");
-                rightGenderChartParagraph.textContent = "Cirkeldiagram som presenterar vaccinationsgraden i procent mellan kvinnor och män.";
+                rightGenderChartParagraph.textContent = "Cirkeldiagram som presenterar vaccinationsgraden mellan kvinnor och män.";
                 
 
                 if (rightOverTimeChart) {
