@@ -155,7 +155,7 @@ namespace DSUGrupp1.Models.ViewModels
                 "#ffffff",
                 "#000000",
             };
-            Chart chart = _chartViewModel.CreateChart("Test test test: ", "bar", labels, "Test", [VaccinatedMales, VaccinatedFemales], colors, 5);
+            Chart chart = _chartViewModel.CreateChart("Hejsan hoppsan ", "bar", labels, "Test", [VaccinatedMales, VaccinatedFemales], colors, 5);
             return chart;
         }
 
