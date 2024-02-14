@@ -126,5 +126,20 @@ namespace DSUGrupp1.Infastructure
             return result;
         }
 
+        public static List<Resident> GetResidentsByDeSo(List<Resident> residents, string deSo)
+        {
+            List<Resident> result = residents
+            .Where(resident => resident.DeSoCode == deSo)
+            .ToList();
+
+            return result;
+        }
+
+        public static List<string> GetDesoList(List<Patient> patients)
+        {
+            List<string> desoList = patients.Select(d => d.DeSoCode).Distinct().ToList();
+            return desoList;
+        }
+
     }
 }
