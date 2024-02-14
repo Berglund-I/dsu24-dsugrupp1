@@ -46,10 +46,6 @@ namespace DSUGrupp1.Models.ViewModels
         {
             SelectedDeSo = deSoCode;
             Patients = patients;
-            //var chartValues = GetSetValuesForChart(deSoCode);
-
-            //JsonChartDose = _chartViewModel.SerializeJson(chartValues.Result);
-
 
             if (GetSetValuesForChart(deSoCode).Result)
             {
@@ -61,12 +57,6 @@ namespace DSUGrupp1.Models.ViewModels
                 JsonChartGender = _chartViewModel.SerializeJson(chartTwo);
                 JsonChartVaccinationOverTime = _chartViewModel.SerializeJson(chartThree);
             };
-
-            //var chart = GetChartDose(/*chartValues.Result*/);
-
-            //JsonChartDose = _chartViewModel.SerializeJson(chart);
-
-
         }
 
         /// <summary>
@@ -133,22 +123,14 @@ namespace DSUGrupp1.Models.ViewModels
         /// <returns></returns>
         private async Task<bool> GetSetValuesForChart(string deSoCode)
         {
-            //var vaccinationDataResponse = await _apiController.GetVaccinationDataFromDeSo(deSoCode);
             var populationMales = await _apiController.GetPopulationInSpecificDeSo(deSoCode, "2022", "1");
             var populationFemales = await _apiController.GetPopulationInSpecificDeSo(deSoCode, "2022", "2");
 
             var desoPatients = LinqQueryRepository.GetPatientsByDeSo(Patients, deSoCode);
             var getBatches = await _apiController.GetDoseTypes();
-            //var populationMales = LinqQueryRepository.GetPatientsByGender(desoPatients, "Male");
-            //var populationFemales = LinqQueryRepository.GetPatientsByGender(desoPatients, "Female");
-
-
-            //GetPatient(vaccinationDataResponse, getBatches);
 
             Population = int.Parse(populationMales.Data[0].Values[0]) + int.Parse(populationFemales.Data[0].Values[0]);
             TotalPatients = desoPatients.Count();
-
-            //List<int> vaccinatedGender = _displayGenderStatistics.CountVaccinatedGender(vaccinationDataResponse);
 
             VaccinatedMales = LinqQueryRepository.GetPatientsByGender(desoPatients, "Male").Count();
             VaccinatedFemales = LinqQueryRepository.GetPatientsByGender(desoPatients, "Female").Count();
@@ -170,7 +152,6 @@ namespace DSUGrupp1.Models.ViewModels
             int totalBoosterDoses = patientsWithBooster
                 .Sum(patient => patient.Vaccinations.Count(vaccination => vaccination.DoseNumber > 3));
 
-            //var doseCount = CalculateDoseCounts(vaccinationDataResponse);
             List<int> doseCount =
             [
                 LinqQueryRepository.GetPatientsByDoseNumber(desoPatients,1).Count(),
@@ -216,160 +197,15 @@ namespace DSUGrupp1.Models.ViewModels
                     bColor: color,
                     bWidth: 3
                 );
-
                 datasets.Add(dataset);
             }
 
             Datasets = datasets;
-                
-
-
-
-
-
             return true;
         }
 
         /// <summary>
-        /// REDUNDANT using method from countvaccinationovertimeviewmodelinstead
-        /// </summary>
-        /// <param name="vaccinationDataFromSpecificDeSoDto"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
-        private List<double> CountVaccinationsWeekByWeek(VaccinationDataFromSpecificDeSoDto vaccinationDataFromSpecificDeSoDto, int year)
-        {
-            var ci = new CultureInfo("sv-SE");
-            var cal = ci.Calendar;
-            var lastDayOfYear = new DateTime(year, 12, 31);
-            int weeksInYear = cal.GetWeekOfYear(lastDayOfYear, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
-
-            // Preprocess to get vaccination dates for the given year
-            var vaccinationsInYear = StoreVaccinationsByYear(vaccinationDataFromSpecificDeSoDto, year.ToString());
-            var vaccinationsPerWeek = new List<double>();
-
-            var parsedVaccinationDates = vaccinationsInYear
-            .Select(dateString => DateTime.TryParse(dateString, out DateTime date) ? (DateTime?)date : null)
-            .Select(date => date.Value)
-            .ToList();
-
-            List<double> vaccinationCounts = new List<double>();
-
-            for (int week = 1; week <= weeksInYear; week++)
-            {
-                var weekStart = FirstDateOfWeek(year, week, ci);
-                var weekEnd = weekStart.AddDays(6);
-
-                var vaccinationCountThisWeek = parsedVaccinationDates.Count(date => date >= weekStart && date <= weekEnd);
-                vaccinationCounts.Add(vaccinationCountThisWeek);
-            }
-            return vaccinationCounts;
-        }
-        /// <summary>
-        /// REMOVE can be used from vaccinationovertime
-        /// </summary>
-        /// <param name="year"></param>
-        /// <param name="weekOfYear"></param>
-        /// <param name="ci"></param>
-        /// <returns></returns>
-        public static DateTime FirstDateOfWeek(int year, int weekOfYear, CultureInfo ci)
-        {
-            DateTime jan1 = new DateTime(year, 1, 1);
-            int daysOffset = (int)DayOfWeek.Monday - (int)jan1.DayOfWeek;
-            DateTime firstWeekDay = jan1.AddDays(daysOffset);
-            var calendar = ci.Calendar;
-            var firstWeek = calendar.GetWeekOfYear(jan1, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
-
-            int weekOfYearMultiplier = weekOfYear - 1;
-
-            if (firstWeek >= 52)
-            {
-                firstWeekDay = jan1.AddDays(daysOffset + 7);
-            }
-
-
-            return firstWeekDay.AddDays(weekOfYearMultiplier * 7);
-        }
-        
-        /// <summary>
-        /// TODO called where??
-        /// </summary>
-        /// <param name="vaccinationDataFromSpecificDeSoDto"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
-        public List<string> StoreVaccinationsByYear(VaccinationDataFromSpecificDeSoDto vaccinationDataFromSpecificDeSoDto, string year)
-        {
-            List<string> vaccinationsInGivenYear = new List<string>();
-
-            foreach (var deSoCode in vaccinationDataFromSpecificDeSoDto.Meta.DeSoCode)
-            {
-                if(vaccinationDataFromSpecificDeSoDto.Meta.DeSoCode == SelectedDeSo)
-                {
-                    foreach(var patient in vaccinationDataFromSpecificDeSoDto.Patients)
-                    {
-                        foreach(var vaccination in patient.Vaccinations)
-                        {
-                            if (DateTime.TryParse(vaccination.DateOfVaccination, out DateTime vaccinationDate))
-                            {
-                                if (vaccinationDate.Year.ToString() == year)
-                                {
-                                    vaccinationsInGivenYear.Add(vaccination.DateOfVaccination);
-                                }
-
-                            }
-                        }
-                    }
-                }
-            }
-
-            return vaccinationsInGivenYear;
-        }
-        
-        ///Redundant?
-        /// <summary>
-        /// Sets values for dose 1, 2, 3 and booster
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        private List<int> CalculateDoseCounts(VaccinationDataFromSpecificDeSoDto data)
-        {
-            List<int> doseCount = new List<int>();
-            int doseOne = 0;
-            int doseTwo = 0;
-            int doseThree = 0;
-            int booster = 0;
-
-            for (int i = 0; i < data.Patients.Count(); i++)
-            {
-                foreach(var dose in data.Patients[i].Vaccinations)
-                {
-                    if(dose.DoseNumber == 1)
-                    {
-                        doseOne++; 
-                    }
-                    else if (dose.DoseNumber == 2)
-                    {
-                        doseTwo++;
-                    }
-                    else if (dose.DoseNumber == 3)
-                    {
-                        doseThree++;                   
-                    }
-                    else if (dose.DoseNumber > 3)
-                    {
-                        booster++;
-                    }
-                }             
-            }
-            doseCount.Add(doseOne);
-            doseCount.Add(doseTwo);
-            doseCount.Add(doseThree);
-            doseCount.Add(booster);
-
-            return doseCount;
-        }
-
-        /// <summary>
-        /// IsFixed
+        /// Gets all used batches in deSo and gender allocation.
         /// </summary>
         /// <param name="patients"></param>
         public void GetBatches(List<Patient> patients)
@@ -386,57 +222,6 @@ namespace DSUGrupp1.Models.ViewModels
                 .ToList();
 
             Batches = batches; 
-        }
-
-        /// <summary>
-        /// Gets all used batches in deSo and gender allocation
-        /// </summary>
-        /// <param name="data"></param>
-        //public void GetBatches(VaccinationDataFromSpecificDeSoDto data)
-        //{
-        //    Dictionary<string, Batch> batches = new Dictionary<string, Batch>();
-
-        //    foreach(var patients in data.Patients)
-        //    {
-
-        //        for(int i = 0; i < patients.Vaccinations.Count(); i++)
-        //        {
-        //            string batchNumber = patients.Vaccinations[i].BatchNumber;
-
-        //            if (!batches.ContainsKey(batchNumber))
-        //            {
-        //                Batch batch = new Batch()
-        //                {
-        //                    BatchNumber = batchNumber                           
-        //                };
-        //                if (patients.Gender == "Male")
-        //                {
-        //                    batch.Male++;
-        //                }
-        //                else
-        //                {
-        //                    batch.Female++;
-        //                }
-        //                batches.Add(batchNumber, batch);
-        //            }
-        //            else
-        //            {
-        //                Batch existingBatch = batches[batchNumber];
-
-        //                if (patients.Gender == "Male")
-        //                {
-        //                    existingBatch.Male++;
-        //                }
-        //                else
-        //                {
-        //                    existingBatch.Female++;
-        //                }
-        //            }
-        //        }                                      
-        //    }
-        //    Batches = batches.Values.ToList();
-        //}
-
-
+        }       
     }
 }

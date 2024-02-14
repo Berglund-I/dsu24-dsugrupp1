@@ -50,6 +50,12 @@ namespace DSUGrupp1.Models.ViewModels
 
             return vaccinationPercent;
         }
+
+        //TODO Unify GenerateChart to a single method.
+        /// <summary>
+        /// A method that generates a Chart for the vaccination percentage of women.
+        /// </summary>
+        /// <returns></returns>
         public ChartViewModel GenerateChartFemales()
         {
             ChartViewModel chart = new ChartViewModel();
@@ -63,7 +69,6 @@ namespace DSUGrupp1.Models.ViewModels
             chart.JsonChart = chart.SerializeJson(chart.Chart);
             return chart;
         }
-
         /// <summary>
         /// A method that generates a Chart for the vaccination percentage of men.
         /// </summary>

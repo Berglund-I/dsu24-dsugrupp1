@@ -11,10 +11,5 @@ namespace DSUGrupp1.Models.ViewModels
         }
         public List<ChartViewModel> Charts { get; set; }
         public PopulateDeSoDropDownViewModel DeSoDropDown { get; set; }
-
-        //public VaccinationDataFromSpecificDeSoDto? DataFromSpecificDeSo { get; set; }
-
-        //public PopulationDto? Population { get; set; }
-
     }
 }

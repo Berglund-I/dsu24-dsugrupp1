@@ -63,8 +63,8 @@ namespace DSUGrupp1.Controllers
 
                 HomeViewModel model = new HomeViewModel(Patients);
 
-                DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(vaccineDataAllDeso);
-                //REFACTOR
+                DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(Patients);
+
                 VaccinationOverTimeViewModel vaccinationOverTimeStatistics = new VaccinationOverTimeViewModel(Patients);
                 ChartViewModel chartLineOverTime = vaccinationOverTimeStatistics.GenerateLineChart();
 
@@ -73,6 +73,7 @@ namespace DSUGrupp1.Controllers
 
 
                 DisplayGenderStatisticsViewModel genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, Patients);
+
                 ChartViewModel chartGenderFemales = genderStatistics.GenerateChartFemales();
                 ChartViewModel chartGenderMales = genderStatistics.GenerateChartMales();
                 ChartViewModel chartGenderBoth = genderStatistics.GenerateChartBothGenders();

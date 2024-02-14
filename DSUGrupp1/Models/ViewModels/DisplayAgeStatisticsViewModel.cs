@@ -7,23 +7,19 @@ namespace DSUGrupp1.Models.ViewModels
     {
         public List<VaccinationDataFromSpecificDeSoDto> VaccinationDataFromSpecificDeso { get; set; }
 
+        public List<Patient> Patients { get; set; }
 
         public List<AgeGroupDoseCounts> AgeGroupDoseCounts { get; set; }
 
         public List<string> DoseColors = new List<string> { "rgb(255, 99, 132)", "rgb(54, 162, 235)", "rgb(255, 206, 86)" };
         public List<string> Labels = new List<string> { "16-30", "31-45", "46-60", "61+" };
 
-
-        public DisplayAgeStatisticsViewModel(List<VaccinationDataFromSpecificDeSoDto> vaccinationDataFromSpecificDeSos)
+        public DisplayAgeStatisticsViewModel(List<Patient> patients)
         {
-
+            Patients = patients;
             AgeGroupDoseCounts = new List<AgeGroupDoseCounts>();
-            VaccinationDataFromSpecificDeso = vaccinationDataFromSpecificDeSos;
             CalculateAgeAndDoseCounts();
         }
-
-
-
         public ChartViewModel GenerateAgeChartForVaccinated()
         {
             ChartViewModel chart = new ChartViewModel();
@@ -31,7 +27,6 @@ namespace DSUGrupp1.Models.ViewModels
             chart.JsonChart = chart.SerializeJson(chart.Chart);
             return chart;
         }
-
         public ChartViewModel GenerateChartForSelectedAgeRange(int leftValue, int rightValue)
         {
             List<AgeGroupDoseCounts> ageGroupDoseCountsForRange = CalculateAgeAndDoseCountsForSelectedAgeRange(leftValue, rightValue);
@@ -42,98 +37,52 @@ namespace DSUGrupp1.Models.ViewModels
             chart.JsonChart = chart.SerializeJson(chart.Chart);
             return chart;
         }
-
-
-        public List<AgeGroupDoseCounts> CalculateAgeAndDoseCounts()
+        public void CalculateAgeAndDoseCounts()
         {
-            AgeGroupDoseCounts = new List<AgeGroupDoseCounts>();
-
-            foreach (var data in VaccinationDataFromSpecificDeso)
-            {
-                foreach (var patient in data.Patients)
+            var currentYear = DateTime.Now.Year;
+            AgeGroupDoseCounts = Patients
+                .SelectMany(patient => patient.Vaccinations.Select(vaccination => new
                 {
-                    foreach (var vaccination in patient.Vaccinations)
-                    {
-                        int ageAtVaccination = DateTime.Parse(vaccination.DateOfVaccination).Year - int.Parse(patient.YearOfBirth);
-                        string ageGroup = DetermineAgeGroup(ageAtVaccination);
-
-                        AgeGroupDoseCounts ageGroupDoseCounts = AgeGroupDoseCounts.FirstOrDefault(a => a.AgeGroup == ageGroup);
-                        if (ageGroupDoseCounts == null)
-                        {
-                            ageGroupDoseCounts = new AgeGroupDoseCounts { AgeGroup = ageGroup };
-                            AgeGroupDoseCounts.Add(ageGroupDoseCounts);
-                        }
-
-                        if (vaccination.DoseNumber == 1)
-                        {
-                            ageGroupDoseCounts.FirstDoseCount++;
-                        }
-                        else if (vaccination.DoseNumber == 2)
-                        {
-                            ageGroupDoseCounts.SecondDoseCount++;
-                        }
-                        else if (vaccination.DoseNumber == 3)
-                        {
-                            ageGroupDoseCounts.BoosterDoseCount++;
-                        }
-                    }
-                }
-            }
-
-            AgeGroupDoseCounts = AgeGroupDoseCounts
-        .OrderBy(a => Labels.IndexOf(a.AgeGroup))
-        .ToList();
-
-            return AgeGroupDoseCounts;
-
-
+                    AgeAtVaccination = currentYear - patient.YearOfBirth,
+                    vaccination.DoseNumber
+                }))
+                .GroupBy(x => DetermineAgeGroup(x.AgeAtVaccination))
+                .Select(g => new AgeGroupDoseCounts
+                {
+                    AgeGroup = g.Key,
+                    FirstDoseCount = g.Count(v => v.DoseNumber == 1),
+                    SecondDoseCount = g.Count(v => v.DoseNumber == 2),
+                    BoosterDoseCount = g.Count(v => v.DoseNumber == 3) 
+                })
+                .OrderBy(a => Labels.IndexOf(a.AgeGroup))
+                .ToList();
         }
-
-
         public List<AgeGroupDoseCounts> CalculateAgeAndDoseCountsForSelectedAgeRange(int minAge, int maxAge)
         {
-            List<AgeGroupDoseCounts> ageGroupDoseCountsForRange = new List<AgeGroupDoseCounts>();
-
-            foreach (var data in VaccinationDataFromSpecificDeso)
-            {
-                foreach (var patient in data.Patients)
+            var currentYear = DateTime.Now.Year;
+            var ageGroupDoseCountsForRange = Patients
+                .Where(patient =>
                 {
-                    foreach (var vaccination in patient.Vaccinations)
-                    {
-                        int ageAtVaccination = DateTime.Parse(vaccination.DateOfVaccination).Year - int.Parse(patient.YearOfBirth);
-
-                        if (ageAtVaccination >= minAge && ageAtVaccination <= maxAge)
-                        {
-                            string ageGroup = DetermineAgeGroupForRange(ageAtVaccination, minAge, maxAge);
-
-                            AgeGroupDoseCounts ageGroupDoseCounts = ageGroupDoseCountsForRange.FirstOrDefault(a => a.AgeGroup == ageGroup);
-                            if (ageGroupDoseCounts == null)
-                            {
-                                ageGroupDoseCounts = new AgeGroupDoseCounts { AgeGroup = ageGroup };
-                                ageGroupDoseCountsForRange.Add(ageGroupDoseCounts);
-                            }
-
-                            if (vaccination.DoseNumber == 1)
-                            {
-                                ageGroupDoseCounts.FirstDoseCount++;
-                            }
-                            else if (vaccination.DoseNumber == 2)
-                            {
-                                ageGroupDoseCounts.SecondDoseCount++;
-                            }
-                            else if (vaccination.DoseNumber == 3)
-                            {
-                                ageGroupDoseCounts.BoosterDoseCount++;
-                            }
-                        }
-                    }
-                }
-            }
-
+                    var age = currentYear - patient.YearOfBirth;
+                    return age >= minAge && age <= maxAge;
+                })
+                .SelectMany(patient => patient.Vaccinations.Select(vaccination => new
+                {
+                    Age = currentYear - patient.YearOfBirth,
+                    vaccination.DoseNumber
+                }))
+                .GroupBy(x => DetermineAgeGroupForRange(x.Age,minAge,maxAge))
+                .Select(g => new AgeGroupDoseCounts
+                {
+                    AgeGroup = g.Key,
+                    FirstDoseCount = g.Count(v => v.DoseNumber == 1),
+                    SecondDoseCount = g.Count(v => v.DoseNumber == 2),
+                    BoosterDoseCount = g.Count(v => v.DoseNumber == 3)
+                })
+                .ToList();
             return ageGroupDoseCountsForRange;
         }
-
-
+        
         private string DetermineAgeGroup(int age)
         {
             if (age < 31)
@@ -158,9 +107,6 @@ namespace DSUGrupp1.Models.ViewModels
                 return "Ålder existerar ej";
             }
         }
-
-
-
     }
 }
 
