@@ -143,13 +143,13 @@ namespace DSUGrupp1.Infastructure
             return uniqueDeSoCodesAndNames;
         }
 
-        public static List<Patient> GetPatientsByDeSo(List<Patient> patients, string deSo)
-        {
-            List<Patient> result = patients
-            .Where(patient => patient.DeSoCode == deSo)
-            .ToList();
+        //public static List<Patient> GetPatientsByDeSo(List<Patient> patients, string deSo)
+        //{
+        //    List<Patient> result = patients
+        //    .Where(patient => patient.DeSoCode == deSo)
+        //    .ToList();
 
-            return result;
-        }
+        //    return result;
+        //}
     }
 }

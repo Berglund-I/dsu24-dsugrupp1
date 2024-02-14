@@ -65,7 +65,7 @@ namespace DSUGrupp1.Controllers
                 
                 ChartViewModel municipalityChart = await vaccinations.GenerateChart(Patients);
 
-                HomeViewModel model = new HomeViewModel(Patients);
+                //HomeViewModel model = new HomeViewModel(Patients);
 
 
                 DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(Patients);
@@ -76,6 +76,7 @@ namespace DSUGrupp1.Controllers
                 ChartViewModel chartLineOverTime = vaccinationOverTimeStatistics.GenerateLineChart();
 
                 ChartViewModel ageChart = ageStatistics.GenerateAgeChartForVaccinated();
+                
                 HomeModelStorage.AgeStatistics = ageStatistics;
 
                 HomeViewModel model = new HomeViewModel(ListOfPatients.PatientList);
