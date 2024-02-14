@@ -58,7 +58,7 @@ namespace DSUGrupp1.Models.ViewModels
                         },
                     },
                 },
-                Options = new OptionsDto
+                Options = new OptionsDto(type)
                 {
                     Responsive = true,
                     MaintainAspectRatio = true,
@@ -87,7 +87,7 @@ namespace DSUGrupp1.Models.ViewModels
                     Labels = labels,
                     Datasets = datasets,
                 },
-                Options = new OptionsDto
+                Options = new OptionsDto(type)
                 {
                     Responsive = true,
                     MaintainAspectRatio = true,
@@ -153,7 +153,7 @@ namespace DSUGrupp1.Models.ViewModels
                 }
             }
                 },
-                Options = new OptionsDto
+                Options = new OptionsDto(type)
                 {
                     Responsive = true,
                     MaintainAspectRatio = false,
@@ -207,7 +207,7 @@ namespace DSUGrupp1.Models.ViewModels
                 }
             }
                 },
-                Options = new OptionsDto
+                Options = new OptionsDto(type)
                 {
                     Responsive = true,
                     MaintainAspectRatio = false,
