@@ -1,6 +1,6 @@
 ﻿using DSUGrupp1.Controllers;
-using Newtonsoft.Json;
-using System.Diagnostics;
+using DSUGrupp1.Infastructure;
+
 
 namespace DSUGrupp1.Models.ViewModels
 {
@@ -17,17 +17,14 @@ namespace DSUGrupp1.Models.ViewModels
         /// Method that generates a chart that uses GetVaccinationValues & CalculateVaccinationPercentage for percentage values. Hard coded text for labels in the new chart.
         /// </summary>
         /// <returns></returns>
-        public async Task<ChartViewModel> GenerateChart()
+        public async Task<ChartViewModel> GenerateChart(List<Patient> patients)
         {
+
             ChartViewModel chart = new ChartViewModel();
+            // TODO implement a call for municipality population earlier in the program structure so that individual calls in the viewmodel like this is unneccessary.
+            int population = await GetMunicipalityPopulation();
 
-            var populationTask = GetMunicipalityPopulation();
-            var vaccinationValuesTask = GetVaccinationValues();
-
-            await Task.WhenAll(populationTask, vaccinationValuesTask);
-
-            int population = populationTask.Result;
-            List<double> vaccinationValues = vaccinationValuesTask.Result;
+            var vaccinationValues = GetVaccinationValues(patients,population);
 
             chart.Chart = chart.CreateChart("", "bar", ["En dos", "Två doser", "Tre doser eller fler"], $"% av totalt {population} invånare", vaccinationValues, ["rgb(29, 52, 97)", "rgb(55, 105, 150)", "rgb(130, 156, 188)"], 5);
             chart.JsonChart = chart.SerializeJson(chart.Chart);
@@ -38,23 +35,18 @@ namespace DSUGrupp1.Models.ViewModels
         /// Fetches vaccinations from API, calls for municipality population, adds all the vaccinated people together in a list and returns the total vaccination percentage.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<double>> GetVaccinationValues()
+        public List<double> GetVaccinationValues(List<Patient> patients, int population)
         {
-            var vaccineData = await _apiController.GetVaccinationsCount();
-
-            int totalPopulation = await GetMunicipalityPopulation();        
+            
             int oneDose = 0, secondDose = 0, thirdDose = 0;
 
-            foreach (var deSo in vaccineData.Data)
-            {
-                oneDose += deSo.Data[0].Count;
-                secondDose += deSo.Data[1].Count;
-                thirdDose += deSo.Data[2].Count;
-            }
+            oneDose = LinqQueryRepository.GetPatientsByDoseNumber(patients, 1).Count();
+            secondDose = LinqQueryRepository.GetPatientsByDoseNumber(patients, 2).Count();
+            thirdDose = LinqQueryRepository.GetPatientsByDoseNumber(patients, 3).Count();
 
-            double vaccinatedPercentageDoseOne = CalculateVaccinationPercentage(totalPopulation, oneDose);
-            double vaccinatedPercentageDoseTwo = CalculateVaccinationPercentage(totalPopulation, secondDose);
-            double vaccinatedPercentageDoseThree = CalculateVaccinationPercentage(totalPopulation, thirdDose);
+            double vaccinatedPercentageDoseOne = CalculateVaccinationPercentage(population, oneDose);
+            double vaccinatedPercentageDoseTwo = CalculateVaccinationPercentage(population, secondDose);
+            double vaccinatedPercentageDoseThree = CalculateVaccinationPercentage(population, thirdDose);
 
             List<double> percentageValues = [vaccinatedPercentageDoseOne, vaccinatedPercentageDoseTwo, vaccinatedPercentageDoseThree];
 
@@ -67,13 +59,14 @@ namespace DSUGrupp1.Models.ViewModels
         /// <returns></returns>
         public async Task<int> GetMunicipalityPopulation()
         {
+            //Maybe move this method? see TODO at top
             var populationData = await _apiController.GetPopulationCount("2380", "2022");
             int totalPopulation = int.Parse(populationData.Data[0].Values[0]) + int.Parse(populationData.Data[1].Values[0]);
             return totalPopulation;
         }
 
         /// <summary>
-        /// Calculates the percentage of vaccinated people in a specified DeSo
+        /// Calculates the percentage of vaccinated people.
         /// </summary>
         /// <param name="totalPopulation"></param>
         /// <param name="vaccinatedPeople"></param>
@@ -82,18 +75,13 @@ namespace DSUGrupp1.Models.ViewModels
         public double CalculateVaccinationPercentage(int totalPopulation, int vaccinatedPeople)
         {
 
-            //För att inte dela med noll
+            //dividing by zero = bad
             if (totalPopulation <= 0)
             {
                 throw new Exception("Antalet invånare kan ej vara noll");
             }
 
-            if (vaccinatedPeople < 0)
-            {
-                throw new Exception("Antalet vaccinerade kan ej vara noll");
-            }
-
-            double percentage = (double)vaccinatedPeople / totalPopulation * 100;
+            double percentage = ((double)vaccinatedPeople / totalPopulation) * 100;
             return percentage;
         }
     }
