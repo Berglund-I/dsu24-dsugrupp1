@@ -291,7 +291,7 @@ function setLeftValue() {
         min = parseInt(sliderInputL.min),
         max = parseInt(sliderInputL.max);
 
-    sliderInputL.value = Math.min(parseInt(sliderInputL.value), parseInt(inputRight.value) - 10);
+    sliderInputL.value = Math.min(parseInt(sliderInputL.value), parseInt(inputRight.value) - 5);
 
     var percent = ((sliderInputL.value - min) / (max - min)) * 100;
 
@@ -307,7 +307,7 @@ function setRightValue() {
         min = parseInt(sliderInputR.min),
         max = parseInt(sliderInputR.max);
 
-    sliderInputR.value = Math.max(parseInt(sliderInputR.value), parseInt(inputLeft.value) + 10);
+    sliderInputR.value = Math.max(parseInt(sliderInputR.value), parseInt(inputLeft.value) + 5);
 
     var percent = ((sliderInputR.value - min) / (max - min)) * 100;
 
