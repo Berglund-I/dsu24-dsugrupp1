@@ -61,7 +61,7 @@ namespace DSUGrupp1.Controllers
 
 
                 await GetPatient(vaccineDataAllDeso, batchTest);
-                GetResident(apiResult2);
+                await GetResident(apiResult2);
                 
                 ChartViewModel municipalityChart = await vaccinations.GenerateChart(Patients);
 
@@ -190,7 +190,6 @@ namespace DSUGrupp1.Controllers
         {     
 
             var response = await _apiController.GetDeSoNames();   
-            var time = Stopwatch.StartNew();
             Parallel.ForEach(vaccinationData, v =>
             {
                 Parallel.ForEach(v.Patients, p =>
@@ -207,7 +206,7 @@ namespace DSUGrupp1.Controllers
             ListOfPatients.PatientList = Patients;
         }
 
-        public async void GetResident(VaccineCountDto vaccineCount)
+        public async Task GetResident(VaccineCountDto vaccineCount)
         {
             List<string> deSos = vaccineCount.Data.Select(d => d.Deso).ToList();
 
@@ -219,19 +218,15 @@ namespace DSUGrupp1.Controllers
             population.AddRange(responsFemale.Data);
 
             List<Resident> sortedPopulation = new List<Resident>();
-
-            Parallel.ForEach(population, p =>
+            foreach (var p in population)
             {
                 for (int i = 0; i < int.Parse(p.Values[0]); i++)
                 {
                     Resident resident = new Resident(p);
-                    lock (resident)
-                    {
-                        sortedPopulation.Add(resident);
-                    }
-                }
-            });
 
+                    sortedPopulation.Add(resident);
+                }
+            }
             ListOfPopulation.ListOfResidents = sortedPopulation;
         }
     }
