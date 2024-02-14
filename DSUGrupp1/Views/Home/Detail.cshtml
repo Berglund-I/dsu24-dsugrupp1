@@ -75,24 +75,36 @@
     <div class="deSo-container">
 
     <div class="filters">
-        @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj ett område", new { @id = "filter-deSo-dropdown", @class = "dropdown-filter" })
-        @Html.DropDownListFor(d => d.FilterDropDown.SelectedBatch, Model.FilterDropDown.Batches, "Välj Batch-nummer", new { @id = "batch-number-dropdown", @class = "dropdown-filter" })
-        @Html.DropDownListFor(d => d.FilterDropDown.SelectedBatch, Model.FilterDropDown.VaccineName, "Välj vaccintyp", new { @id = "vaccine-type-dropdown", @class = "dropdown-filter"})
-        @Html.DropDownListFor(d => d.FilterDropDown.SelectedBatch, Model.FilterDropDown.VaccineCentral, "Välj vaccinationscentral", new { @id = "vaccine-central-dropdown", @class = "dropdown-filter" })
-        <select name="Kön" id="gender-drop-down" class="dropdown-filter">
-            <option value="">Båda</option>
-            <option value="Male">Män</option>
-            <option value="Female">Kvinnor</option>
-        </select>
-        <select name="dose-number" id="dose-dropdown" class="dropdown-filter">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-        </select>
+        <label>DeSo områden:
+            @Html.DropDownListFor(d => d.DeSoDropDown.SelectedDeso, Model.DeSoDropDown.DeSos, "Välj ett område", new { @id = "filter-deSo-dropdown", @class = "dropdown-filter"})
+        </label>
+        <label>Batch-Nummer:
+            @Html.DropDownListFor(d => d.FilterDropDown.SelectedBatch, Model.FilterDropDown.Batches, "Välj Batch-nummer", new { @id = "batch-number-dropdown", @class = "dropdown-filter" })
+        </label>
+        <label>Vaccintyp:
+            @Html.DropDownListFor(d => d.FilterDropDown.SelectedBatch, Model.FilterDropDown.VaccineName, "Välj vaccintyp", new { @id = "vaccine-type-dropdown", @class = "dropdown-filter"})
+        </label>
+        <label>Vaccinationscentral:
+            @Html.DropDownListFor(d => d.FilterDropDown.SelectedBatch, Model.FilterDropDown.VaccineCentral, "Välj vaccinationscentral", new { @id = "vaccine-central-dropdown", @class = "dropdown-filter" })
+        </label>
+        <label>Kön:
+            <select name="Kön" id="gender-drop-down" class="dropdown-filter">
+                <option value="">Båda</option>
+                <option value="Male">Män</option>
+                <option value="Female">Kvinnor</option>
+            </select>
+        </label>
+        <label>Dosnummer:
+            <select name="dose-number" id="dose-dropdown" class="dropdown-filter">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+            </select>
+        </label>
 
         <div class="calender">
             <label>
@@ -102,37 +114,35 @@
             </label>
             <label>
                 Välj slut datum för vaccination:
-                <input type="date" name="lastVDay" id="end-date" required pattern="\d{4}-\d{2}-\d{2}" />
+                <input type="date" name="lastVDay" id="end-date" value="2024-02-13" required pattern="\d{4}-\d{2}-\d{2}" />
                 <span class="validity"></span>
             </label>
         </div>
 
-        <div class="age-slider-filter">
-            <div class="multi-range-slider">
-                <div id="left-value" class="slider-value detail-slider-value"></div>
-                <input type="range" id="input-left" min="16" max="85" value="16">
-                <div id="right-value" class="slider-value detail-slider-value"></div>
-                <input type="range" id="input-right" min="16" max="85" value="85">
+        <label>Åldersintervall:
+            <div class="age-slider-filter">
+                <div class="multi-range-slider">
+                    <div id="left-value" class="slider-value detail-slider-value"></div>
+                    <input type="range" id="input-left" min="16" max="85" value="16">
+                    <div id="right-value" class="slider-value detail-slider-value"></div>
+                    <input type="range" id="input-right" min="16" max="85" value="85">
 
-                <div class="slider">
-                    <div class="track"></div>
-                    <div class="range"></div>
-                    <div class="thumb left"></div>
-                    <div class="thumb right"></div>
+                    <div class="slider">
+                        <div class="track"></div>
+                        <div class="range"></div>
+                        <div class="thumb left"></div>
+                        <div class="thumb right"></div>
+                    </div>
+
                 </div>
-
             </div>
-        </div>
+        </label>
 
-        <button id="confirm-filters">Filterknapp</button>
+        <button id="confirm-filters" class="dropdown-filter">Filtrera</button>
 
     </div>
-    
-    
-   
-        
 
-        <div class="right-div">
+        <div class="right-div-filter">
             <div class="charts">
             <canvas id="right-filter-chart"></canvas>
         </div>
@@ -140,4 +150,3 @@
     </div>
 
 }
-

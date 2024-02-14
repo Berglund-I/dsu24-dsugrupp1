@@ -20,7 +20,7 @@ let yyyy = todaysDate.getFullYear();
 let newDate = yyyy + "-" + mm + "-" + dd;
 
 let endDate = document.getElementById('end-date');
-endDate.value = newDate;
+endDate = newDate;
 
 
 document.addEventListener('DOMContentLoaded', function () {
