@@ -27,6 +27,9 @@ namespace DSUGrupp1.Controllers
         private readonly ListOfPopulation _listOfResidents;
 
         private readonly ILogger<HomeController> _logger;
+        private readonly object lockObject = new object();
+
+
 
         //Shouldn't be possible to change when the initial values is set
         public List<Patient> Patients { get; set; } = new List<Patient>();
@@ -58,6 +61,7 @@ namespace DSUGrupp1.Controllers
                 var apiResult2 = await _apiController.GetVaccinationsCount();
 
                 var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
+                
 
 
                 await GetPatient(vaccineDataAllDeso, batchTest);
@@ -103,6 +107,7 @@ namespace DSUGrupp1.Controllers
                 //data.MinAge = 20;
                 //data.MaxAge = 30;
                 //var result = GetChartFromFilteredOptions(data);
+                LinqQueryRepository.GetDesoList(Patients);
 
                 _memoryCache.Set(PatientsCacheKey, Patients);
                 return View(model);
@@ -111,13 +116,13 @@ namespace DSUGrupp1.Controllers
         }
         public ActionResult Detail()
         {
-
             return View(HomeModelStorage.ViewModel);
         }
 
         public ActionResult Map()
         {
-            return View();
+            var response = new StatisticsForMapViewModel(ListOfPopulation.ListOfResidents, ListOfPatients.PatientList);
+            return View(response);
         }
 
         [HttpPost]
