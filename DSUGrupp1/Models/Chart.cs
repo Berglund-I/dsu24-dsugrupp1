@@ -8,7 +8,7 @@ namespace DSUGrupp1.Models
         {
             Type = "bar";
             Data = new ChartDataDto();
-            Options = new OptionsDto();
+            Options = new OptionsDto(Type);
         }
         public string Type { get; set; }
         public ChartDataDto Data { get; set; }
