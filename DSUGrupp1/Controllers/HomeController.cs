@@ -19,7 +19,12 @@ namespace DSUGrupp1.Controllers
     public class HomeController : Controller
     {
         private readonly ApiController _apiController;
+
         private readonly IMemoryCache _memoryCache;
+
+
+        private readonly ListOfPatients _patientList;
+        private readonly ListOfPopulation _listOfResidents;
 
         private readonly ILogger<HomeController> _logger;
 
@@ -31,6 +36,7 @@ namespace DSUGrupp1.Controllers
             _logger = logger;
             _apiController = new ApiController();
             _memoryCache = memoryCache;
+
         }
 
         public async Task<ActionResult> Index()
@@ -53,21 +59,26 @@ namespace DSUGrupp1.Controllers
 
                 var vaccineDataAllDeso = await _apiController.GetVaccinationDataFromAllDeSos(apiResult2);
 
-                await GetPatient(vaccineDataAllDeso, batchTest);
 
+                await GetPatient(vaccineDataAllDeso, batchTest);
+                GetResident(apiResult2);
                 
                 ChartViewModel municipalityChart = await vaccinations.GenerateChart(Patients);
 
                 HomeViewModel model = new HomeViewModel(Patients);
 
+
                 DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(Patients);
 
+
                 VaccinationOverTimeViewModel vaccinationOverTimeStatistics = new VaccinationOverTimeViewModel(Patients);
+
                 ChartViewModel chartLineOverTime = vaccinationOverTimeStatistics.GenerateLineChart();
 
                 ChartViewModel ageChart = ageStatistics.GenerateAgeChartForVaccinated();
                 HomeModelStorage.AgeStatistics = ageStatistics;
 
+                HomeViewModel model = new HomeViewModel(ListOfPatients.PatientList);
 
                 DisplayGenderStatisticsViewModel genderStatistics = new DisplayGenderStatisticsViewModel(apiResult1, Patients);
 
@@ -128,12 +139,17 @@ namespace DSUGrupp1.Controllers
 
         public IActionResult GetChartFromFilteredOptions([FromBody] FilterDto data)
         {
-            
-            var response1 = LinqQueryRepository.GetSortedPatients(data, Patients);
+            var response = LinqQueryRepository.GetSortedPatients(data, ListOfPatients.PatientList);
+            var patients = response.Count();
+            var chart = new ChartViewModel();
 
-            var response = data;
+            if (patients <= 5){
+                var notEnoughPatients = chart.CreateChart("INTE TILLRÄCKLIGT MED PATIENTER", "bar", ["Error"], "Ingen data tillgänglig", [0], ["#ffffff"], 0);
+                return Ok(notEnoughPatients);
+            }
 
-            return Ok();
+            var newChart = chart.CreateChart("Antal patienter utifrån filtrering", "bar", ["Antal patienter"], "Patienter", [patients], ["#0000FF"], 5);
+            return Ok(newChart);
         }
 
 
@@ -162,9 +178,6 @@ namespace DSUGrupp1.Controllers
             return Ok(chart);
         }
 
-
-
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
@@ -190,7 +203,35 @@ namespace DSUGrupp1.Controllers
 
             });
 
-            var secondtime = time.Elapsed.TotalMilliseconds;
+            ListOfPatients.PatientList = Patients;
+        }
+
+        public async void GetResident(VaccineCountDto vaccineCount)
+        {
+            List<string> deSos = vaccineCount.Data.Select(d => d.Deso).ToList();
+
+            var responsMale = await _apiController.GetPopulationInSpecificDeSo(deSos, "2022", "1");
+            var responsFemale = await _apiController.GetPopulationInSpecificDeSo(deSos, "2022", "2");
+
+            List<DataItem> population = new List<DataItem>();
+            population.AddRange(responsMale.Data);
+            population.AddRange(responsFemale.Data);
+
+            List<Resident> sortedPopulation = new List<Resident>();
+
+            Parallel.ForEach(population, p =>
+            {
+                for (int i = 0; i < int.Parse(p.Values[0]); i++)
+                {
+                    Resident resident = new Resident(p);
+                    lock (resident)
+                    {
+                        sortedPopulation.Add(resident);
+                    }
+                }
+            });
+
+            ListOfPopulation.ListOfResidents = sortedPopulation;
         }
     }
 

@@ -106,9 +106,17 @@ namespace DSUGrupp1.Infastructure
 
             return result;
         }
+
+        /// <summary>
+        /// Sorts patients from parameters sent from javascript with linqquery, returns a list of filtered patients
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="patients"></param>
+        /// <returns></returns>
         public static List<Patient> GetSortedPatients(FilterDto filter, List<Patient> patients)
         {
             var filteredPatients = patients
+                .Where(p => string.IsNullOrEmpty(filter.DeSoCode) || p.DeSoCode == filter.DeSoCode)
                 .Where(p => string.IsNullOrEmpty(filter.BatchNumber) || p.Vaccinations.Any(v => v.BatchNumber == filter.BatchNumber))
                 .Where(p => string.IsNullOrEmpty(filter.Gender) || p.Gender == filter.Gender)
                 .Where(p => filter.MinAge == 0 || p.AgeAtFirstVaccination >= filter.MinAge)
@@ -133,6 +141,15 @@ namespace DSUGrupp1.Infastructure
                 .OrderBy(item => item.Text)
                 .ToList();
             return uniqueDeSoCodesAndNames;
+        }
+
+        public static List<Patient> GetPatientsByDeSo(List<Patient> patients, string deSo)
+        {
+            List<Patient> result = patients
+            .Where(patient => patient.DeSoCode == deSo)
+            .ToList();
+
+            return result;
         }
     }
 }

@@ -7,12 +7,88 @@ let leftChart;
 let rightChart;
 let leftGenderChart;
 let rightGenderChart;
+/*let leftFilterChart;*/
+let rightFilterChart;
 let leftOverTimeChart; 
 let rightOverTimeChart;
 
+let todaysDate = new Date();
+let dd = todaysDate.getDate();
+let mm = todaysDate.getMonth() + 1;
+if (mm < 10) { mm = '0' + mm; }
+let yyyy = todaysDate.getFullYear();
+let newDate = yyyy + "-" + mm + "-" + dd;
+
+let endDate = document.getElementById('end-date');
+endDate = newDate;
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    filterButton = document.getElementById('confirm-filters');
+    filterButton.addEventListener('click', function () {
+
+        const deSoCode = document.getElementById('filter-deSo-dropdown').value;
+        const gender = document.getElementById('gender-drop-down').value;
+        const minAge = document.getElementById('input-left').value;
+        const maxAge = document.getElementById('input-right').value;
+        const batchNumber = document.getElementById('batch-number-dropdown').value;
+        const vaccineType = document.getElementById('vaccine-type-dropdown').value;
+        let vaccineCentral = document.getElementById('vaccine-central-dropdown').value;
+        if (vaccineCentral == "") {
+            vaccineCentral = 0;
+        }
+        const doseCount = document.getElementById('dose-dropdown').value;
+        const startDate = document.getElementById('start-date').value;
+        endDate = document.getElementById('end-date').value;
+
+        const vaccineData = {
+            deSoCode: deSoCode,
+            batchNumber: batchNumber,
+            gender: gender,
+            minAge: minAge,
+            maxAge: maxAge,
+            siteId: vaccineCentral,
+            numberOfDoses: doseCount,
+            typeOfVaccine: vaccineType,
+            startDate: startDate,
+            endDate: endDate,
+        };
+        console.log(vaccineData);
+
+        fetch('/Home/GetChartFromFilteredOptions', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+
+            },
+            body: JSON.stringify(vaccineData),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Inte bra');
+                }
+                return response.json();
+            })
+            .then(data => {
+
+                if (rightFilterChart) {
+                    rightFilterChart.destroy();
+                }
+
+                const contextTest = document.getElementById('right-filter-chart').getContext('2d');
+                rightFilterChart = new Chart(contextTest, data);
+
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        resetSliders();
+    });
+});
+
+
 document.addEventListener('DOMContentLoaded', function () {
     const deSoDropdown = document.getElementById('left-deSo-dropdown');
-
     deSoDropdown.addEventListener('change', function () {
         let selectedDeSo = this.value;
 
@@ -65,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 leftChart = new Chart(ctx, chart);
-                console.log(data.jsonVaccinationChartOverTime);
+
                 if (leftGenderChart) {
                     leftGenderChart.destroy();
                 }
@@ -74,6 +150,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const genderChart = JSON.parse(data.jsonChartGender);
 
                 leftGenderChart = new Chart(context, genderChart);
+                const leftGenderChartParagraph = document.getElementById("gender-paragraf-left");
+                leftGenderChartParagraph.textContent = "Cirkeldiagram som presenterar vaccinationsgraden i procent mellan kvinnor och män.";
 
 
                 if (leftOverTimeChart) {
@@ -83,9 +161,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 const ctext = document.getElementById('left-over-time-chart').getContext('2d');
                 const overTimeChart = JSON.parse(data.jsonChartVaccinationOverTime);
 
-                
-
                 leftOverTimeChart = new Chart(ctext, overTimeChart);
+                const leftOverTimeChartParagraph = document.getElementById("vaccination-over-time-paragraf-left");
+                leftOverTimeChartParagraph.textContent = "Ett linjegram som visar antal vaccinerade per vecka under åren 2020-2023.";
+
+                
 
             })
             .catch((error) => {
@@ -163,6 +243,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 const genderChart = JSON.parse(data.jsonChartGender);
 
                 rightGenderChart = new Chart(context, genderChart);
+                const rightGenderChartParagraph = document.getElementById("gender-paragraf-right");
+                rightGenderChartParagraph.textContent = "Cirkeldiagram som presenterar vaccinationsgraden i procent mellan kvinnor och män.";
+                
 
                 if (rightOverTimeChart) {
                     rightOverTimeChart.destroy();
@@ -172,6 +255,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const overTimeChart = JSON.parse(data.jsonChartVaccinationOverTime);
 
                 rightOverTimeChart = new Chart(ctext, overTimeChart);
+                const rightOverTimeChartParagraph = document.getElementById("vaccination-over-time-paragraf-right");
+                rightOverTimeChartParagraph.textContent = "Ett linjegram som visar antal vaccinerade per vecka under åren 2020-2023.";
 
             })
             .catch((error) => {
@@ -179,6 +264,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     });
 });
+
 function clearDeSoInformation(id) {
     const deSoStatisticContainer = document.getElementById(id);
 
@@ -383,11 +469,9 @@ resetButton.addEventListener("click", function () {
     resetSliders();
 
     resetButton.style.display = "none";
-
 });
 
-
-
-
-
-
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 18,
+}).addTo(mymap);
