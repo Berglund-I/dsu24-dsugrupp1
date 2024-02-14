@@ -159,8 +159,10 @@ namespace DSUGrupp1.Models.ViewModels
         /// <returns></returns>
         private async Task<bool> GetSetValuesForChart(string deSoCode)
         {
-            var populationMales = await _apiController.GetPopulationInSpecificDeSo(deSoCode, "2022", "1");
-            var populationFemales = await _apiController.GetPopulationInSpecificDeSo(deSoCode, "2022", "2");
+            List<string> deSoList = new List<string>();
+            deSoList.Add(deSoCode);
+            var populationMales = await _apiController.GetPopulationInSpecificDeSo(deSoList, "2022", "1");
+            var populationFemales = await _apiController.GetPopulationInSpecificDeSo(deSoList, "2022", "2");
 
             var desoPatients = LinqQueryRepository.GetPatientsByDeSo(Patients, deSoCode);
             var getBatches = await _apiController.GetDoseTypes();
