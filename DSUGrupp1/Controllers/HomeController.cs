@@ -190,7 +190,6 @@ namespace DSUGrupp1.Controllers
         {     
 
             var response = await _apiController.GetDeSoNames();   
-            var time = Stopwatch.StartNew();
             Parallel.ForEach(vaccinationData, v =>
             {
                 Parallel.ForEach(v.Patients, p =>
@@ -228,19 +227,6 @@ namespace DSUGrupp1.Controllers
                     sortedPopulation.Add(resident);
                 }
             }
-
-            //Parallel.ForEach(population, p =>
-            //{
-            //    for (int i = 0; i < int.Parse(p.Values[0]); i++)
-            //    {
-            //        Resident resident = new Resident(p);
-            //        lock (resident)
-            //        {
-            //            sortedPopulation.Add(resident);
-            //        }
-            //    }
-            //});
-
             ListOfPopulation.ListOfResidents = sortedPopulation;
         }
     }
