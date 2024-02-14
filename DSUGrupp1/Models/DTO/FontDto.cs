@@ -4,6 +4,7 @@
     {
         public string Weight { get; set; }
         public string Color { get; set; }
+        
 
     }
 }

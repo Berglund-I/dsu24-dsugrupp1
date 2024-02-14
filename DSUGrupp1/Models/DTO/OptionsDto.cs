@@ -20,7 +20,7 @@
                             {
                                 Weight = "900",
                                 Color = "black",
-                                Size = 12,
+                                
                             }
                         }
                     },
@@ -32,7 +32,7 @@
                             {
                                 Weight = "900",
                                 Color = "black",
-                                Size = 12,
+                                
                             }
                         }
                     }
