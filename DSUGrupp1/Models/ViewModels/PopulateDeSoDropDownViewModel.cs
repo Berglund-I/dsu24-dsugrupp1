@@ -1,8 +1,6 @@
-﻿using DSUGrupp1.Controllers;
-using DSUGrupp1.Infastructure;
-using DSUGrupp1.Models;
+﻿using DSUGrupp1.Infastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Diagnostics;
+
 
 
 namespace DSUGrupp1.Models.ViewModels

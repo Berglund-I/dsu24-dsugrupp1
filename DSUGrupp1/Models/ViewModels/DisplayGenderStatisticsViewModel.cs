@@ -1,6 +1,5 @@
 ﻿using DSUGrupp1.Infastructure;
 using DSUGrupp1.Models.DTO;
-using Newtonsoft.Json;
 
 namespace DSUGrupp1.Models.ViewModels
 {

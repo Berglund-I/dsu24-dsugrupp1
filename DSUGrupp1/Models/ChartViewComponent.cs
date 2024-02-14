@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DSUGrupp1.Models.ViewModels;
-using DSUGrupp1.Models.DTO;
 
 namespace DSUGrupp1.Models
 {

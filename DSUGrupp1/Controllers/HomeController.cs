@@ -2,16 +2,10 @@ using DSUGrupp1.Models.DTO;
 using DSUGrupp1.Models;
 using DSUGrupp1.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Diagnostics;
-using System.Reflection;
-using Newtonsoft.Json;
-using System.ComponentModel;
-using System.Text.Json.Nodes;
-using System.Collections.Generic;
 using DSUGrupp1.Infastructure;
 using Microsoft.Extensions.Caching.Memory;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 
 namespace DSUGrupp1.Controllers
@@ -69,9 +63,6 @@ namespace DSUGrupp1.Controllers
                 
                 ChartViewModel municipalityChart = await vaccinations.GenerateChart(Patients);
 
-                //HomeViewModel model = new HomeViewModel(Patients);
-
-
                 DisplayAgeStatisticsViewModel ageStatistics = new DisplayAgeStatisticsViewModel(Patients);
 
 
@@ -100,13 +91,7 @@ namespace DSUGrupp1.Controllers
 
                 HomeModelStorage.ViewModel = model;
 
-                //var data = new FilterDto();
-                //data.Gender = "Male";
-                //data.BatchNumber = "AZ002";
-                //data.SiteId = 4;
-                //data.MinAge = 20;
-                //data.MaxAge = 30;
-                //var result = GetChartFromFilteredOptions(data);
+
                 LinqQueryRepository.GetDesoList(Patients);
 
                 _memoryCache.Set(PatientsCacheKey, Patients);
@@ -133,7 +118,7 @@ namespace DSUGrupp1.Controllers
             if (cachedPatients != null)
             {
                 var response = new DeSoChartViewModel(data.SelectedDeSo, cachedPatients);
-                return Ok(response);          
+                return Ok(response);        
                 
             }
             return BadRequest();

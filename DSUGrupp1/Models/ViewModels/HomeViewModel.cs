@@ -1,6 +1,4 @@
-﻿using DSUGrupp1.Models.DTO;
-using System.Security.Cryptography.X509Certificates;
-
+﻿
 namespace DSUGrupp1.Models.ViewModels
 {
     public class HomeViewModel

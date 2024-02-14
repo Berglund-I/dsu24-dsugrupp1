@@ -2,11 +2,7 @@
 using Newtonsoft.Json;
 using System.Text;
 using DSUGrupp1.Models.DTO;
-using System.Net;
 using DSUGrupp1.Infastructure;
-using System.ComponentModel;
-using System.Collections.Specialized;
-using System.Diagnostics;
 
 
 namespace DSUGrupp1.Controllers

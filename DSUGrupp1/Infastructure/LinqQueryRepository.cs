@@ -1,8 +1,6 @@
 ﻿using DSUGrupp1.Models;
 using DSUGrupp1.Models.DTO;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
-using System.Xml.Linq;
 
 namespace DSUGrupp1.Infastructure
 {
@@ -142,7 +140,7 @@ namespace DSUGrupp1.Infastructure
                 .ToList();
             return uniqueDeSoCodesAndNames;
         }
-
+      
         /// <summary>
         /// Method that calculates the total population in all desos and creates a list.
         /// </summary>
@@ -168,7 +166,6 @@ namespace DSUGrupp1.Infastructure
             List<string> desoList = patients.Select(d => d.DeSoCode).Distinct().ToList();
             return desoList;
         }
-
 
     }
 }
