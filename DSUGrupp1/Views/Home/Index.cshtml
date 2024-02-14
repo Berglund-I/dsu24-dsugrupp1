@@ -8,7 +8,7 @@
 
 @section LeftContent {
     <div class="municipality-text">
-        <h1>Vaccinationsgrad i Östersunds kommun</h1>
+        <h1>Vaccinationsgrad i hela Östersunds kommun</h1>
     </div>
     @await Component.InvokeAsync("Chart", new { Id = "1", ChartModel = Model.Charts[0] })
 
@@ -56,7 +56,7 @@
 }
 
 @section CenterContentTwo {
-    <h1 id="title-gender">Statistik fördelat efter kön i hela Östersunds kommun</h1>
+    <h1 id="title-gender">Statistik fördelat efter kön </h1>
     <div class="center-two">
         <div class="chart-females">
             @await Component.InvokeAsync("Chart", new { Id = "4", ChartModel = Model.Charts[3] })
