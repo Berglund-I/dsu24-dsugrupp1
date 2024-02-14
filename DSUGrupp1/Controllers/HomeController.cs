@@ -18,6 +18,7 @@ namespace DSUGrupp1.Controllers
         private readonly ILogger<HomeController> _logger;
 
 
+
         public List<Patient> Patients { get; set; } = new List<Patient>();
         public HomeController(ILogger<HomeController> logger)
         {
