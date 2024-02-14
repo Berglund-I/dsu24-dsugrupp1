@@ -125,7 +125,6 @@ namespace DSUGrupp1.Controllers
         {
             _memoryCache.TryGetValue(PatientsCacheKey, out List<Patient> cachedPatients);
 
-            // If found in cache, return it directly
             if (cachedPatients != null)
             {
                 var response = new DeSoChartViewModel(data.SelectedDeSo, cachedPatients);
