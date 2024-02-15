@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Text;
 using DSUGrupp1.Models.DTO;
 using DSUGrupp1.Infastructure;
+using System.Threading;
 
 
 namespace DSUGrupp1.Controllers
@@ -83,7 +84,11 @@ namespace DSUGrupp1.Controllers
             }
             else
             {
-                throw new Exception(apiResponse.ErrorMessage);
+                string jsonPath = Path.Combine(Directory.GetCurrentDirectory(), "Backup", "apiVaccinationsCount.json");
+
+                string jsonData = await System.IO.File.ReadAllTextAsync(jsonPath);
+                VaccineCountDto data = JsonConvert.DeserializeObject<VaccineCountDto>(jsonData);
+                return data;
             }
         }
 
@@ -108,7 +113,11 @@ namespace DSUGrupp1.Controllers
             }
             else
             {
-                throw new Exception(apiResponse.ErrorMessage);
+                string jsonPath = Path.Combine(Directory.GetCurrentDirectory(), "Backup", "StatsPerDeSo", deSoCode + ".json");
+
+                string jsonData = await System.IO.File.ReadAllTextAsync(jsonPath);
+                VaccinationDataFromSpecificDeSoDto data = JsonConvert.DeserializeObject<VaccinationDataFromSpecificDeSoDto>(jsonData);
+                return data;
             }
         }
 
@@ -197,7 +206,11 @@ namespace DSUGrupp1.Controllers
             }
             else
             {
-                throw new Exception(apiResponse.ErrorMessage);
+                string jsonPath = Path.Combine(Directory.GetCurrentDirectory(), "Backup", "apiDesoName.json");
+
+                string jsonData = await System.IO.File.ReadAllTextAsync(jsonPath);
+                DesoInfoDTO data = JsonConvert.DeserializeObject<DesoInfoDTO>(jsonData);
+                return data;
             }
         }
 
@@ -218,9 +231,13 @@ namespace DSUGrupp1.Controllers
             }
             else
             {
-                throw new Exception(apiResponse.ErrorMessage);
+                string jsonPath = Path.Combine(Directory.GetCurrentDirectory(), "Backup", "apiBatches.json");
+
+                string jsonData = await System.IO.File.ReadAllTextAsync(jsonPath);
+                DoseTypeDto data = JsonConvert.DeserializeObject<DoseTypeDto>(jsonData);
+                return data;
             }
-        }
+    }
        
     }
 
