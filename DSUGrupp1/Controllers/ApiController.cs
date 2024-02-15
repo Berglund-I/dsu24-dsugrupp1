@@ -89,9 +89,9 @@ namespace DSUGrupp1.Controllers
                 string jsonData = await System.IO.File.ReadAllTextAsync(jsonPath);
                 VaccineCountDto data = JsonConvert.DeserializeObject<VaccineCountDto>(jsonData);
                 return data;
-            }              
+            }
         }
-    
+
         /// <summary>
         /// Gets vaccination data from a specific DeSo
         /// </summary>
@@ -100,25 +100,25 @@ namespace DSUGrupp1.Controllers
         [HttpGet]
         public async Task<VaccinationDataFromSpecificDeSoDto> GetVaccinationDataFromDeSo(string deSoCode)
         {
-            //string requestUrl = "https://grupp1.dsvkurs.miun.se/api/vaccinations/";
+            string requestUrl = "https://grupp1.dsvkurs.miun.se/api/vaccinations/";
 
-            //string jsonRequest = requestUrl + deSoCode;
+            string jsonRequest = requestUrl + deSoCode;
 
-            //var apiResponse = await ApiEngine.Fetch<VaccinationDataFromSpecificDeSoDto>(jsonRequest, HttpMethod.Get);
+            var apiResponse = await ApiEngine.Fetch<VaccinationDataFromSpecificDeSoDto>(jsonRequest, HttpMethod.Get);
 
-            //if (apiResponse.IsSuccessful)
-            //{
-            //    return apiResponse.Data;
+            if (apiResponse.IsSuccessful)
+            {
+                return apiResponse.Data;
 
-            //}
-            //else
-            //{
+            }
+            else
+            {
                 string jsonPath = Path.Combine(Directory.GetCurrentDirectory(), "Backup", "StatsPerDeSo", deSoCode + ".json");
 
                 string jsonData = await System.IO.File.ReadAllTextAsync(jsonPath);
                 VaccinationDataFromSpecificDeSoDto data = JsonConvert.DeserializeObject<VaccinationDataFromSpecificDeSoDto>(jsonData);
                 return data;
-            //}
+            }
         }
 
         /// <summary>
@@ -196,22 +196,22 @@ namespace DSUGrupp1.Controllers
         /// <returns></returns>
         public async Task<DesoInfoDTO> GetDeSoNames()
         {
-            //string requestUrl = "https://grupp1.dsvkurs.miun.se/api/deso";
+            string requestUrl = "https://grupp1.dsvkurs.miun.se/api/deso";
 
-            //var apiResponse = await ApiEngine.Fetch<DesoInfoDTO>(requestUrl, HttpMethod.Get);
+            var apiResponse = await ApiEngine.Fetch<DesoInfoDTO>(requestUrl, HttpMethod.Get);
 
-            //if (apiResponse.IsSuccessful)
-            //{
-            //    return apiResponse.Data;
-            //}
-            //else
-            //{
+            if (apiResponse.IsSuccessful)
+            {
+                return apiResponse.Data;
+            }
+            else
+            {
                 string jsonPath = Path.Combine(Directory.GetCurrentDirectory(), "Backup", "apiDesoName.json");
 
                 string jsonData = await System.IO.File.ReadAllTextAsync(jsonPath);
                 DesoInfoDTO data = JsonConvert.DeserializeObject<DesoInfoDTO>(jsonData);
                 return data;
-            //}
+            }
         }
 
         /// <summary>
@@ -221,23 +221,23 @@ namespace DSUGrupp1.Controllers
         /// <exception cref="Exception"></exception>
         public async Task<DoseTypeDto> GetDoseTypes()
         {
-            //string requestUrl = "https://grupp1.dsvkurs.miun.se/api/batches";
+            string requestUrl = "https://grupp1.dsvkurs.miun.se/api/batches";
 
-            //var apiResponse = await ApiEngine.Fetch<DoseTypeDto>(requestUrl, HttpMethod.Get);
+            var apiResponse = await ApiEngine.Fetch<DoseTypeDto>(requestUrl, HttpMethod.Get);
 
-            //if (apiResponse.IsSuccessful)
-            //{
-            //    return apiResponse.Data;
-            //}
-            //else
-            //{
+            if (apiResponse.IsSuccessful)
+            {
+                return apiResponse.Data;
+            }
+            else
+            {
                 string jsonPath = Path.Combine(Directory.GetCurrentDirectory(), "Backup", "apiBatches.json");
 
                 string jsonData = await System.IO.File.ReadAllTextAsync(jsonPath);
                 DoseTypeDto data = JsonConvert.DeserializeObject<DoseTypeDto>(jsonData);
                 return data;
-            //}
-        }
+            }
+    }
        
     }
 
