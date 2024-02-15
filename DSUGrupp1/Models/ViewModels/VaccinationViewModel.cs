@@ -21,7 +21,6 @@ namespace DSUGrupp1.Models.ViewModels
         {
 
             ChartViewModel chart = new ChartViewModel();
-            // TODO implement a call for municipality population earlier in the program structure so that individual calls in the viewmodel like this is unneccessary.
             int population = await GetMunicipalityPopulation();
 
             var vaccinationValues = GetVaccinationValues(patients,population);
@@ -59,7 +58,6 @@ namespace DSUGrupp1.Models.ViewModels
         /// <returns></returns>
         public async Task<int> GetMunicipalityPopulation()
         {
-            //Maybe move this method? see TODO at top
             var populationData = await _apiController.GetPopulationCount("2380", "2022");
             int totalPopulation = int.Parse(populationData.Data[0].Values[0]) + int.Parse(populationData.Data[1].Values[0]);
             return totalPopulation;
@@ -75,7 +73,6 @@ namespace DSUGrupp1.Models.ViewModels
         public double CalculateVaccinationPercentage(int totalPopulation, int vaccinatedPeople)
         {
 
-            //dividing by zero = bad
             if (totalPopulation <= 0)
             {
                 throw new Exception("Antalet invånare kan ej vara noll");
