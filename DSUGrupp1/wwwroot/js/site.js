@@ -7,7 +7,6 @@ let leftChart;
 let rightChart;
 let leftGenderChart;
 let rightGenderChart;
-/*let leftFilterChart;*/
 let rightFilterChart;
 let leftOverTimeChart; 
 let rightOverTimeChart;

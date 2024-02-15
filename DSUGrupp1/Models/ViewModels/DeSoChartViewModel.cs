@@ -45,9 +45,9 @@ namespace DSUGrupp1.Models.ViewModels
 
             if (GetSetValuesForChart(deSoCode, patients, residents).Result)
             {
-                var chart = GetChartDose(/*chartValues.Result*/);
-                var chartTwo = GetChartGender(/*chartValues.Result*/);              
-                var chartFour = GetChartOverTime(/*chartValues.Result*/);
+                var chart = GetChartDose();
+                var chartTwo = GetChartGender();              
+                var chartFour = GetChartOverTime();
 
                 JsonChartDose = _chartViewModel.SerializeJson(chart);
                 JsonChartGender = _chartViewModel.SerializeJson(chartTwo);
@@ -59,7 +59,7 @@ namespace DSUGrupp1.Models.ViewModels
         /// Sets data for the chart that displays doses in a DeSo
         /// </summary>
         /// <returns></returns>
-        private Chart GetChartDose(/*Chart chartValues*/)
+        private Chart GetChartDose()
         {
            
             List<string> labels = new List<string>()
@@ -83,7 +83,7 @@ namespace DSUGrupp1.Models.ViewModels
         /// Sets data for the chart that displays gender allocation in a DeSo
         /// </summary>
         /// <returns></returns>
-        private Chart GetChartGender(/*Chart chartValues*/)
+        private Chart GetChartGender()
         {
 
             List<string> labels = new List<string>()
@@ -147,7 +147,7 @@ namespace DSUGrupp1.Models.ViewModels
 
             var patientsWithBooster = LinqQueryRepository.GetPatientsWithBoosterDose(desoPatients);
             
-            //Consider adding to LinqQueryRepository
+            
             int totalBoosterDoses = patientsWithBooster
                 .Sum(patient => patient.Vaccinations.Count(vaccination => vaccination.DoseNumber > 3));
 

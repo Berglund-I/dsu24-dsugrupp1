@@ -44,15 +44,15 @@ header {
     transition-duration: 0.4s;
 }
 
-    .nav-button a {
-        text-decoration: none;
-        color: white;
-    }
+.nav-button a {
+    text-decoration: none;
+    color: white;
+}
 
-    .nav-button:hover {
-        cursor: pointer;
-        background-color: #376996;
-    }
+.nav-button:hover {
+    cursor: pointer;
+    background-color: #376996;
+} 
 
 .flex-container {
     display: flex;
@@ -87,7 +87,7 @@ header {
     width: 100%;
 }
 
-/*Css f�r sliders f�r index o detail*/
+/*Css for sliders for index and Detail*/
 
 .multi-range-slider {
     position: relative;
@@ -268,7 +268,7 @@ footer {
     text-align:center;
     color: #ffffff;
 }
-/*------------------------------------------------------*/
+
 /**Css for Detail*/
 .center h2 {
     text-align: center;

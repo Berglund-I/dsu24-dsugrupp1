@@ -66,9 +66,6 @@ namespace DSUGrupp1.Infastructure
         /// <returns></returns>
         public static List<Patient> GetPatientsByAge(List<Patient> patients, int lowestAge, int highestAge)
         {
-            //DateTime dateTime = DateTime.Now;
-            //int currentYear = dateTime.Year;
-
             List<Patient> result = patients
             .Where(patient => patient.AgeAtFirstVaccination >= lowestAge &&
              patient.AgeAtFirstVaccination <= highestAge)
