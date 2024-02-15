@@ -81,9 +81,7 @@ header {
 #age-chart-text{
     text-align:center;
 }
-/*------------------------------------------------------*/
 
-/*Nytt*/
 #chart7 {
     height: 500px;
     width: 100%;
@@ -194,7 +192,6 @@ header {
 }
 
 
-
 #confirm-button{
     background-color: #376996;
     color: #ffffff;
@@ -230,9 +227,7 @@ header {
 #reset-button:hover {
     background-color: #FF0000;
 }
-/*----------------------------------------------------------------------------*/
 
-/*Startsidan gender*/
 .female-chart {
     width: 30%;
     height: 30%;
@@ -281,12 +276,6 @@ footer {
 }
 
 
-/**Css for Detail*/
-.center h2{
-    text-align: center;
-    margin-bottom: 25px;
-}
-
 .deSo-container {
     width: 100%;
     display: flex;
@@ -298,8 +287,6 @@ footer {
     margin: 1%;
     width: 49%;
 }
-
-
 
 .left-div div {
    width: 100%;
