@@ -10,6 +10,8 @@ List the key features of your project. For example:
 - Interactive charts displaying vaccination data for different areas
 - Map displaying vaccination coverage for all the DeSO (Demografiska StatistikOmråden)
 
+![image](https://github.com/systemvetenskap/dsu24-dsugrupp1/assets/93514607/5af64abd-62fa-4460-a40f-16a466f29128)
+
   
 
 ## Technologies Used
