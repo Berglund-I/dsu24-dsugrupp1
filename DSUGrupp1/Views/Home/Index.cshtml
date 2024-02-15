@@ -15,7 +15,7 @@
 }
 
 @section RightContent {
-    <h1 id="title-vaccination-over-time">Vaccination statistik över varje vecka</h1>
+    <h1 id="title-vaccination-over-time">Vaccinationstatistik över varje vecka</h1>
         <div class="chart-over-time">
             @await Component.InvokeAsync("Chart", new { Id = "3", ChartModel = Model.Charts[1] })
             <p class="vaccination-over-time-paragraf">Ett linjegram som visar antal vaccinerade per vecka under året.</p>
