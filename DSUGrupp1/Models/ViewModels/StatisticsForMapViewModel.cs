@@ -18,7 +18,7 @@ namespace DSUGrupp1.Models.ViewModels
             SetValuesForVaccinationList(residents, patients);
             JsonVaccinationPercent = JsonConvert.SerializeObject(VaccinationPercentDeso);
 
-
+             
         }
 
 
